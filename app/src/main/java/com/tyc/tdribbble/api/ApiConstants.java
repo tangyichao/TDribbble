@@ -28,7 +28,7 @@ public class ApiConstants {
 
         String SCOPE = "public write comment upload";
 
-        String STATE = "hunter";
+        String STATE = "tangyc";
 
 //         params.put(ApiConstants.ParamKey.CLIENT_ID, ApiConstants.ParamValue.CLIENT_ID);
 //        params.put(ApiConstants.ParamKey.REDIRECT_URI, ApiConstants.ParamValue.REDIRECT_URI);
