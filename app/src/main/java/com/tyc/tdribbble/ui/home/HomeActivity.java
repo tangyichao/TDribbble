@@ -8,14 +8,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
@@ -53,6 +52,12 @@ public class HomeActivity extends BaseActivity
     // @BindView(R.id.iv_avatar)
     CircleImageView mIvAvatar;
     TextView mTvName;
+    @BindView(R.id.sp_list)
+    AppCompatSpinner mSpList;
+    @BindView(R.id.sp_sort)
+    AppCompatSpinner mSpSort;
+    @BindView(R.id.sp_time)
+    AppCompatSpinner mSpTime;
     private String token;
 
     @Override
@@ -62,12 +67,12 @@ public class HomeActivity extends BaseActivity
 
     @Override
     protected void initData() {
-        token= TDribbbleApp.token;
+        token = TDribbbleApp.token;
         setSupportActionBar(mToolbar);
         View headerLayout = mNavView.getHeaderView(0);
-        mIvAvatar=headerLayout.findViewById(R.id.iv_avatar);
+        mIvAvatar = headerLayout.findViewById(R.id.iv_avatar);
         mIvAvatar.setOnClickListener(this);
-        mTvName=headerLayout.findViewById(R.id.tv_name);
+        mTvName = headerLayout.findViewById(R.id.tv_name);
         mTvName.setOnClickListener(this);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,6 +87,19 @@ public class HomeActivity extends BaseActivity
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         mNavView.setNavigationItemSelectedListener(this);
+
+        mSpTime.setDropDownWidth(360);//设置下拉菜单的宽度
+
+        mSpTime.setDropDownHorizontalOffset(112);////设置选择微调的弹出窗口中像素的水平偏移。在mode_dropdown唯一有效的；
+        mSpTime.setDropDownVerticalOffset(112);//设置选择微调的弹出窗口中像素的垂直偏移。在mode_dropdown唯一有效的；
+        mSpList.setDropDownWidth(360);//设置下拉菜单的宽度
+
+        mSpList.setDropDownHorizontalOffset(112);////设置选择微调的弹出窗口中像素的水平偏移。在mode_dropdown唯一有效的；
+        mSpList.setDropDownVerticalOffset(112);//设置选择微调的弹出窗口中像素的垂直偏移。在mode_dropdown唯一有效的；
+        mSpSort.setDropDownWidth(360);//设置下拉菜单的宽度
+
+        mSpSort.setDropDownHorizontalOffset(112);////设置选择微调的弹出窗口中像素的水平偏移。在mode_dropdown唯一有效的；
+        mSpSort.setDropDownVerticalOffset(112);//设置选择微调的弹出窗口中像素的垂直偏移。在mode_dropdown唯一有效的；
     }
 
     @Override
@@ -142,29 +160,35 @@ public class HomeActivity extends BaseActivity
     }
 
 
-
-
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.iv_avatar:
 
-                if(TextUtils.isEmpty(token)) {
+                if (TextUtils.isEmpty(token)) {
                     Intent intent = new Intent();
                     intent.setClass(HomeActivity.this, LoginActivity.class);
                     intent.putExtra("url", StringOauth.getOauthSting());
                     startActivityForResult(intent, REQUEST_CODE);
-                }else{
+                } else {
                     //Log
                 }
                 break;
 
         }
     }
-    @Subscribe( threadMode = ThreadMode.MAIN,sticky = true)
-    public void onMessageEvent(UserEntity userEntity)
-    {   Log.i("debug",userEntity.getAvatarUrl());
+
+    @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
+    public void onMessageEvent(UserEntity userEntity) {
+        Log.i("debug", userEntity.getAvatarUrl());
         Glide.with(this).load(userEntity.getAvatarUrl()).placeholder(R.mipmap.ic_avatar).into(mIvAvatar);
         mTvName.setText(userEntity.getName());
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

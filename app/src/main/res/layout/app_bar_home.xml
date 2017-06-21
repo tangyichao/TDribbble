@@ -25,16 +25,22 @@
                 android:id="@+id/sp_list"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:entries="@array/list"
+                android:spinnerMode="dropdown"
                 android:layout_weight="1"/>
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/sp_sort"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:entries="@array/sort"
+                android:spinnerMode="dropdown"
                 android:layout_weight="1"/>
             <android.support.v7.widget.AppCompatSpinner
                 android:id="@+id/sp_time"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
+                android:entries="@array/time"
+                android:spinnerMode="dropdown"
                 android:layout_weight="1"/>
         </LinearLayout>
     </android.support.design.widget.AppBarLayout>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="list">
+        <item>全部</item>
+        <item>团队</item>
+        <item>首秀</item>
+        <item>精品</item>
+        <item>再创作</item>
+        <item>动画</item>
+    </string-array>
+    <string-array name="sort">
+        <item>最热</item>
+        <item>最新</item>
+        <item>浏览最多</item>
+        <item>评论最多</item>
+    </string-array>
+    <string-array name="time">
+        <item>当前</item>
+        <item>周</item>
+        <item>月</item>
+        <item>年</item>
+        <item>所有</item>
+    </string-array>
+</resources>
