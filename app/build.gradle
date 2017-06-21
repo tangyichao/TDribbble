@@ -20,6 +20,11 @@ android {
         }
     }
 }
+apt{
+    arguments {
+        eventBusIndex "com.tyc.tdribbble.MyEventBusIndex"
+    }
+}
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
@@ -48,4 +53,7 @@ dependencies {
     apt 'com.jakewharton:butterknife-compiler:8.5.1'
     apt 'com.google.dagger:dagger-compiler:2.5'
     provided 'javax.annotation:jsr250-api:1.0'
+
+    compile 'org.greenrobot:eventbus:3.0.0'
+    apt 'org.greenrobot:eventbus-annotation-processor:3.0.1'
 }

@@ -13,11 +13,11 @@ public class StringOauth {
                 .append(ApiConstants.AUTHORIZE)
                 .append("?")
                 .append(ApiConstants.OAuthKey.CLIENT_ID+"="+ApiConstants.OAuth.CLIENT_ID)
-                .append("&&")
+                .append("&")
                 .append(ApiConstants.OAuthKey.REDIRECT_URI+"="+ApiConstants.OAuth.REDIRECT_URI)
-                .append("&&")
+                .append("&")
                 .append(ApiConstants.OAuthKey.SCOPE+"="+ApiConstants.OAuth.SCOPE)
-                .append("&&")
+                .append("&")
                 .append(ApiConstants.OAuthKey.STATE+"="+ApiConstants.OAuth.SCOPE);
         return sb.toString();
     }

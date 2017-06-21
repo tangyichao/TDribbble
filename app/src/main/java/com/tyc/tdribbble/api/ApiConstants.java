@@ -7,15 +7,23 @@ package com.tyc.tdribbble.api;
 public class ApiConstants {
     public static final String BASE_URL= "https://dribbble.com/";
     public static final String AUTHORIZE="oauth/authorize";
+    public static final String TOKEN="oauth/token";
+
+
+    public static final String BASE_URL_V1= "https://api.dribbble.com/v1/";
+    public static final String USER= "user";
+    public static final String SHOTS="shots";
 
    public interface OAuthKey{
        String CLIENT_ID = "client_id";
-
+       String CLIENT_SECRET = "client_secret";
        String REDIRECT_URI = "redirect_uri";
-
        String SCOPE = "scope";
-
        String STATE = "state";
+       String CODE = "code";
+
+       String TOKEN="token";
+
    }
    public interface OAuth{
         String CLIENT_ID = "ad196f1170dea2fe1a821fdc03da6aaef8221c940bcae9e05b51ad9320699e7f";
@@ -26,7 +34,7 @@ public class ApiConstants {
 
         String REDIRECT_URI = "http://weibo.com/tyc10086/home?wvr=5";
 
-        String SCOPE = "public write comment upload";
+        String SCOPE = "public+write+comment+upload";
 
         String STATE = "tangyc";
 

@@ -10,26 +10,38 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.tyc.tdribbble.R;
-import com.tyc.tdribbble.ui.oauth.OAuthActivity;
+import com.tyc.tdribbble.TDribbbleApp;
+import com.tyc.tdribbble.base.BaseActivity;
+import com.tyc.tdribbble.entity.UserEntity;
+import com.tyc.tdribbble.ui.login.LoginActivity;
 import com.tyc.tdribbble.utils.StringOauth;
+
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * 作者：tangyc on 2017/6/20
  * 邮箱：874500641@qq.com
  */
 
-public class HomeActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+public class HomeActivity extends BaseActivity
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
 
+    private static final int REQUEST_CODE = 102;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.fab)
@@ -38,13 +50,25 @@ public class HomeActivity extends AppCompatActivity
     NavigationView mNavView;
     @BindView(R.id.drawer_layout)
     DrawerLayout mDrawerLayout;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
-        ButterKnife.bind(this);
-        setSupportActionBar(mToolbar);
+    // @BindView(R.id.iv_avatar)
+    CircleImageView mIvAvatar;
+    TextView mTvName;
+    private String token;
 
+    @Override
+    protected int layoutResID() {
+        return R.layout.activity_home;
+    }
+
+    @Override
+    protected void initData() {
+        token= TDribbbleApp.token;
+        setSupportActionBar(mToolbar);
+        View headerLayout = mNavView.getHeaderView(0);
+        mIvAvatar=headerLayout.findViewById(R.id.iv_avatar);
+        mIvAvatar.setOnClickListener(this);
+        mTvName=headerLayout.findViewById(R.id.tv_name);
+        mTvName.setOnClickListener(this);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -57,7 +81,6 @@ public class HomeActivity extends AppCompatActivity
                 this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
         mNavView.setNavigationItemSelectedListener(this);
     }
 
@@ -100,10 +123,7 @@ public class HomeActivity extends AppCompatActivity
         int id = item.getItemId();
         if (id == R.id.nav_camera) {
             // Handle the camera action
-            Intent intent=new Intent();
-            intent.setClass(HomeActivity.this, OAuthActivity.class);
-            intent.putExtra("url", StringOauth.getOauthSting());
-            startActivityForResult(intent,100);
+
         } else if (id == R.id.nav_gallery) {
 
         } else if (id == R.id.nav_slideshow) {
@@ -119,5 +139,32 @@ public class HomeActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+
+
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.iv_avatar:
+
+                if(TextUtils.isEmpty(token)) {
+                    Intent intent = new Intent();
+                    intent.setClass(HomeActivity.this, LoginActivity.class);
+                    intent.putExtra("url", StringOauth.getOauthSting());
+                    startActivityForResult(intent, REQUEST_CODE);
+                }else{
+                    //Log
+                }
+                break;
+
+        }
+    }
+    @Subscribe( threadMode = ThreadMode.MAIN,sticky = true)
+    public void onMessageEvent(UserEntity userEntity)
+    {   Log.i("debug",userEntity.getAvatarUrl());
+        Glide.with(this).load(userEntity.getAvatarUrl()).placeholder(R.mipmap.ic_avatar).into(mIvAvatar);
+        mTvName.setText(userEntity.getName());
     }
 }
