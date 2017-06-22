@@ -2,8 +2,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/action_settings"
+        android:id="@+id/action_shots"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:title=""
+        android:icon="@mipmap/ic_action_large"
+        app:showAsAction="always" >
+        <menu>
+
+    <item
+        android:id="@+id/action_large_image"
+        android:orderInCategory="100"
+        android:title="@string/action_large_image"
+        android:icon="@mipmap/ic_action_large"
+        />
+            <item
+                android:id="@+id/action_small_image"
+                android:orderInCategory="100"
+                android:title="@string/action_small_image"
+                android:icon="@mipmap/ic_action_small"
+                 />
+        </menu>
+    </item>
+
 </menu>

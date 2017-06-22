@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
@@ -77,11 +78,14 @@ public class HomeActivity extends BaseActivity
     RecyclerView mRvShots;
     @BindView(R.id.srl_shots)
     SwipeRefreshLayout mSrlShots;
+
+    private LinearShotsAdapter adapter;
     private String token;
     private int count = 0;
     private  HashMap<String, String> hashMap = new HashMap<>();
     private HomePresenter  homePresenter;
     private boolean isFlag=false;
+    private int type=0;
     @Override
     protected int layoutResID() {
         return R.layout.activity_home;
@@ -141,7 +145,9 @@ public class HomeActivity extends BaseActivity
         hashMap.put("date", "2017-06-22");
         hashMap.put("page", String.valueOf(count));
         final LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+        linearLayoutManager.setAutoMeasureEnabled(true);
         mRvShots.setLayoutManager(linearLayoutManager);
+
         mSrlShots.setOnRefreshListener(this);
         mRvShots.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -193,7 +199,25 @@ public class HomeActivity extends BaseActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_large_image) {
+            type=0;
+            final LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+            linearLayoutManager.setAutoMeasureEnabled(true);
+            mRvShots.setLayoutManager(linearLayoutManager);
+            if(adapter!=null)
+            {
+                adapter.chageType(type);
+            }
+            return true;
+        }
+        if (id == R.id.action_small_image) {
+            GridLayoutManager gridLayoutManager=new GridLayoutManager(this,2);
+            mRvShots.setLayoutManager(gridLayoutManager);
+            type=1;
+            if(adapter!=null)
+            {
+                adapter.chageType(type);
+            }
             return true;
         }
 
@@ -247,7 +271,7 @@ public class HomeActivity extends BaseActivity
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onMessageEvent(UserEntity userEntity) {
         Log.i("debug", userEntity.getAvatarUrl());
-        Glide.with(this).load(userEntity.getAvatarUrl()).placeholder(R.mipmap.ic_avatar).into(mIvAvatar);
+        Glide.with(this).load(userEntity.getAvatarUrl()).asGif().placeholder(R.mipmap.ic_avatar).into(mIvAvatar);
         mTvName.setText(userEntity.getName());
     }
 
@@ -255,7 +279,7 @@ public class HomeActivity extends BaseActivity
     @Override
     public void showShots(List<ShotsEntity> shotsEntities) {
         if(mRvShots.getAdapter()==null){
-            LinearShotsAdapter adapter=new LinearShotsAdapter(this, shotsEntities);
+            adapter=new LinearShotsAdapter(this, shotsEntities,type);
             mRvShots.setAdapter(adapter);
         }else{
             ((LinearShotsAdapter) mRvShots.getAdapter()).swipeData(shotsEntities);
@@ -266,7 +290,7 @@ public class HomeActivity extends BaseActivity
     @Override
     public void loadMoreShots(List<ShotsEntity> shotsEntities) {
         if(mRvShots.getAdapter()==null){
-            LinearShotsAdapter adapter=new LinearShotsAdapter(this, shotsEntities);
+            adapter=new LinearShotsAdapter(this, shotsEntities,type);
             mRvShots.setAdapter(adapter);
         }else{
             ((LinearShotsAdapter) mRvShots.getAdapter()).addData(shotsEntities);

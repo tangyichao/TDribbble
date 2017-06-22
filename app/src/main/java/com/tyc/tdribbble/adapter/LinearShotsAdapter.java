@@ -27,9 +27,11 @@ import butterknife.ButterKnife;
 public class LinearShotsAdapter extends RecyclerView.Adapter {
     private Context context;
     private List<ShotsEntity> shotsEntities;
-    public LinearShotsAdapter(Context context, List<ShotsEntity> shotsEntities) {
+    private int type;
+    public LinearShotsAdapter(Context context, List<ShotsEntity> shotsEntities, int type) {
         this.context=context;
         this.shotsEntities=shotsEntities;
+        this.type=type;
     }
      public void swipeData(List<ShotsEntity> shotsEntities){
          this.shotsEntities.clear();
@@ -38,6 +40,10 @@ public class LinearShotsAdapter extends RecyclerView.Adapter {
      }
     public void addData(List<ShotsEntity> shotsEntities){
         this.shotsEntities.addAll(shotsEntities);
+        notifyDataSetChanged();
+    }
+    public void chageType(int type){
+        this.type=type;
         notifyDataSetChanged();
     }
     @Override
@@ -49,11 +55,22 @@ public class LinearShotsAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         int width= ScreenUtils.getScreenWidth(context)- DisplayUtils.dip2px(context,16f);
+        if(type==1)
+        {
+            width=width/2;
+        }
         int height=width*3/4;
         if(shotsEntities.get(position).isAnimated()){
             String hidpi=shotsEntities.get(position).getImages().getHidpi();
             Glide.with(context).load(hidpi).asGif().placeholder(R.drawable.bg_linear_shots).override(width,height).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(((LinearShotsViewHolder) holder).mIvShots);
+           if(type==0){
+                 ((LinearShotsViewHolder) holder).mIvIsGif.setImageResource(R.mipmap.ic_gif);
+           }else{
+                ((LinearShotsViewHolder) holder).mIvIsGif.setImageResource(R.mipmap.ic_gif_small);
+
+           }
             ((LinearShotsViewHolder) holder).mIvIsGif.setVisibility(View.VISIBLE);
+
         }else{
             String normal=shotsEntities.get(position).getImages().getNormal();
             Glide.with(context).load(normal).placeholder(R.drawable.bg_linear_shots).override(width,height).into(((LinearShotsViewHolder) holder).mIvShots);
@@ -74,15 +91,21 @@ public class LinearShotsAdapter extends RecyclerView.Adapter {
         public LinearShotsViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);
-            inttView();
+            initView();
         }
-         private void inttView() {
-             int width= ScreenUtils.getScreenWidth(context)- DisplayUtils.dip2px(context,16f);
-             int height=width*3/4;
-             ViewGroup.LayoutParams params=mIvShots.getLayoutParams();
-             params.height=height;
-             params.width=width;
-             mIvShots.setLayoutParams(params);
+         private void initView() {
+
+             int width = ScreenUtils.getScreenWidth(context) - DisplayUtils.dip2px(context, 16f);
+             if(type==1)
+             {
+                 width=width/2;
+             }
+                 int height = width * 3 / 4;
+                 ViewGroup.LayoutParams params = mIvShots.getLayoutParams();
+                 params.height = height;
+                 params.width = width;
+                 mIvShots.setLayoutParams(params);
+
          }
      }
 }
