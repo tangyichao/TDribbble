@@ -1,10 +1,17 @@
 package com.tyc.tdribbble.api;
 
+import com.tyc.tdribbble.TDribbbleApp;
+import com.tyc.tdribbble.entity.ShotsEntity;
 import com.tyc.tdribbble.entity.TokenEntity;
 import com.tyc.tdribbble.entity.UserEntity;
 
+import java.util.List;
+import java.util.Map;
+
 import io.reactivex.Observable;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
@@ -18,7 +25,8 @@ public interface ApiService {
     Observable<TokenEntity> getToKen(@Query(ApiConstants.OAuthKey.CLIENT_ID) String clientID,@Query(ApiConstants.OAuthKey.CLIENT_SECRET) String clientSecret,@Query(ApiConstants.OAuthKey.REDIRECT_URI) String redirectUri,@Query(ApiConstants.OAuthKey.CODE) String code);
     @GET(ApiConstants.USER)
     Observable<UserEntity> getUser(@Query(ApiConstants.OAuthKey.TOKEN)String token);
+    //@Headers("Authorization: Bearer 9416495d875cf69abfe9d0bd16b0a007dea727d1d0512e102fed64a5009cfd07")
     @GET(ApiConstants.SHOTS)
-    Observable<UserEntity> getShots(@QueryMap String map);
+    Observable<List<ShotsEntity>> getShots(@QueryMap Map<String,String> map,@Header("Authorization") String token);
 
 }

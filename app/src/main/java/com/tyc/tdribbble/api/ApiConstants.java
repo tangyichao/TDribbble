@@ -14,6 +14,24 @@ public class ApiConstants {
     public static final String USER= "user";
     public static final String SHOTS="shots";
 
+
+
+  public interface Shots{
+      /**
+       * 类型，默认返回所有类型
+       */
+       String[] LIST_VALUES = {"", "teams", "debuts", "playoffs", "rebounds", "animated"};
+
+      /**
+       * 排序，默认返回综合排序
+       */
+      String[] SORT_VALUES = {"", "recent", "views", "comments"};
+
+      /**
+       * 时间段，默认返回最新
+       */
+      String[] TIME_VALUES = {"", "week", "month", "year", "ever"};
+  }
    public interface OAuthKey{
        String CLIENT_ID = "client_id";
        String CLIENT_SECRET = "client_secret";

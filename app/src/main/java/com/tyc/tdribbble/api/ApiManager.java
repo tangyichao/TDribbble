@@ -40,4 +40,11 @@ public class ApiManager {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client).build();
     }
+    public static Retrofit getRetrofitShots(String url){
+        OkHttpClient client=new OkHttpClient().newBuilder().readTimeout(20, TimeUnit.SECONDS).build();
+        return  new Retrofit.Builder().baseUrl(url)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client).build();
+    }
 }

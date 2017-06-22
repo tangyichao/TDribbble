@@ -7,26 +7,41 @@ import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.TDribbbleApp;
+import com.tyc.tdribbble.adapter.LinearShotsAdapter;
+import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.base.BaseActivity;
+import com.tyc.tdribbble.entity.ShotsEntity;
 import com.tyc.tdribbble.entity.UserEntity;
 import com.tyc.tdribbble.ui.login.LoginActivity;
+import com.tyc.tdribbble.utils.DisplayUtils;
+import com.tyc.tdribbble.utils.ScreenUtils;
 import com.tyc.tdribbble.utils.StringOauth;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
+
+import java.util.HashMap;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +53,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 
 public class HomeActivity extends BaseActivity
-        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener, IHomeView, SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemSelectedListener {
 
     private static final int REQUEST_CODE = 102;
     @BindView(R.id.toolbar)
@@ -58,8 +73,15 @@ public class HomeActivity extends BaseActivity
     AppCompatSpinner mSpSort;
     @BindView(R.id.sp_time)
     AppCompatSpinner mSpTime;
+    @BindView(R.id.rv_shots)
+    RecyclerView mRvShots;
+    @BindView(R.id.srl_shots)
+    SwipeRefreshLayout mSrlShots;
     private String token;
-
+    private int count = 0;
+    private  HashMap<String, String> hashMap = new HashMap<>();
+    private HomePresenter  homePresenter;
+    private boolean isFlag=false;
     @Override
     protected int layoutResID() {
         return R.layout.activity_home;
@@ -87,19 +109,63 @@ public class HomeActivity extends BaseActivity
         mDrawerLayout.addDrawerListener(toggle);
         toggle.syncState();
         mNavView.setNavigationItemSelectedListener(this);
+        int width= ScreenUtils.getScreenWidth(this);
+        int height=DisplayUtils.dip2px(this,56);
+        mSpTime.setDropDownWidth(width/3);//设置下拉菜单的宽度
+        mSpTime.setDropDownHorizontalOffset(height);////设置选择微调的弹出窗口中像素的水平偏移。在mode_dropdown唯一有效的；
+        mSpTime.setDropDownVerticalOffset(height);//设置选择微调的弹出窗口中像素的垂直偏移。在mode_dropdown唯一有效的；
 
-        mSpTime.setDropDownWidth(360);//设置下拉菜单的宽度
+//        ArrayAdapter<CharSequence> timeAdapter = ArrayAdapter.createFromResource ( this , R.array.time , R.layout.item_spinnerlayout );
+//        mSpTime.setAdapter(timeAdapter);
 
-        mSpTime.setDropDownHorizontalOffset(112);////设置选择微调的弹出窗口中像素的水平偏移。在mode_dropdown唯一有效的；
-        mSpTime.setDropDownVerticalOffset(112);//设置选择微调的弹出窗口中像素的垂直偏移。在mode_dropdown唯一有效的；
-        mSpList.setDropDownWidth(360);//设置下拉菜单的宽度
+        mSpList.setDropDownWidth(width/3);//设置下拉菜单的宽度
+        mSpList.setDropDownHorizontalOffset(height);////设置选择微调的弹出窗口中像素的水平偏移。在mode_dropdown唯一有效的；
+        mSpList.setDropDownVerticalOffset(height);//设置选择微调的弹出窗口中像素的垂直偏移。在mode_dropdown唯一有效的；
 
-        mSpList.setDropDownHorizontalOffset(112);////设置选择微调的弹出窗口中像素的水平偏移。在mode_dropdown唯一有效的；
-        mSpList.setDropDownVerticalOffset(112);//设置选择微调的弹出窗口中像素的垂直偏移。在mode_dropdown唯一有效的；
-        mSpSort.setDropDownWidth(360);//设置下拉菜单的宽度
+//        ArrayAdapter<CharSequence> listAdapter = ArrayAdapter.createFromResource ( this , R.array.list, R.layout.item_spinnerlayout );
+//        mSpList.setAdapter(listAdapter);
 
-        mSpSort.setDropDownHorizontalOffset(112);////设置选择微调的弹出窗口中像素的水平偏移。在mode_dropdown唯一有效的；
-        mSpSort.setDropDownVerticalOffset(112);//设置选择微调的弹出窗口中像素的垂直偏移。在mode_dropdown唯一有效的；
+        mSpSort.setDropDownWidth(width/3);//设置下拉菜单的宽度
+        Log.i("debug",mSpSort.getHeight()+"-----");
+        mSpSort.setDropDownHorizontalOffset( height);////设置选择微调的弹出窗口中像素的水平偏移。在mode_dropdown唯一有效的；
+        mSpSort.setDropDownVerticalOffset( height);//设置选择微调的弹出窗口中像素的垂直偏移。在mode_dropdown唯一有效的；
+
+//        ArrayAdapter<CharSequence> sortAdapter = ArrayAdapter.createFromResource ( this , R.array.sort , R.layout.item_spinnerlayout );
+//        mSpSort.setAdapter(sortAdapter);
+
+        homePresenter = new HomePresenter(this);
+        mSpList.setOnItemSelectedListener(this);
+        mSpSort.setOnItemSelectedListener(this);
+        mSpTime.setOnItemSelectedListener(this);
+
+        hashMap.put("date", "2017-06-22");
+        hashMap.put("page", String.valueOf(count));
+        final LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
+        mRvShots.setLayoutManager(linearLayoutManager);
+        mSrlShots.setOnRefreshListener(this);
+        mRvShots.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastItemPosition=linearLayoutManager.findLastVisibleItemPosition();
+                int count=recyclerView.getAdapter().getItemCount();
+                if((lastItemPosition==count-2||count<2)&&!isFlag)
+                {
+                    isFlag=true;
+                    hashMap.remove("page");
+                    count++;
+                    hashMap.put("page",String.valueOf(count));
+                    homePresenter.loadShots(hashMap,TDribbbleApp.token);
+                    Log.i("debug","-----------");
+                }
+            }
+        });
     }
 
     @Override
@@ -185,10 +251,82 @@ public class HomeActivity extends BaseActivity
         mTvName.setText(userEntity.getName());
     }
 
+
+    @Override
+    public void showShots(List<ShotsEntity> shotsEntities) {
+        if(mRvShots.getAdapter()==null){
+            LinearShotsAdapter adapter=new LinearShotsAdapter(this, shotsEntities);
+            mRvShots.setAdapter(adapter);
+        }else{
+            ((LinearShotsAdapter) mRvShots.getAdapter()).swipeData(shotsEntities);
+        }
+        mSrlShots.setRefreshing(false);
+    }
+
+    @Override
+    public void loadMoreShots(List<ShotsEntity> shotsEntities) {
+        if(mRvShots.getAdapter()==null){
+            LinearShotsAdapter adapter=new LinearShotsAdapter(this, shotsEntities);
+            mRvShots.setAdapter(adapter);
+        }else{
+            ((LinearShotsAdapter) mRvShots.getAdapter()).addData(shotsEntities);
+        }
+
+        isFlag=false;
+
+    }
+
+    @Override
+    public void showError() {
+
+    }
+
+    @Override
+    public void showEmpty() {
+
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
+    }
+
+    @Override
+    public void onRefresh() {
+       homePresenter.loadShots(hashMap,token);
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+            switch (adapterView.getId())
+            {
+                case R.id.sp_list:
+                    hashMap.put("list", ApiConstants.Shots.LIST_VALUES[i]);
+                    break;
+                case R.id.sp_sort:
+                    hashMap.put("sort",ApiConstants.Shots.SORT_VALUES[i]);
+                    break;
+                case R.id.sp_time:
+                    hashMap.put("timeframe", ApiConstants.Shots.TIME_VALUES[i]);
+                    break;
+            }
+        TextView tv = (TextView)view;
+        tv.setGravity(Gravity.CENTER);
+//
+        homePresenter.loadShots(hashMap, TDribbbleApp.token);
+        mSrlShots.setRefreshing(true);
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+//        for(int j=0;j<adapterView.getCount();j++)
+//        {
+//            TextView itemTv = (TextView) adapterView.getChildAt(j);
+//            itemTv.setGravity(Gravity.CENTER);
+//        }
     }
 }
