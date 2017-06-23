@@ -47,6 +47,8 @@ dependencies {
     compile 'com.squareup.retrofit2:converter-gson:2.2.0'
     compile 'com.jakewharton:butterknife:8.5.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
+    //高斯模糊
+    compile 'jp.wasabeef:glide-transformations:2.0.1'
     compile 'de.hdodenhof:circleimageview:2.1.0'
     compile 'org.greenrobot:greendao:3.2.2'
     compile 'com.google.dagger:dagger:2.5'

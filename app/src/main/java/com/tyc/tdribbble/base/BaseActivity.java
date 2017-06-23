@@ -18,8 +18,10 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- * Created by tangyc on 2017/6/8.
+ * 作者：tangyc on 2017/6/20
+ * 邮箱：874500641@qq.com
  */
+
 
 public abstract class BaseActivity extends AppCompatActivity {
     private Unbinder bind;
@@ -27,6 +29,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initToolbar();
         setContentView(layoutResID());
 
         EventBus.getDefault().register(this);
@@ -35,6 +38,12 @@ public abstract class BaseActivity extends AppCompatActivity {
         bind = ButterKnife.bind(this);
         initData();
     }
+
+    protected void initToolbar() {
+
+    }
+
+    ;
 
     protected abstract int layoutResID();
 

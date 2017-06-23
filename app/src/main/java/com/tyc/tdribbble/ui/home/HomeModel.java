@@ -27,9 +27,8 @@ public class HomeModel implements IHomeModel {
     }
 
     @Override
-    public  void loadShots(Map<String,String> map,String token){
+    public void loadShots(Map<String, String> map, String token, final int type) {
         {
-            final int page=Integer.valueOf(map.get("page"));
             ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1,token).create(ApiService.class);
             service.getShots(map," Bearer "+token)
                     .subscribeOn(Schedulers.io())
@@ -39,7 +38,8 @@ public class HomeModel implements IHomeModel {
                         public void accept(@NonNull List<ShotsEntity> shotsEntities) throws Exception {
                             if(shotsEntities.size()>0)
                             {
-                                if(page==0) {
+
+                                if (type == 0) {
                                     iHomeView.showShots(shotsEntities);
                                 }else{
                                     iHomeView.loadMoreShots(shotsEntities);

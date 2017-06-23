@@ -167,7 +167,7 @@ public class HomeActivity extends BaseActivity
                     hashMap.remove("page");
                     count++;
                     hashMap.put("page",String.valueOf(count));
-                    homePresenter.loadShots(hashMap,TDribbbleApp.token);
+                    homePresenter.loadShots(hashMap, TDribbbleApp.token, 1);
                     Log.i("debug","-----------");
                 }
             }
@@ -220,7 +220,16 @@ public class HomeActivity extends BaseActivity
             }
             return true;
         }
-
+        if (id == R.id.action_large_info) {
+            type = 2;
+            final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+            linearLayoutManager.setAutoMeasureEnabled(true);
+            mRvShots.setLayoutManager(linearLayoutManager);
+            if (adapter != null) {
+                adapter.chageType(type);
+            }
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -234,7 +243,7 @@ public class HomeActivity extends BaseActivity
 
         } else if (id == R.id.nav_gallery) {
 
-        } else if (id == R.id.nav_slideshow) {
+        } else if (id == R.id.nav_favorite) {
 
         } else if (id == R.id.nav_manage) {
 
@@ -320,7 +329,7 @@ public class HomeActivity extends BaseActivity
 
     @Override
     public void onRefresh() {
-       homePresenter.loadShots(hashMap,token);
+        homePresenter.loadShots(hashMap, token, 0);
     }
 
     @Override
@@ -340,7 +349,7 @@ public class HomeActivity extends BaseActivity
         TextView tv = (TextView)view;
         tv.setGravity(Gravity.CENTER);
 //
-        homePresenter.loadShots(hashMap, TDribbbleApp.token);
+        homePresenter.loadShots(hashMap, TDribbbleApp.token, 0);
         mSrlShots.setRefreshing(true);
 
     }

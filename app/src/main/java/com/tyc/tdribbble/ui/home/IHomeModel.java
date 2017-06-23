@@ -7,6 +7,6 @@ import java.util.Map;
  * 邮箱：874500641@qq.com
  */
 public interface IHomeModel {
-    public void loadShots(Map<String,String> map,String token);
+    public void loadShots(Map<String, String> map, String token, int type);
 
 }

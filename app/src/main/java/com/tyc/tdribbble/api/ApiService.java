@@ -11,6 +11,7 @@ import io.reactivex.Observable;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
@@ -27,4 +28,6 @@ public interface ApiService {
     @GET(ApiConstants.SHOTS)
     Observable<List<ShotsEntity>> getShots(@QueryMap Map<String,String> map,@Header("Authorization") String token);
 
+    @GET(ApiConstants.FOLLOWERS)
+    Observable<List<ShotsEntity>> getFollowers(@Path(ApiConstants.USERID) String userId, @Header("Authorization") String token);
 }

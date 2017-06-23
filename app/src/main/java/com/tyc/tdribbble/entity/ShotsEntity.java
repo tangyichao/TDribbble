@@ -2,13 +2,14 @@ package com.tyc.tdribbble.entity;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * 作者：tangyc on 2017/6/22
  * 邮箱：874500641@qq.com
  */
-public class ShotsEntity {
+public class ShotsEntity implements Serializable {
 
     /**
      * id : 471756
@@ -279,7 +280,7 @@ public class ShotsEntity {
         this.tags = tags;
     }
 
-    public static class ImagesBean {
+    public static class ImagesBean implements Serializable {
         /**
          * hidpi : null
          * normal : https://d13yacurqjgara.cloudfront.net/users/1/screenshots/471756/sasquatch.png
@@ -315,7 +316,7 @@ public class ShotsEntity {
         }
     }
 
-    public static class UserBean {
+    public static class UserBean implements Serializable {
         /**
          * id : 1
          * name : Dan Cederholm
@@ -610,7 +611,7 @@ public class ShotsEntity {
             this.updated_at = updated_at;
         }
 
-        public static class LinksBean {
+        public static class LinksBean implements Serializable {
             /**
              * web : http://simplebits.com
              * twitter : https://twitter.com/simplebits
@@ -637,7 +638,7 @@ public class ShotsEntity {
         }
     }
 
-    public static class TeamBean {
+    public static class TeamBean implements Serializable {
         /**
          * id : 39
          * name : Dribbble
@@ -964,7 +965,7 @@ public class ShotsEntity {
             this.updatedAt = updatedAt;
         }
 
-        public static class LinksBeanX {
+        public static class LinksBeanX implements Serializable {
             /**
              * web : http://dribbble.com
              * twitter : https://twitter.com/dribbble

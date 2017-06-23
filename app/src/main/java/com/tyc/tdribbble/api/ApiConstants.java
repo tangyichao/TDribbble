@@ -14,8 +14,9 @@ public class ApiConstants {
     public static final String USER= "user";
     public static final String SHOTS="shots";
 
+    public static final String FOLLOWERS = "users/{userId}/followers";
 
-
+    public static final String USERID = "userId";
   public interface Shots{
       /**
        * 类型，默认返回所有类型

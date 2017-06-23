@@ -26,6 +26,10 @@
         <activity android:name=".ui.login.LoginActivity"
             android:launchMode="singleTask">
         </activity>
+        <activity
+            android:name=".ui.user.UserActivity"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

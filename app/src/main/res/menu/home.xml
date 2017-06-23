@@ -3,24 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/action_shots"
+        android:icon="@mipmap/ic_action_large"
         android:orderInCategory="100"
         android:title=""
-        android:icon="@mipmap/ic_action_large"
-        app:showAsAction="always" >
+        app:showAsAction="always">
         <menu>
 
-    <item
-        android:id="@+id/action_large_image"
-        android:orderInCategory="100"
-        android:title="@string/action_large_image"
-        android:icon="@mipmap/ic_action_large"
-        />
+            <item
+                android:id="@+id/action_large_image"
+                android:icon="@mipmap/ic_action_large"
+                android:orderInCategory="100"
+                android:title="@string/action_large_image" />
             <item
                 android:id="@+id/action_small_image"
-                android:orderInCategory="100"
-                android:title="@string/action_small_image"
                 android:icon="@mipmap/ic_action_small"
-                 />
+                android:orderInCategory="100"
+                android:title="@string/action_small_image" />
+            <item
+                android:id="@+id/action_large_info"
+                android:icon="@mipmap/ic_action_large_info"
+                android:orderInCategory="100"
+                android:title="@string/action_large_info" />
         </menu>
     </item>
 

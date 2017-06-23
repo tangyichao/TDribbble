@@ -2,11 +2,13 @@ package com.tyc.tdribbble.entity;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * 作者：tangyc on 2017/6/21
  * 邮箱：874500641@qq.com
  */
-public class UserEntity {
+public class UserEntity implements Serializable {
 
     /**
      * id : 1780074
@@ -325,6 +327,6 @@ public class UserEntity {
         this.updated_at = updated_at;
     }
 
-    public static class LinksBean {
+    public static class LinksBean implements Serializable {
     }
 }

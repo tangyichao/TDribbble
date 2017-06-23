@@ -6,6 +6,17 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
+        <item name="actionMenuTextColor">@color/white</item>
+        <item name="actionMenuTextAppearance">@style/MenuTextStyle</item>
+    </style>
+
+    <style name="MenuTextStyle">
+        <item name="android:textColor">@android:color/white</item>
+    </style>
+
+    <style name="OverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:popupBackground">@color/colorPrimary</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -16,7 +27,8 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-    <style name="SpinnerStyle" parent="Base.Widget.AppCompat.DropDownItem.Spinner" >
+
+    <style name="SpinnerStyle" parent="Base.Widget.AppCompat.DropDownItem.Spinner">
         <item name="android:popupBackground">@color/colorPrimary</item>
         <item name="android:gravity">center</item>
         <item name="android:layout_gravity">center</item>
