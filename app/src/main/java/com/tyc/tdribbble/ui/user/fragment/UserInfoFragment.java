@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.entity.ShotsEntity;
+import com.tyc.tdribbble.entity.UserEntity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -42,7 +43,7 @@ public class UserInfoFragment extends Fragment {
     @BindView(R.id.tv_shots_count)
     TextView mTvShotsCount;
 
-    public static UserInfoFragment newInstance(ShotsEntity.UserBean user) {
+    public static UserInfoFragment newInstance(UserEntity user) {
         UserInfoFragment fragment = new UserInfoFragment();
         Bundle bundle = new Bundle();
         bundle.putSerializable("user", user);
@@ -61,13 +62,13 @@ public class UserInfoFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ShotsEntity.UserBean user = (ShotsEntity.UserBean) getArguments().getSerializable("user");
-        mTvFollowersCount.setText(user.getFollowers_count() + "粉丝");
-        mTvFollowingsCount.setText(user.getFollowings_count() + "关注");
+        UserEntity user = (UserEntity) getArguments().getSerializable("user");
+        mTvFollowersCount.setText(user.getFollowersCount() + "粉丝");
+        mTvFollowingsCount.setText(user.getFollowingsCount() + "关注");
         // mTvFavoriteCount.setText(user.get+"点赞");
-        mTvBucketsCount.setText(user.getBuckets_count() + "收藏");
-        mTvShotsCount.setText(user.getShots_count() + "作品");
-        mTvProjectsCount.setText(user.getProjects_count() + "项目");
+        mTvBucketsCount.setText(user.getBucketsCount() + "收藏");
+        mTvShotsCount.setText(user.getShotsCount() + "作品");
+        mTvProjectsCount.setText(user.getProjectsCount() + "项目");
         String location = user.getLocation();
         mTvLocation.setText(location);
         String web = user.getLinks().getWeb();

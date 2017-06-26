@@ -1,4 +1,4 @@
-package com.tyc.tdribbble.ui.user;
+package com.tyc.tdribbble.ui.shotsdetails;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -9,6 +9,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
 import android.text.Html;
 import android.text.TextUtils;
+import android.transition.Transition;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -17,14 +19,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.tyc.tdribbble.R;
+import com.tyc.tdribbble.adapter.LinearShotsAdapter;
 import com.tyc.tdribbble.adapter.TFragmentPageAdapter;
 import com.tyc.tdribbble.base.BaseActivity;
+import com.tyc.tdribbble.entity.ShotsEntity;
 import com.tyc.tdribbble.entity.UserEntity;
+import com.tyc.tdribbble.ui.shotsdetails.Comments.CommentsFragment;
 import com.tyc.tdribbble.ui.user.followers.UserFollowersFragment;
 import com.tyc.tdribbble.ui.user.fragment.UserInfoFragment;
 import com.tyc.tdribbble.ui.user.shots.UserShotsFragment;
 import com.tyc.tdribbble.utils.ScreenUtils;
+import com.tyc.tdribbble.view.widget.BadgedFourThreeImageView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,75 +45,45 @@ import jp.wasabeef.glide.transformations.BlurTransformation;
  * 作者：tangyc on 2017/6/23
  * 邮箱：874500641@qq.com
  */
-public class UserActivity extends BaseActivity {
-    @BindView(R.id.iv_avatar_big)
-    ImageView mIvAvatarBig;
-    @BindView(R.id.iv_avatar)
-    CircleImageView mIvAvatar;
-    @BindView(R.id.tv_name)
-    TextView mTvName;
-    @BindView(R.id.tv_bio)
-    TextView mTvBio;
-    @BindView(R.id.tv_web)
-    TextView mTvWeb;
-    @BindView(R.id.tv_twitter)
-    TextView mTvTwitter;
-    @BindView(R.id.cl)
-    CoordinatorLayout cl;
-    @BindView(R.id.tl_user)
-    TabLayout mTlUser;
-    @BindView(R.id.vp_user)
-    ViewPager mVpUser;
+public class ShotsDetailsActivity extends BaseActivity {
+    @BindView(R.id.iv_shots)
+    BadgedFourThreeImageView mIvShots;
 
+    @BindView(R.id.tl_user_shots)
+    TabLayout mTlUserShots;
+    @BindView(R.id.vp_user_shots)
+    ViewPager mVpUserShots;
     private List<Fragment> list = new ArrayList<>();
-    private String[] tabStrs = {"简介", "作品", "粉丝"};
+    private String[] tabStrs = {"评论"};
 
     @Override
     protected int layoutResID() {
-        return R.layout.activity_user;
+        return R.layout.activity_shots_details;
     }
 
     @Override
     protected void initData() {
-        int width = ScreenUtils.getScreenWidth(this);
-        ViewGroup.LayoutParams params = mIvAvatarBig.getLayoutParams();
-        params.height = width;
+        final int width = ScreenUtils.getScreenWidth(this);
+        ViewGroup.LayoutParams params = mIvShots.getLayoutParams();
         params.width = width;
-        mIvAvatarBig.setLayoutParams(params);
-        UserEntity user = (UserEntity) getIntent().getSerializableExtra("user");
-        String avatar = user.getAvatarUrl();
-        Glide.with(this).load(avatar).into(mIvAvatar);
-        Glide.with(this).load(avatar).bitmapTransform(new BlurTransformation(this, 18, 3)).override(width, width).into(mIvAvatarBig);
-        String name = user.getName();
-        mTvName.setText(name);
-        String bio = user.getBio();
-        if (TextUtils.isEmpty(bio)) {
-            mTvBio.setVisibility(View.GONE);
+        params.height = width * 3 / 4;
+        mIvShots.setLayoutParams(params);
+        ShotsEntity shots = (ShotsEntity) getIntent().getSerializableExtra("shots");
+        boolean isAnimated = shots.isAnimated();
+        if (isAnimated) {
+            String hidpi = shots.getImages().getHidpi();
+            Glide.with(ShotsDetailsActivity.this).load(hidpi).asGif().placeholder(R.drawable.bg_linear_shots).diskCacheStrategy(DiskCacheStrategy.SOURCE).dontTransform().fitCenter().into(mIvShots);
         } else {
-            mTvBio.setVisibility(View.VISIBLE);
-            mTvBio.setText(Html.fromHtml(bio));
+            String normal = shots.getImages().getNormal();
+            Glide.with(ShotsDetailsActivity.this).load(normal).placeholder(R.drawable.bg_linear_shots).override(width, width * 3 / 4).into(mIvShots);
         }
-
-        list.add(UserInfoFragment.newInstance(user));
-        list.add(UserShotsFragment.newInstance(String.valueOf(user.getId())));
-        list.add(UserFollowersFragment.newInstance(String.valueOf(user.getId())));
-        mTlUser.setupWithViewPager(mVpUser);
+        list.add(CommentsFragment.newInstance(String.valueOf(shots.getId())));
+        mTlUserShots.setupWithViewPager(mVpUserShots);
         FragmentManager fm = getSupportFragmentManager();
         TFragmentPageAdapter adapter = new TFragmentPageAdapter(fm, tabStrs, list);
-        mVpUser.setAdapter(adapter);
+        mVpUserShots.setAdapter(adapter);
 
-        String web = user.getLinks().getWeb();
-        if (TextUtils.isEmpty(web)) {
-            mTvWeb.setVisibility(View.GONE);
-        } else {
-            mTvWeb.setText(web);
-        }
-        String twitter = user.getLinks().getTwitter();
-        if (TextUtils.isEmpty(twitter)) {
-            mTvTwitter.setVisibility(View.GONE);
-        } else {
-            mTvTwitter.setText(twitter);
-        }
+
     }
 
     @Override
@@ -127,7 +104,6 @@ public class UserActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
     }
 }

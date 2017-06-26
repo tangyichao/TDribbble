@@ -1,5 +1,7 @@
 package com.tyc.tdribbble.api;
 
+import com.tyc.tdribbble.entity.CommentsEntity;
+import com.tyc.tdribbble.entity.FollowersEntity;
 import com.tyc.tdribbble.entity.ShotsEntity;
 import com.tyc.tdribbble.entity.TokenEntity;
 import com.tyc.tdribbble.entity.UserEntity;
@@ -29,5 +31,11 @@ public interface ApiService {
     Observable<List<ShotsEntity>> getShots(@QueryMap Map<String,String> map,@Header("Authorization") String token);
 
     @GET(ApiConstants.FOLLOWERS)
-    Observable<List<ShotsEntity>> getFollowers(@Path(ApiConstants.USERID) String userId, @Header("Authorization") String token);
+    Observable<List<FollowersEntity>> getFollowers(@Path(ApiConstants.USERID) String userId, @Header("Authorization") String token);
+
+    @GET(ApiConstants.USERSHOTS)
+    Observable<List<ShotsEntity>> getUserShots(@Path(ApiConstants.USERID) String userId, @Header("Authorization") String token);
+
+    @GET(ApiConstants.COMMENTS)
+    Observable<List<CommentsEntity>> getComments(@Path(ApiConstants.SHOTID) String shotId, @Header("Authorization") String token);
 }

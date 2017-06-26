@@ -28,7 +28,9 @@
         </activity>
         <activity
             android:name=".ui.user.UserActivity"
-            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.shotsdetails.ShotsDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
     </application>
 

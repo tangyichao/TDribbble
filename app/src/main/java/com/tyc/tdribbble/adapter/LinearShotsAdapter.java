@@ -1,5 +1,6 @@
 package com.tyc.tdribbble.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -17,6 +18,7 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.entity.ShotsEntity;
 import com.tyc.tdribbble.ui.home.HomeActivity;
+import com.tyc.tdribbble.ui.shotsdetails.ShotsDetailsActivity;
 import com.tyc.tdribbble.ui.user.UserActivity;
 import com.tyc.tdribbble.utils.DisplayUtils;
 import com.tyc.tdribbble.utils.ScreenUtils;
@@ -66,6 +68,9 @@ public class LinearShotsAdapter extends RecyclerView.Adapter {
         {
             width = (width - DisplayUtils.dip2px(context, 16f)) / 2;
         }
+        if (type == 4) {
+            width = (width - DisplayUtils.dip2px(context, 16f)) * 2 / 3;
+        }
         int height = width * 3 / 4;
         ViewGroup.LayoutParams params = ((LinearShotsViewHolder) (holder)).mIvShots.getLayoutParams();
         params.height = height;
@@ -74,14 +79,14 @@ public class LinearShotsAdapter extends RecyclerView.Adapter {
 
         if (type == 2) {
             ((LinearShotsViewHolder) (holder)).mLlAUthor.setVisibility(View.VISIBLE);
-            String avatar = shotsEntities.get(position).getUser().getAvatar_url();
+            String avatar = shotsEntities.get(position).getUser().getAvatarUrl();
             Glide.with(context).load(avatar).into(((LinearShotsViewHolder) holder).mIvAvatar);
             ((LinearShotsViewHolder) holder).mIvAvatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent();
                     intent.setClass(context, UserActivity.class);
-                    intent.putExtra("shots", shotsEntities.get(holder.getAdapterPosition()));
+                    intent.putExtra("user", shotsEntities.get(holder.getAdapterPosition()).getUser());
                     context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation((HomeActivity) context,
                             Pair.create(view, context.getResources().getString(R.string.str_avatar_tran)),
                             Pair.create((View) ((LinearShotsViewHolder) holder).mTvName, context.getResources().getString(R.string.str_name_tran))).toBundle());
@@ -108,7 +113,7 @@ public class LinearShotsAdapter extends RecyclerView.Adapter {
         }
         if(shotsEntities.get(position).isAnimated()){
             String hidpi=shotsEntities.get(position).getImages().getHidpi();
-            Glide.with(context).load(hidpi).asGif().placeholder(R.drawable.bg_linear_shots).override(width,height).diskCacheStrategy(DiskCacheStrategy.SOURCE).into(((LinearShotsViewHolder) holder).mIvShots);
+            Glide.with(context).load(hidpi).asGif().placeholder(R.drawable.bg_linear_shots).override(width, height).diskCacheStrategy(DiskCacheStrategy.SOURCE).dontTransform().fitCenter().into(((LinearShotsViewHolder) holder).mIvShots);
             if (type == 0 || type == 2) {
                  ((LinearShotsViewHolder) holder).mIvIsGif.setImageResource(R.mipmap.ic_gif);
            }else{
@@ -120,6 +125,16 @@ public class LinearShotsAdapter extends RecyclerView.Adapter {
             Glide.with(context).load(normal).placeholder(R.drawable.bg_linear_shots).override(width,height).into(((LinearShotsViewHolder) holder).mIvShots);
             ((LinearShotsViewHolder) holder).mIvIsGif.setVisibility(View.GONE);
         }
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent();
+                intent.setClass(context, ShotsDetailsActivity.class);
+                intent.putExtra("shots", shotsEntities.get(holder.getAdapterPosition()));
+                context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context,
+                        Pair.create((View) ((LinearShotsViewHolder) holder).mIvShots, context.getResources().getString(R.string.str_shots_tran))).toBundle());
+            }
+        });
 
     }
 

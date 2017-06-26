@@ -15,8 +15,10 @@ public class ApiConstants {
     public static final String SHOTS="shots";
 
     public static final String FOLLOWERS = "users/{userId}/followers";
-
+    public static final String USERSHOTS = "users/{userId}/shots";
+    public static final String COMMENTS = "shots/{shotId}/comments";
     public static final String USERID = "userId";
+    public static final String SHOTID = "shotId";
   public interface Shots{
       /**
        * 类型，默认返回所有类型

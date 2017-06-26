@@ -1,9 +1,10 @@
-package com.tyc.tdribbble.ui.user.followers;
+package com.tyc.tdribbble.ui.user.shots;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,10 +12,8 @@ import android.view.ViewGroup;
 
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.TDribbbleApp;
-import com.tyc.tdribbble.adapter.FollowersAdapter;
-import com.tyc.tdribbble.entity.FollowersEntity;
+import com.tyc.tdribbble.adapter.LinearShotsAdapter;
 import com.tyc.tdribbble.entity.ShotsEntity;
-import com.tyc.tdribbble.ui.user.fragment.UserInfoFragment;
 
 import java.util.List;
 
@@ -26,16 +25,16 @@ import butterknife.Unbinder;
  * 作者：tangyc on 2017/6/23
  * 邮箱：874500641@qq.com
  */
-public class UserFollowersFragment extends Fragment implements IFollowersView {
+public class UserShotsFragment extends Fragment implements IShotsView {
     @BindView(R.id.rv_followers)
     RecyclerView mRvFollowers;
     Unbinder unbinder;
-    FollowersPresenter followersPresenter;
+    ShotsPresenter shotsPresenter;
 
-    public static UserFollowersFragment newInstance(String userId) {
-        UserFollowersFragment fragment = new UserFollowersFragment();
+    public static UserShotsFragment newInstance(String userId) {
+        UserShotsFragment fragment = new UserShotsFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("userId", userId);
+        bundle.putSerializable("userId", userId);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -52,15 +51,17 @@ public class UserFollowersFragment extends Fragment implements IFollowersView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         String userId = getArguments().getString("userId");
-        followersPresenter = new FollowersPresenter(this);
-        followersPresenter.loadFollowers(userId, TDribbbleApp.token);
-        mRvFollowers.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+        shotsPresenter = new ShotsPresenter(this);
+        shotsPresenter.loadShots(userId, TDribbbleApp.token);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        mRvFollowers.setLayoutManager(manager);
+        new LinearSnapHelper().attachToRecyclerView(mRvFollowers);
     }
 
     @Override
-    public void showFollowers(List<FollowersEntity> followersEntities) {
-        mRvFollowers.setAdapter(new FollowersAdapter(getActivity(), followersEntities));
+    public void showShots(List<ShotsEntity> shotsEntities) {
+        LinearShotsAdapter adapter = new LinearShotsAdapter(getActivity(), shotsEntities, 0);
+        mRvFollowers.setAdapter(adapter);
     }
 
     @Override

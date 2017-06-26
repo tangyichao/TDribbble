@@ -52,7 +52,7 @@ public class UserEntity implements Serializable {
     private String avatarUrl;
     private String bio;
     private String location;
-    private LinksBean links;
+    private LinksEntity links;
     @SerializedName("buckets_count")
     private int bucketsCount;
     @SerializedName("comments_received_count")
@@ -143,11 +143,11 @@ public class UserEntity implements Serializable {
         this.location = location;
     }
 
-    public LinksBean getLinks() {
+    public LinksEntity getLinks() {
         return links;
     }
 
-    public void setLinks(LinksBean links) {
+    public void setLinks(LinksEntity links) {
         this.links = links;
     }
 

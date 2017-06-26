@@ -1,20 +1,21 @@
-package com.tyc.tdribbble.ui.user.followers;
+package com.tyc.tdribbble.ui.shotsdetails.Comments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.TDribbbleApp;
+import com.tyc.tdribbble.adapter.CommentsAdapter;
 import com.tyc.tdribbble.adapter.FollowersAdapter;
+import com.tyc.tdribbble.entity.CommentsEntity;
 import com.tyc.tdribbble.entity.FollowersEntity;
-import com.tyc.tdribbble.entity.ShotsEntity;
-import com.tyc.tdribbble.ui.user.fragment.UserInfoFragment;
 
 import java.util.List;
 
@@ -26,16 +27,16 @@ import butterknife.Unbinder;
  * 作者：tangyc on 2017/6/23
  * 邮箱：874500641@qq.com
  */
-public class UserFollowersFragment extends Fragment implements IFollowersView {
-    @BindView(R.id.rv_followers)
-    RecyclerView mRvFollowers;
+public class CommentsFragment extends Fragment implements ICommentsView {
+    @BindView(R.id.rv_comments)
+    RecyclerView mRvComments;
     Unbinder unbinder;
-    FollowersPresenter followersPresenter;
+    CommentsPresenter commentsPresenter;
 
-    public static UserFollowersFragment newInstance(String userId) {
-        UserFollowersFragment fragment = new UserFollowersFragment();
+    public static CommentsFragment newInstance(String shotId) {
+        CommentsFragment fragment = new CommentsFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("userId", userId);
+        bundle.putString("shotId", shotId);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -43,7 +44,7 @@ public class UserFollowersFragment extends Fragment implements IFollowersView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.fragment_followers, null);
+        View view = View.inflate(getActivity(), R.layout.fragment_comments, null);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }
@@ -51,16 +52,17 @@ public class UserFollowersFragment extends Fragment implements IFollowersView {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        String userId = getArguments().getString("userId");
-        followersPresenter = new FollowersPresenter(this);
-        followersPresenter.loadFollowers(userId, TDribbbleApp.token);
-        mRvFollowers.setLayoutManager(new LinearLayoutManager(getActivity()));
+        String shotId = getArguments().getString("shotId");
+        Log.i("debug", shotId);
+        commentsPresenter = new CommentsPresenter(this);
+        commentsPresenter.loadComments(shotId, TDribbbleApp.token);
+        mRvComments.setLayoutManager(new LinearLayoutManager(getActivity()));
 
     }
 
     @Override
-    public void showFollowers(List<FollowersEntity> followersEntities) {
-        mRvFollowers.setAdapter(new FollowersAdapter(getActivity(), followersEntities));
+    public void showComments(List<CommentsEntity> commentsEntities) {
+        mRvComments.setAdapter(new CommentsAdapter(getActivity(), commentsEntities));
     }
 
     @Override

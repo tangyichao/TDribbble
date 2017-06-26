@@ -19,4 +19,5 @@
     <string name="action_large_info">大图详情</string>
     <string name="str_avatar_tran">avatarTran</string>
     <string name="str_name_tran">nameTran</string>
+    <string name="str_shots_tran">shotsTran</string>
 </resources>

@@ -1,16 +1,12 @@
-package com.tyc.tdribbble.ui.user.followers;
+package com.tyc.tdribbble.ui.shotsdetails.Comments;
 
 import android.util.Log;
 
 import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.api.ApiManager;
 import com.tyc.tdribbble.api.ApiService;
+import com.tyc.tdribbble.entity.CommentsEntity;
 import com.tyc.tdribbble.entity.FollowersEntity;
-import com.tyc.tdribbble.entity.ShotsEntity;
-import com.tyc.tdribbble.entity.TokenEntity;
-import com.tyc.tdribbble.entity.UserEntity;
-import com.tyc.tdribbble.ui.login.ILoginModel;
-import com.tyc.tdribbble.ui.login.ILoginView;
 
 import java.util.List;
 
@@ -23,34 +19,35 @@ import io.reactivex.schedulers.Schedulers;
  * 作者：tangyc on 2017/6/21
  * 邮箱：874500641@qq.com
  */
-public class FollowersModel implements IFollowersModel {
+public class CommentsModel implements ICommentsModel {
 
-    private IFollowersView iFollowersView;
+    private ICommentsView iCommentsView;
 
-    public FollowersModel(IFollowersView iFollowersView) {
-        this.iFollowersView = iFollowersView;
+    public CommentsModel(ICommentsView iCommentsView) {
+        this.iCommentsView = iCommentsView;
     }
 
 
     @Override
-    public void loadFollowers(String userId, String token) {
+    public void loadComments(String shotId, String token) {
         ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1, token).create(ApiService.class);
-        service.getFollowers(userId, token)
+        service.getComments(shotId, token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<FollowersEntity>>() {
+                .subscribe(new Consumer<List<CommentsEntity>>() {
                     @Override
-                    public void accept(@NonNull List<FollowersEntity> followersEntities) throws Exception {
-                        if (followersEntities.size() > 0) {
-                            iFollowersView.showFollowers(followersEntities);
+                    public void accept(@NonNull List<CommentsEntity> commentsEntities) throws Exception {
+                        if (commentsEntities.size() == 0) {
+                            iCommentsView.showComments(commentsEntities);
                         } else {
-
+                            Log.i("debug", "commentsEntities size is 0");
                         }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(@NonNull Throwable throwable) throws Exception {
-                        iFollowersView.showError();
+                        iCommentsView.showError();
+                        Log.i("debug", throwable.getMessage());
                     }
                 });
     }

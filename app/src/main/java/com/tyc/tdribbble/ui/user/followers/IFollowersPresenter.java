@@ -5,7 +5,6 @@ package com.tyc.tdribbble.ui.user.followers;
  * 邮箱：874500641@qq.com
  */
 public interface IFollowersPresenter {
-    public void loadToken(String code);
 
-    public void loadUser(String token);
+    public void loadFollowers(String userId, String token);
 }
