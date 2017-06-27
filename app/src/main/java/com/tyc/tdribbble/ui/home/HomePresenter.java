@@ -15,4 +15,9 @@ public class HomePresenter implements IHomePresenter {
     public void loadShots(Map<String, String> map, String token, int type) {
         homeModel.loadShots(map, token, type);
     }
+
+    @Override
+    public void loadUser(String token) {
+        homeModel.loadUser(token);
+    }
 }

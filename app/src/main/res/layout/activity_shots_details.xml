@@ -43,6 +43,7 @@
                 app:tabMode="scrollable"
                 app:tabContentStart="200dp"
                 android:layout_gravity="bottom"
+                app:tabSelectedTextColor="@color/colorAccent"
                 android:layout_height="?attr/actionBarSize" />
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>

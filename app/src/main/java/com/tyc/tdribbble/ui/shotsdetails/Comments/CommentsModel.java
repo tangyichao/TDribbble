@@ -8,6 +8,7 @@ import com.tyc.tdribbble.api.ApiService;
 import com.tyc.tdribbble.entity.CommentsEntity;
 import com.tyc.tdribbble.entity.FollowersEntity;
 
+import java.util.HashMap;
 import java.util.List;
 
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -29,15 +30,15 @@ public class CommentsModel implements ICommentsModel {
 
 
     @Override
-    public void loadComments(String shotId, String token) {
+    public void loadComments(String shotId, HashMap<String, String> hashMap, String token) {
         ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1, token).create(ApiService.class);
-        service.getComments(shotId, token)
+        service.getComments(shotId, hashMap, token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<CommentsEntity>>() {
                     @Override
                     public void accept(@NonNull List<CommentsEntity> commentsEntities) throws Exception {
-                        if (commentsEntities.size() == 0) {
+                        if (commentsEntities.size() > 0) {
                             iCommentsView.showComments(commentsEntities);
                         } else {
                             Log.i("debug", "commentsEntities size is 0");

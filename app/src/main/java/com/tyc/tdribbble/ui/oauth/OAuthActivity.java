@@ -67,7 +67,6 @@ public class OAuthActivity extends BaseActivity {
                             Intent intent=new Intent();
                             intent.putExtra("code",codeStr);
                             setResult(RESULT_OK,intent);
-                            //finish();
                             break;
                         }
                     }

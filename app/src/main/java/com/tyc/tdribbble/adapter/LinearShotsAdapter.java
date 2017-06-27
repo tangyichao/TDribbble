@@ -111,7 +111,8 @@ public class LinearShotsAdapter extends RecyclerView.Adapter {
             ((LinearShotsViewHolder) (holder)).mLlCounts.setVisibility(View.GONE);
 
         }
-        if(shotsEntities.get(position).isAnimated()){
+        final boolean isAnimated = shotsEntities.get(position).isAnimated();
+        if (isAnimated) {
             String hidpi=shotsEntities.get(position).getImages().getHidpi();
             Glide.with(context).load(hidpi).asGif().placeholder(R.drawable.bg_linear_shots).override(width, height).diskCacheStrategy(DiskCacheStrategy.SOURCE).dontTransform().fitCenter().into(((LinearShotsViewHolder) holder).mIvShots);
             if (type == 0 || type == 2) {
@@ -131,8 +132,12 @@ public class LinearShotsAdapter extends RecyclerView.Adapter {
                 Intent intent = new Intent();
                 intent.setClass(context, ShotsDetailsActivity.class);
                 intent.putExtra("shots", shotsEntities.get(holder.getAdapterPosition()));
-                context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context,
-                        Pair.create((View) ((LinearShotsViewHolder) holder).mIvShots, context.getResources().getString(R.string.str_shots_tran))).toBundle());
+                if (!isAnimated) {
+                    context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context,
+                            Pair.create((View) ((LinearShotsViewHolder) holder).mIvShots, context.getResources().getString(R.string.str_shots_tran))).toBundle());
+                } else {
+                    context.startActivity(intent);
+                }
             }
         });
 

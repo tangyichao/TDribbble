@@ -19,6 +19,9 @@ public class ApiConstants {
     public static final String COMMENTS = "shots/{shotId}/comments";
     public static final String USERID = "userId";
     public static final String SHOTID = "shotId";
+
+
+    public static final String PAGE = "page";
   public interface Shots{
       /**
        * 类型，默认返回所有类型

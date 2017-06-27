@@ -3,20 +3,23 @@ package com.tyc.tdribbble.ui.shotsdetails.Comments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.TDribbbleApp;
 import com.tyc.tdribbble.adapter.CommentsAdapter;
-import com.tyc.tdribbble.adapter.FollowersAdapter;
+import com.tyc.tdribbble.adapter.LinearShotsAdapter;
+import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.entity.CommentsEntity;
-import com.tyc.tdribbble.entity.FollowersEntity;
 
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -30,9 +33,14 @@ import butterknife.Unbinder;
 public class CommentsFragment extends Fragment implements ICommentsView {
     @BindView(R.id.rv_comments)
     RecyclerView mRvComments;
+    @BindView(R.id.pb_loading_more)
+    ProgressBar mPbLoadingMore;
     Unbinder unbinder;
     CommentsPresenter commentsPresenter;
-
+    private boolean isFlag = false;
+    private HashMap<String, String> hashMap = new HashMap<>();
+    int pageNum = 1;
+    private String shotId;
     public static CommentsFragment newInstance(String shotId) {
         CommentsFragment fragment = new CommentsFragment();
         Bundle bundle = new Bundle();
@@ -52,17 +60,47 @@ public class CommentsFragment extends Fragment implements ICommentsView {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        String shotId = getArguments().getString("shotId");
-        Log.i("debug", shotId);
+        shotId = getArguments().getString("shotId");
+        hashMap.put(ApiConstants.PAGE, String.valueOf(pageNum));
         commentsPresenter = new CommentsPresenter(this);
-        commentsPresenter.loadComments(shotId, TDribbbleApp.token);
-        mRvComments.setLayoutManager(new LinearLayoutManager(getActivity()));
+        commentsPresenter.loadComments(shotId, hashMap, TDribbbleApp.token);
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        linearLayoutManager.setAutoMeasureEnabled(true);
+        mRvComments.setLayoutManager(linearLayoutManager);
+        mRvComments.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                int lastItemPosition = linearLayoutManager.findLastVisibleItemPosition();
+                int itemCount = recyclerView.getAdapter().getItemCount();
+                int childCount = recyclerView.getChildCount();
+                if ((itemCount - childCount) <= lastItemPosition && !isFlag) {
+                    isFlag = true;
+                    pageNum++;
+                    hashMap.put(ApiConstants.PAGE, String.valueOf(pageNum));
+                    commentsPresenter.loadComments(shotId, hashMap, TDribbbleApp.token);
+                }
+            }
+        });
 
     }
 
     @Override
     public void showComments(List<CommentsEntity> commentsEntities) {
-        mRvComments.setAdapter(new CommentsAdapter(getActivity(), commentsEntities));
+        if (mRvComments.getAdapter() == null) {
+            CommentsAdapter adapter = new CommentsAdapter(getActivity(), commentsEntities);
+            mRvComments.setAdapter(adapter);
+            mRvComments.addItemDecoration(new DividerItemDecoration(
+                    getActivity(), DividerItemDecoration.VERTICAL));
+        } else {
+            ((CommentsAdapter) mRvComments.getAdapter()).addData(commentsEntities);
+        }
+        isFlag = false;
     }
 
     @Override

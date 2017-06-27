@@ -46,7 +46,7 @@
                     android:id="@+id/tv_name"
                     android:layout_width="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:textSize="20sp"
+                    android:textSize="14sp"
                     android:textColor="@color/colorTextClick"
                     android:transitionName="@string/str_name_tran"
                     android:layout_height="wrap_content" />

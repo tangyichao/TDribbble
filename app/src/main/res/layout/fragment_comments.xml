@@ -1,17 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_comments"
+    <LinearLayout
+        android:id="@+id/ll_comments"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_comments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </LinearLayout>
 
     <ProgressBar
-        android:id="@+id/pb_loading_more"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="?android:attr/progressBarStyleSmall" />
-</LinearLayout>
+        android:id="@id/pb_loading_more"
+        style="?android:attr/progressBarStyleSmall"
+        android:layout_width="match_parent"
+        android:layout_below="@id/ll_comments"
+        android:layout_height="wrap_content" />
+</RelativeLayout>

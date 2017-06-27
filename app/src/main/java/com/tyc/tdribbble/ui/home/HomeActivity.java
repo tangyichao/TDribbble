@@ -5,6 +5,9 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -22,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,19 +38,23 @@ import com.tyc.tdribbble.base.BaseActivity;
 import com.tyc.tdribbble.entity.ShotsEntity;
 import com.tyc.tdribbble.entity.UserEntity;
 import com.tyc.tdribbble.ui.login.LoginActivity;
+import com.tyc.tdribbble.ui.user.UserActivity;
 import com.tyc.tdribbble.utils.DisplayUtils;
 import com.tyc.tdribbble.utils.ScreenUtils;
 import com.tyc.tdribbble.utils.StringOauth;
+import com.tyc.tdribbble.utils.TimeUtils;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.sql.Time;
 import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
+import jp.wasabeef.glide.transformations.BlurTransformation;
 
 /**
  * 作者：tangyc on 2017/6/20
@@ -68,6 +76,7 @@ public class HomeActivity extends BaseActivity
     // @BindView(R.id.iv_avatar)
     CircleImageView mIvAvatar;
     TextView mTvName;
+    ImageView mIvBg;
     @BindView(R.id.sp_list)
     AppCompatSpinner mSpList;
     @BindView(R.id.sp_sort)
@@ -81,11 +90,13 @@ public class HomeActivity extends BaseActivity
 
     private LinearShotsAdapter adapter;
     private String token;
-    private int count = 0;
+    private int count = 1;
     private  HashMap<String, String> hashMap = new HashMap<>();
     private HomePresenter  homePresenter;
     private boolean isFlag=false;
     private int type=0;
+    UserEntity userEntity;
+
     @Override
     protected int layoutResID() {
         return R.layout.activity_home;
@@ -100,6 +111,7 @@ public class HomeActivity extends BaseActivity
         mIvAvatar.setOnClickListener(this);
         mTvName = headerLayout.findViewById(R.id.tv_name);
         mTvName.setOnClickListener(this);
+        mIvBg = headerLayout.findViewById(R.id.iv_bg);
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -107,7 +119,7 @@ public class HomeActivity extends BaseActivity
                         .setAction("Action", null).show();
             }
         });
-
+        mSrlShots.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         mDrawerLayout.addDrawerListener(toggle);
@@ -130,7 +142,6 @@ public class HomeActivity extends BaseActivity
 //        mSpList.setAdapter(listAdapter);
 
         mSpSort.setDropDownWidth(width/3);//设置下拉菜单的宽度
-        Log.i("debug",mSpSort.getHeight()+"-----");
         mSpSort.setDropDownHorizontalOffset( height);////设置选择微调的弹出窗口中像素的水平偏移。在mode_dropdown唯一有效的；
         mSpSort.setDropDownVerticalOffset( height);//设置选择微调的弹出窗口中像素的垂直偏移。在mode_dropdown唯一有效的；
 
@@ -142,8 +153,8 @@ public class HomeActivity extends BaseActivity
         mSpSort.setOnItemSelectedListener(this);
         mSpTime.setOnItemSelectedListener(this);
 
-        hashMap.put("date", "2017-06-22");
-        hashMap.put("page", String.valueOf(count));
+        hashMap.put("date", TimeUtils.dateToStr(TimeUtils.FORMAT_DATE, null));
+        hashMap.put(ApiConstants.PAGE, String.valueOf(count));
         final LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setAutoMeasureEnabled(true);
         mRvShots.setLayoutManager(linearLayoutManager);
@@ -168,10 +179,12 @@ public class HomeActivity extends BaseActivity
                     count++;
                     hashMap.put("page",String.valueOf(count));
                     homePresenter.loadShots(hashMap, TDribbbleApp.token, 1);
-                    Log.i("debug","-----------");
                 }
             }
         });
+        if (!TextUtils.isEmpty(token)) {
+            homePresenter.loadUser(token);
+        }
     }
 
     @Override
@@ -269,8 +282,14 @@ public class HomeActivity extends BaseActivity
                     intent.setClass(HomeActivity.this, LoginActivity.class);
                     intent.putExtra("url", StringOauth.getOauthSting());
                     startActivityForResult(intent, REQUEST_CODE);
+                    view.setEnabled(false);
                 } else {
-                    //Log
+                    Intent intent = new Intent();
+                    intent.setClass(HomeActivity.this, UserActivity.class);
+                    intent.putExtra("user", userEntity);
+                    startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                            Pair.create((View) mIvAvatar, getResources().getString(R.string.str_avatar_tran)),
+                            Pair.create((View) mTvName, getResources().getString(R.string.str_name_tran))).toBundle());
                 }
                 break;
 
@@ -279,9 +298,11 @@ public class HomeActivity extends BaseActivity
 
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onMessageEvent(UserEntity userEntity) {
-        Log.i("debug", userEntity.getAvatarUrl());
-        Glide.with(this).load(userEntity.getAvatarUrl()).asGif().placeholder(R.mipmap.ic_avatar).into(mIvAvatar);
+        this.userEntity = userEntity;
+        Glide.with(this).load(userEntity.getAvatarUrl()).asGif().error(R.drawable.bg_default_avatar).into(mIvAvatar);
+        Glide.with(this).load(userEntity.getAvatarUrl()).bitmapTransform(new BlurTransformation(this, 18, 3)).into(mIvBg);
         mTvName.setText(userEntity.getName());
+        mIvAvatar.setEnabled(true);
     }
 
 
@@ -307,6 +328,15 @@ public class HomeActivity extends BaseActivity
 
         isFlag=false;
 
+    }
+
+    @Override
+    public void showUser(UserEntity userEntity) {
+        this.userEntity = userEntity;
+        Glide.with(this).load(userEntity.getAvatarUrl()).error(R.drawable.bg_default_avatar).into(mIvAvatar);
+        Glide.with(this).load(userEntity.getAvatarUrl()).bitmapTransform(new BlurTransformation(this, 18, 3)).into(mIvBg);
+        mTvName.setText(userEntity.getName());
+        mIvAvatar.setEnabled(true);
     }
 
     @Override
@@ -346,8 +376,8 @@ public class HomeActivity extends BaseActivity
                     hashMap.put("timeframe", ApiConstants.Shots.TIME_VALUES[i]);
                     break;
             }
-        TextView tv = (TextView)view;
-        tv.setGravity(Gravity.CENTER);
+//        TextView tv = (TextView)view;
+//        tv.setGravity(Gravity.CENTER);
 //
         homePresenter.loadShots(hashMap, TDribbbleApp.token, 0);
         mSrlShots.setRefreshing(true);

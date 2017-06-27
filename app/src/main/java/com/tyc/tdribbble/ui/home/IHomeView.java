@@ -1,6 +1,7 @@
 package com.tyc.tdribbble.ui.home;
 
 import com.tyc.tdribbble.entity.ShotsEntity;
+import com.tyc.tdribbble.entity.UserEntity;
 
 import java.util.List;
 
@@ -11,6 +12,8 @@ import java.util.List;
 public interface  IHomeView {
     public void showShots(List<ShotsEntity> shotsEntities);
     public void loadMoreShots(List<ShotsEntity> shotsEntities);
+
+    public void showUser(UserEntity userEntity);
     public void showError();
     public void showEmpty();
 }

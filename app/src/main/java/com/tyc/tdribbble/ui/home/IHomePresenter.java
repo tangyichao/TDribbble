@@ -8,4 +8,6 @@ import java.util.Map;
  */
 public interface IHomePresenter {
     void loadShots(Map<String, String> map, String token, int type);
+
+    void loadUser(String token);
 }

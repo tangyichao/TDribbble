@@ -24,6 +24,7 @@ import com.tyc.tdribbble.entity.UserEntity;
 import com.tyc.tdribbble.ui.user.followers.UserFollowersFragment;
 import com.tyc.tdribbble.ui.user.fragment.UserInfoFragment;
 import com.tyc.tdribbble.ui.user.shots.UserShotsFragment;
+import com.tyc.tdribbble.utils.HtmlFormatUtils;
 import com.tyc.tdribbble.utils.ScreenUtils;
 
 import java.util.ArrayList;
@@ -84,7 +85,7 @@ public class UserActivity extends BaseActivity {
             mTvBio.setVisibility(View.GONE);
         } else {
             mTvBio.setVisibility(View.VISIBLE);
-            mTvBio.setText(Html.fromHtml(bio));
+            HtmlFormatUtils.Html2StringNoP(mTvBio, bio);
         }
 
         list.add(UserInfoFragment.newInstance(user));

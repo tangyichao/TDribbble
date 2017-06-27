@@ -6,6 +6,7 @@ import com.tyc.tdribbble.entity.ShotsEntity;
 import com.tyc.tdribbble.entity.TokenEntity;
 import com.tyc.tdribbble.entity.UserEntity;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -37,5 +38,5 @@ public interface ApiService {
     Observable<List<ShotsEntity>> getUserShots(@Path(ApiConstants.USERID) String userId, @Header("Authorization") String token);
 
     @GET(ApiConstants.COMMENTS)
-    Observable<List<CommentsEntity>> getComments(@Path(ApiConstants.SHOTID) String shotId, @Header("Authorization") String token);
+    Observable<List<CommentsEntity>> getComments(@Path(ApiConstants.SHOTID) String shotId, @QueryMap HashMap<String, String> hashMap, @Header("Authorization") String token);
 }

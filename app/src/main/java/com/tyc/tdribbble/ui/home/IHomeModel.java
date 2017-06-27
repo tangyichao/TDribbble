@@ -9,4 +9,6 @@ import java.util.Map;
 public interface IHomeModel {
     public void loadShots(Map<String, String> map, String token, int type);
 
+    public void loadUser(String token);
+
 }

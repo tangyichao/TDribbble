@@ -57,4 +57,28 @@ public class HomeModel implements IHomeModel {
                     });
         }
     }
+
+    @Override
+    public void loadUser(String token) {
+        ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1, token).create(ApiService.class);
+        service.getUser(token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<UserEntity>() {
+                    @Override
+                    public void accept(@NonNull UserEntity userEntity) throws Exception {
+                        if (userEntity != null) {
+                            iHomeView.showUser(userEntity);
+                        } else {
+                            //iLoginView.showError();
+                        }
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable throwable) throws Exception {
+                        //iLoginView.showError();
+                        Log.i("debug", throwable.getMessage());
+                    }
+                });
+    }
 }
