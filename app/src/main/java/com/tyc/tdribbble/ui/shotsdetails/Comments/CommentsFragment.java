@@ -33,8 +33,6 @@ import butterknife.Unbinder;
 public class CommentsFragment extends Fragment implements ICommentsView {
     @BindView(R.id.rv_comments)
     RecyclerView mRvComments;
-    @BindView(R.id.pb_loading_more)
-    ProgressBar mPbLoadingMore;
     Unbinder unbinder;
     CommentsPresenter commentsPresenter;
     private boolean isFlag = false;
@@ -101,6 +99,11 @@ public class CommentsFragment extends Fragment implements ICommentsView {
             ((CommentsAdapter) mRvComments.getAdapter()).addData(commentsEntities);
         }
         isFlag = false;
+    }
+
+    @Override
+    public void showEmpty() {
+
     }
 
     @Override

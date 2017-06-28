@@ -28,6 +28,7 @@
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
                 app:layout_collapseMode="parallax"
+                android:foreground="?android:attr/selectableItemBackground"
                 android:transitionName="@string/str_shots_tran" />
 
             <android.support.v7.widget.Toolbar

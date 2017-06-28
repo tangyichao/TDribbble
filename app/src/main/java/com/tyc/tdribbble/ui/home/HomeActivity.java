@@ -1,6 +1,8 @@
 package com.tyc.tdribbble.ui.home;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -23,6 +25,8 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -94,7 +98,7 @@ public class HomeActivity extends BaseActivity
     private  HashMap<String, String> hashMap = new HashMap<>();
     private HomePresenter  homePresenter;
     private boolean isFlag=false;
-    private int type=0;
+    private int type = 2; //默认是大的
     UserEntity userEntity;
 
     @Override
@@ -107,6 +111,7 @@ public class HomeActivity extends BaseActivity
         token = TDribbbleApp.token;
         setSupportActionBar(mToolbar);
         View headerLayout = mNavView.getHeaderView(0);
+        setTranslucentForDrawerLayout(this, mDrawerLayout);
         mIvAvatar = headerLayout.findViewById(R.id.iv_avatar);
         mIvAvatar.setOnClickListener(this);
         mTvName = headerLayout.findViewById(R.id.tv_name);
@@ -187,13 +192,20 @@ public class HomeActivity extends BaseActivity
         }
     }
 
+    private long time = 0;
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            super.onBackPressed();
+            time = System.currentTimeMillis() - time;
+            if (time > 1000) {
+                Snackbar.make(drawer, R.string.str_finish_app, Snackbar.LENGTH_LONG).show();
+            } else {
+                super.onBackPressed();
+            }
+            time = System.currentTimeMillis();
         }
     }
 
@@ -262,7 +274,7 @@ public class HomeActivity extends BaseActivity
 
         } else if (id == R.id.nav_share) {
 
-        } else if (id == R.id.nav_send) {
+        } else if (id == R.id.nav_settings) {
 
         }
 
@@ -391,5 +403,25 @@ public class HomeActivity extends BaseActivity
 //            TextView itemTv = (TextView) adapterView.getChildAt(j);
 //            itemTv.setGravity(Gravity.CENTER);
 //        }
+    }
+
+    /**
+     * 为 DrawerLayout 布局设置状态栏透明
+     *
+     * @param activity     需要设置的activity
+     * @param drawerLayout DrawerLayout
+     */
+    public static void setTranslucentForDrawerLayout(Activity activity, DrawerLayout drawerLayout) {
+        // 设置状态栏透明
+        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+        // 设置内容布局属性
+        ViewGroup contentLayout = (ViewGroup) drawerLayout.getChildAt(0);
+        contentLayout.setFitsSystemWindows(true);
+        contentLayout.setClipToPadding(true);
+        // 设置抽屉布局属性
+        ViewGroup vg = (ViewGroup) drawerLayout.getChildAt(1);
+        vg.setFitsSystemWindows(false);
+        // 设置 DrawerLayout 属性
+        drawerLayout.setFitsSystemWindows(false);
     }
 }

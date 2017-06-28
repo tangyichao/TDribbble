@@ -5,23 +5,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:id="@+id/ll_comments"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_comments"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_comments"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
-
-    <ProgressBar
-        android:id="@id/pb_loading_more"
-        style="?android:attr/progressBarStyleSmall"
-        android:layout_width="match_parent"
-        android:layout_below="@id/ll_comments"
         android:layout_height="wrap_content" />
 </RelativeLayout>

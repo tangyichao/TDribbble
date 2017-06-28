@@ -32,6 +32,9 @@
         <activity
             android:name=".ui.shotsdetails.ShotsDetailsActivity"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.bigimage.BigImageActivity"
+            android:theme="@style/FullScreenTheme" />
     </application>
 
 </manifest>

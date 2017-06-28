@@ -1,17 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <LinearLayout
+        android:id="@+id/ll_loading"
+        android:layout_width="match_parent"
+        android:orientation="vertical"
+        android:layout_height="40dp">
     <ProgressBar
         style="?android:attr/progressBarStyleSmall"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
+        android:layout_gravity="center"
+        android:layout_height="20dp" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:textSize="12sp"
         android:text="@string/str_loading_more" />
-</LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_end"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:text="没有更多内容可以加载了" />
+</FrameLayout>

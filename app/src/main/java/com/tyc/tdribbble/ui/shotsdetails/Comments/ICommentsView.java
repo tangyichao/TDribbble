@@ -12,5 +12,6 @@ import java.util.List;
 public interface ICommentsView {
     public void showComments(List<CommentsEntity> commentsEntities);
 
+    public void showEmpty();
     public void showError();
 }

@@ -14,6 +14,7 @@
     <string name="str_welcome">欢迎回来</string>
     <string name="str_favorite">收藏</string>
     <string name="str_shots">作品</string>
+    <string name="str_settings">设置</string>
     <string name="action_large_image">仅大图</string>
     <string name="action_small_image">仅小图</string>
     <string name="action_large_info">大图详情</string>
@@ -21,4 +22,5 @@
     <string name="str_avatar_tran">avatarTran</string>
     <string name="str_name_tran">nameTran</string>
     <string name="str_shots_tran">shotsTran</string>
+    <string name="str_finish_app">再次返回退出应用</string>
 </resources>

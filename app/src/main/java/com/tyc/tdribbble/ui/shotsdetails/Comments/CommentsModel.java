@@ -30,7 +30,7 @@ public class CommentsModel implements ICommentsModel {
 
 
     @Override
-    public void loadComments(String shotId, HashMap<String, String> hashMap, String token) {
+    public void loadComments(String shotId, final HashMap<String, String> hashMap, String token) {
         ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1, token).create(ApiService.class);
         service.getComments(shotId, hashMap, token)
                 .subscribeOn(Schedulers.io())
@@ -38,17 +38,16 @@ public class CommentsModel implements ICommentsModel {
                 .subscribe(new Consumer<List<CommentsEntity>>() {
                     @Override
                     public void accept(@NonNull List<CommentsEntity> commentsEntities) throws Exception {
-                        if (commentsEntities.size() > 0) {
+                        if (commentsEntities.size() > 0 || Integer.valueOf(hashMap.get(ApiConstants.PAGE)) > 1) {
                             iCommentsView.showComments(commentsEntities);
                         } else {
-                            Log.i("debug", "commentsEntities size is 0");
+                            iCommentsView.showEmpty();
                         }
                     }
                 }, new Consumer<Throwable>() {
                     @Override
                     public void accept(@NonNull Throwable throwable) throws Exception {
                         iCommentsView.showError();
-                        Log.i("debug", throwable.getMessage());
                     }
                 });
     }

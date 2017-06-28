@@ -1,5 +1,6 @@
 package com.tyc.tdribbble.ui.user;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
@@ -7,7 +8,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.text.Html;
+import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,7 @@ import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.adapter.TFragmentPageAdapter;
 import com.tyc.tdribbble.base.BaseActivity;
 import com.tyc.tdribbble.entity.UserEntity;
+import com.tyc.tdribbble.ui.bigimage.BigImageActivity;
 import com.tyc.tdribbble.ui.user.followers.UserFollowersFragment;
 import com.tyc.tdribbble.ui.user.fragment.UserInfoFragment;
 import com.tyc.tdribbble.ui.user.shots.UserShotsFragment;
@@ -32,6 +34,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import jp.wasabeef.glide.transformations.BlurTransformation;
 
@@ -58,6 +61,20 @@ public class UserActivity extends BaseActivity {
     TabLayout mTlUser;
     @BindView(R.id.vp_user)
     ViewPager mVpUser;
+    @BindView(R.id.cv_title_time)
+    CardView cvTitleTime;
+    @BindView(R.id.tv_desc)
+    TextView tvDesc;
+    @BindView(R.id.cv_desc)
+    CardView cvDesc;
+    @BindView(R.id.civ_author_icon)
+    CircleImageView civAuthorIcon;
+    @BindView(R.id.tv_author_name)
+    TextView tvAuthorName;
+    @BindView(R.id.tv_author_desc)
+    TextView tvAuthorDesc;
+    @BindView(R.id.cv_author)
+    CardView cvAuthor;
 
     private List<Fragment> list = new ArrayList<>();
     private String[] tabStrs = {"简介", "作品", "粉丝"};
@@ -130,5 +147,15 @@ public class UserActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         // TODO: add setContentView(...) invocation
         ButterKnife.bind(this);
+    }
+
+    @OnClick({R.id.iv_avatar_big, R.id.iv_avatar})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_avatar_big:
+                break;
+            case R.id.iv_avatar:
+                break;
+        }
     }
 }
