@@ -25,13 +25,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         />
-        <ProgressBar
-            android:id="@+id/pb_loading_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/rv_shots"
-            android:gravity="bottom|center_horizontal"
-            style="?android:attr/progressBarStyleSmall"/>
         </RelativeLayout>
     </android.support.v4.widget.SwipeRefreshLayout>
 </android.support.constraint.ConstraintLayout>

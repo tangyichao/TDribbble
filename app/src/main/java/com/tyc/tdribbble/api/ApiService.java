@@ -31,6 +31,9 @@ public interface ApiService {
     @GET(ApiConstants.SHOTS)
     Observable<List<ShotsEntity>> getShots(@QueryMap Map<String,String> map,@Header("Authorization") String token);
 
+    @GET(ApiConstants.SEARCH)
+    Observable<List<ShotsEntity>> getSearch(@QueryMap Map<String, String> map);
+
     @GET(ApiConstants.FOLLOWERS)
     Observable<List<FollowersEntity>> getFollowers(@Path(ApiConstants.USERID) String userId, @Header("Authorization") String token);
 

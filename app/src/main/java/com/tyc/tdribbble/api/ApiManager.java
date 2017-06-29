@@ -18,6 +18,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * 邮箱：874500641@qq.com
  */
 public class ApiManager {
+    public static Retrofit getRetrofitJsoup(String url) {
+        OkHttpClient client = new OkHttpClient().newBuilder().readTimeout(20, TimeUnit.SECONDS).build();
+        return new Retrofit.Builder().baseUrl(url)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(new DribbbleSearchConverter.Factory())
+                .client(client).build();
+    }
     public static Retrofit getRetrofit(String url){
         OkHttpClient client=new OkHttpClient().newBuilder().readTimeout(20, TimeUnit.SECONDS).build();
         return  new Retrofit.Builder().baseUrl(url)

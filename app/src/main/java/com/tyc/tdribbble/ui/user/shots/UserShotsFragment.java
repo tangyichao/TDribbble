@@ -53,7 +53,7 @@ public class UserShotsFragment extends Fragment implements IShotsView {
         String userId = getArguments().getString("userId");
         shotsPresenter = new ShotsPresenter(this);
         shotsPresenter.loadShots(userId, TDribbbleApp.token);
-        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRvFollowers.setLayoutManager(manager);
         new LinearSnapHelper().attachToRecyclerView(mRvFollowers);
     }

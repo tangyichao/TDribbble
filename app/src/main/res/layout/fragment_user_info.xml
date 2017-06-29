@@ -19,13 +19,14 @@
             android:layout_height="180dp"
             android:layout_weight="1"
             android:layout_marginStart="24dp"
+
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_followers_count"
                 android:layout_width="match_parent"
                 android:drawableStart="@drawable/ic_follower_red_24dp"
-                android:drawablePadding="4dp"
+                android:drawablePadding="16dp"
                 android:layout_weight="1"
                 android:textSize="12sp"
                 android:gravity="center_vertical"
@@ -35,7 +36,7 @@
                 android:id="@+id/tv_followings_count"
                 android:layout_width="match_parent"
                 android:drawableStart="@drawable/ic_following_red_24dp"
-                android:drawablePadding="4dp"
+                android:drawablePadding="16dp"
                 android:layout_weight="1"
                 android:textSize="12sp"
                 android:gravity="center_vertical"
@@ -45,7 +46,7 @@
                 android:id="@+id/tv_favorite_count"
                 android:layout_width="match_parent"
                 android:drawableStart="@drawable/ic_favorite_red_24dp"
-                android:drawablePadding="4dp"
+                android:drawablePadding="16dp"
                 android:layout_weight="1"
                 android:textSize="12sp"
                 android:gravity="center_vertical"
@@ -55,7 +56,7 @@
                 android:id="@+id/tv_buckets_count"
                 android:layout_width="match_parent"
                 android:drawableStart="@drawable/ic_bucket_red_24dp"
-                android:drawablePadding="4dp"
+                android:drawablePadding="16dp"
                 android:layout_weight="1"
                 android:textSize="12sp"
                 android:gravity="center_vertical"
@@ -66,14 +67,14 @@
             android:layout_width="0dp"
             android:layout_height="180dp"
             android:layout_weight="1"
-            android:layout_marginStart="24dp"
+            android:layout_marginEnd="24dp"
             android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tv_shots_count"
                 android:layout_width="match_parent"
                 android:drawableStart="@drawable/ic_shot_red_24dp"
-                android:drawablePadding="4dp"
+                android:drawablePadding="16dp"
                 android:layout_weight="1"
                 android:textSize="12sp"
                 android:gravity="center_vertical"
@@ -83,7 +84,16 @@
                 android:id="@+id/tv_comments_count"
                 android:layout_width="match_parent"
                 android:drawableStart="@drawable/ic_comment_red_24dp"
-                android:drawablePadding="4dp"
+                android:drawablePadding="16dp"
+                android:layout_weight="1"
+                android:textSize="12sp"
+                android:gravity="center_vertical"
+                android:layout_height="0dp" />
+            <TextView
+                android:id="@+id/tv_teams_count"
+                android:layout_width="match_parent"
+                android:drawableStart="@drawable/ic_team_red_24dp"
+                android:drawablePadding="16dp"
                 android:layout_weight="1"
                 android:textSize="12sp"
                 android:gravity="center_vertical"
@@ -93,7 +103,7 @@
                 android:id="@+id/tv_projects_count"
                 android:layout_width="match_parent"
                 android:drawableStart="@drawable/ic_project_red_24dp"
-                android:drawablePadding="4dp"
+                android:drawablePadding="16dp"
                 android:layout_weight="1"
                 android:textSize="12sp"
                 android:gravity="center_vertical"
@@ -111,27 +121,30 @@
             android:id="@+id/tv_location"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawablePadding="16dp"
             android:drawableStart="@drawable/ic_location_grey_24dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_web"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:drawablePadding="16dp"
             android:drawableStart="@drawable/ic_browser_grey_24dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_twitter"
             android:layout_width="wrap_content"
+            android:drawablePadding="16dp"
             android:drawableStart="@drawable/ic_twitter_grey_24dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:layout_marginBottom="2dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
             android:textSize="14sp" />
     </LinearLayout>
 </LinearLayout>

@@ -49,32 +49,13 @@ public class UserActivity extends BaseActivity {
     CircleImageView mIvAvatar;
     @BindView(R.id.tv_name)
     TextView mTvName;
-    @BindView(R.id.tv_bio)
-    TextView mTvBio;
-    @BindView(R.id.tv_web)
-    TextView mTvWeb;
-    @BindView(R.id.tv_twitter)
-    TextView mTvTwitter;
     @BindView(R.id.cl)
     CoordinatorLayout cl;
     @BindView(R.id.tl_user)
     TabLayout mTlUser;
     @BindView(R.id.vp_user)
     ViewPager mVpUser;
-    @BindView(R.id.cv_title_time)
-    CardView cvTitleTime;
-    @BindView(R.id.tv_desc)
-    TextView tvDesc;
-    @BindView(R.id.cv_desc)
-    CardView cvDesc;
-    @BindView(R.id.civ_author_icon)
-    CircleImageView civAuthorIcon;
-    @BindView(R.id.tv_author_name)
-    TextView tvAuthorName;
-    @BindView(R.id.tv_author_desc)
-    TextView tvAuthorDesc;
-    @BindView(R.id.cv_author)
-    CardView cvAuthor;
+
 
     private List<Fragment> list = new ArrayList<>();
     private String[] tabStrs = {"简介", "作品", "粉丝"};
@@ -97,13 +78,7 @@ public class UserActivity extends BaseActivity {
         Glide.with(this).load(avatar).bitmapTransform(new BlurTransformation(this, 18, 3)).override(width, width).into(mIvAvatarBig);
         String name = user.getName();
         mTvName.setText(name);
-        String bio = user.getBio();
-        if (TextUtils.isEmpty(bio)) {
-            mTvBio.setVisibility(View.GONE);
-        } else {
-            mTvBio.setVisibility(View.VISIBLE);
-            HtmlFormatUtils.Html2StringNoP(mTvBio, bio);
-        }
+
 
         list.add(UserInfoFragment.newInstance(user));
         list.add(UserShotsFragment.newInstance(String.valueOf(user.getId())));
@@ -113,18 +88,7 @@ public class UserActivity extends BaseActivity {
         TFragmentPageAdapter adapter = new TFragmentPageAdapter(fm, tabStrs, list);
         mVpUser.setAdapter(adapter);
 
-        String web = user.getLinks().getWeb();
-        if (TextUtils.isEmpty(web)) {
-            mTvWeb.setVisibility(View.GONE);
-        } else {
-            mTvWeb.setText(web);
-        }
-        String twitter = user.getLinks().getTwitter();
-        if (TextUtils.isEmpty(twitter)) {
-            mTvTwitter.setVisibility(View.GONE);
-        } else {
-            mTvTwitter.setText(twitter);
-        }
+
     }
 
     @Override

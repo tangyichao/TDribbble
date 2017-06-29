@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -96,10 +97,16 @@ public class LinearShotsAdapter extends RecyclerView.Adapter {
             String name = shotsEntities.get(position).getUser().getName();
             ((LinearShotsViewHolder) holder).mTvName.setText(name);
             String location = shotsEntities.get(position).getUser().getLocation();
-            ((LinearShotsViewHolder) holder).mTvLocation.setText(location);
+            if (TextUtils.isEmpty(location)) {
+                ((LinearShotsViewHolder) holder).mTvLocation.setVisibility(View.GONE);
+            } else {
+                ((LinearShotsViewHolder) holder).mTvLocation.setText(location);
+            }
             String title = shotsEntities.get(position).getTitle();
             ((LinearShotsViewHolder) holder).mTvTitle.setText(title);
             ((LinearShotsViewHolder) (holder)).mLlCounts.setVisibility(View.VISIBLE);
+            int attachments = shotsEntities.get(position).getAttachmentsCount();
+            ((LinearShotsViewHolder) holder).mTvAttachmentsCount.setText(String.valueOf(attachments));
             int likesCount = shotsEntities.get(position).getLikesCount();
             ((LinearShotsViewHolder) holder).mTvLikesCount.setText(String.valueOf(likesCount));
             int commentsCount = shotsEntities.get(position).getCommentsCount();
@@ -164,6 +171,8 @@ public class LinearShotsAdapter extends RecyclerView.Adapter {
          TextView mTvTitle;
          @BindView(R.id.ll_counts)
          LinearLayout mLlCounts;
+         @BindView(R.id.tv_attachments_count)
+         TextView mTvAttachmentsCount;
          @BindView(R.id.tv_likes_count)
          TextView mTvLikesCount;
          @BindView(R.id.tv_comments_count)

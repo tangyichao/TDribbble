@@ -35,6 +35,12 @@
         <activity
             android:name=".ui.bigimage.BigImageActivity"
             android:theme="@style/FullScreenTheme" />
+        <activity
+            android:name=".ui.about.AboutActivity"
+            android:label="@string/str_about" />
+        <activity
+            android:name=".ui.search.SearchActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

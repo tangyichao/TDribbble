@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tyc.tdribbble.R;
-import com.tyc.tdribbble.entity.ShotsEntity;
 import com.tyc.tdribbble.entity.UserEntity;
 
 import butterknife.BindView;
@@ -42,6 +41,10 @@ public class UserInfoFragment extends Fragment {
     TextView mTvProjectsCount;
     @BindView(R.id.tv_shots_count)
     TextView mTvShotsCount;
+    @BindView(R.id.tv_comments_count)
+    TextView mTvCommentsCount;
+    @BindView(R.id.tv_teams_count)
+    TextView mTvTeamsCount;
 
     public static UserInfoFragment newInstance(UserEntity user) {
         UserInfoFragment fragment = new UserInfoFragment();
@@ -65,10 +68,12 @@ public class UserInfoFragment extends Fragment {
         UserEntity user = (UserEntity) getArguments().getSerializable("user");
         mTvFollowersCount.setText(user.getFollowersCount() + "粉丝");
         mTvFollowingsCount.setText(user.getFollowingsCount() + "关注");
-        // mTvFavoriteCount.setText(user.get+"点赞");
+        mTvFavoriteCount.setText(user.getLikesCount() + "点赞");
         mTvBucketsCount.setText(user.getBucketsCount() + "收藏");
         mTvShotsCount.setText(user.getShotsCount() + "作品");
         mTvProjectsCount.setText(user.getProjectsCount() + "项目");
+        mTvTeamsCount.setText(user.getTeamsCount() + "团队");
+        mTvCommentsCount.setText(user.getLikesReceivedCount() + "被喜欢");
         String location = user.getLocation();
         mTvLocation.setText(location);
         String web = user.getLinks().getWeb();

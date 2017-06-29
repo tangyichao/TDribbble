@@ -13,7 +13,7 @@ public class ApiConstants {
     public static final String BASE_URL_V1= "https://api.dribbble.com/v1/";
     public static final String USER= "user";
     public static final String SHOTS="shots";
-
+    public static final String SEARCH = "search";
     public static final String FOLLOWERS = "users/{userId}/followers";
     public static final String USERSHOTS = "users/{userId}/shots";
     public static final String COMMENTS = "shots/{shotId}/comments";

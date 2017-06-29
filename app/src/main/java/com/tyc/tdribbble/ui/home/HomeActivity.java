@@ -41,7 +41,9 @@ import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.base.BaseActivity;
 import com.tyc.tdribbble.entity.ShotsEntity;
 import com.tyc.tdribbble.entity.UserEntity;
+import com.tyc.tdribbble.ui.about.AboutActivity;
 import com.tyc.tdribbble.ui.login.LoginActivity;
+import com.tyc.tdribbble.ui.search.SearchActivity;
 import com.tyc.tdribbble.ui.user.UserActivity;
 import com.tyc.tdribbble.utils.DisplayUtils;
 import com.tyc.tdribbble.utils.ScreenUtils;
@@ -111,7 +113,7 @@ public class HomeActivity extends BaseActivity
         token = TDribbbleApp.token;
         setSupportActionBar(mToolbar);
         View headerLayout = mNavView.getHeaderView(0);
-        setTranslucentForDrawerLayout(this, mDrawerLayout);
+        // setTranslucentForDrawerLayout(this, mDrawerLayout);
         mIvAvatar = headerLayout.findViewById(R.id.iv_avatar);
         mIvAvatar.setOnClickListener(this);
         mTvName = headerLayout.findViewById(R.id.tv_name);
@@ -233,6 +235,7 @@ public class HomeActivity extends BaseActivity
             {
                 adapter.chageType(type);
             }
+
             return true;
         }
         if (id == R.id.action_small_image) {
@@ -255,6 +258,12 @@ public class HomeActivity extends BaseActivity
             }
             return true;
         }
+        if (id == R.id.action_search) {
+            Intent intent = new Intent();
+            intent.setClass(this, SearchActivity.class);
+            startActivity(intent);
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -275,7 +284,9 @@ public class HomeActivity extends BaseActivity
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_settings) {
-
+            Intent intent = new Intent();
+            intent.setClass(this, AboutActivity.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
