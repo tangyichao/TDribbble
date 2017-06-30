@@ -9,4 +9,6 @@ import java.util.HashMap;
 public interface ICommentsPresenter {
 
     public void loadComments(String shotId, HashMap<String, String> hashMap, String token);
+
+    public void likeComment(String shotId, String commentId, String token);
 }

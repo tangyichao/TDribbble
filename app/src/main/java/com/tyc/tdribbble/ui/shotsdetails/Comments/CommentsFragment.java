@@ -3,6 +3,7 @@ package com.tyc.tdribbble.ui.shotsdetails.Comments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -10,17 +11,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ProgressBar;
+import android.widget.ImageView;
 
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.TDribbbleApp;
 import com.tyc.tdribbble.adapter.CommentsAdapter;
-import com.tyc.tdribbble.adapter.LinearShotsAdapter;
 import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.entity.CommentsEntity;
+import com.tyc.tdribbble.entity.TTEntity;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,12 +35,17 @@ import butterknife.Unbinder;
 public class CommentsFragment extends Fragment implements ICommentsView {
     @BindView(R.id.rv_comments)
     RecyclerView mRvComments;
-    Unbinder unbinder;
     CommentsPresenter commentsPresenter;
+    @BindView(R.id.iv_empty_error)
+    ImageView mIvEmptyError;
+    @BindView(R.id.srl)
+    SwipeRefreshLayout mSrl;
+    Unbinder unbinder;
     private boolean isFlag = false;
     private HashMap<String, String> hashMap = new HashMap<>();
     int pageNum = 1;
     private String shotId;
+
     public static CommentsFragment newInstance(String shotId) {
         CommentsFragment fragment = new CommentsFragment();
         Bundle bundle = new Bundle();
@@ -62,9 +69,12 @@ public class CommentsFragment extends Fragment implements ICommentsView {
         hashMap.put(ApiConstants.PAGE, String.valueOf(pageNum));
         commentsPresenter = new CommentsPresenter(this);
         commentsPresenter.loadComments(shotId, hashMap, TDribbbleApp.token);
+        mSrl.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+        mSrl.setRefreshing(true);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setAutoMeasureEnabled(true);
         mRvComments.setLayoutManager(linearLayoutManager);
+
         mRvComments.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
@@ -82,6 +92,7 @@ public class CommentsFragment extends Fragment implements ICommentsView {
                     pageNum++;
                     hashMap.put(ApiConstants.PAGE, String.valueOf(pageNum));
                     commentsPresenter.loadComments(shotId, hashMap, TDribbbleApp.token);
+                    //mSrl.setRefreshing(true);
                 }
             }
         });
@@ -90,25 +101,47 @@ public class CommentsFragment extends Fragment implements ICommentsView {
 
     @Override
     public void showComments(List<CommentsEntity> commentsEntities) {
+        mRvComments.setVisibility(View.VISIBLE);
         if (mRvComments.getAdapter() == null) {
             CommentsAdapter adapter = new CommentsAdapter(getActivity(), commentsEntities);
             mRvComments.setAdapter(adapter);
             mRvComments.addItemDecoration(new DividerItemDecoration(
                     getActivity(), DividerItemDecoration.VERTICAL));
+            mSrl.setRefreshing(false);
         } else {
             ((CommentsAdapter) mRvComments.getAdapter()).addData(commentsEntities);
         }
+        ((CommentsAdapter) mRvComments.getAdapter()).setListener(new CommentsAdapter.OnClickLikeListener() {
+            @Override
+            public void onClick(Object object) {
+                CommentsEntity entity = (CommentsEntity) object;
+                Log.i("debug", "" + String.valueOf(entity.getId()) + shotId);
+                commentsPresenter.likeComment(shotId, String.valueOf(entity.getId()), TDribbbleApp.token);
+            }
+        });
+        mIvEmptyError.setVisibility(View.GONE);
         isFlag = false;
+
+    }
+
+    @Override
+    public void likeComment(TTEntity ttEntity) {
+        ((CommentsAdapter) mRvComments.getAdapter()).swipeLike(ttEntity.getId());
     }
 
     @Override
     public void showEmpty() {
-
+        mRvComments.setVisibility(View.GONE);
+        mIvEmptyError.setVisibility(View.VISIBLE);
+        mSrl.setRefreshing(false);
     }
 
     @Override
     public void showError() {
-
+        mRvComments.setVisibility(View.GONE);
+        mIvEmptyError.setVisibility(View.VISIBLE);
+        mIvEmptyError.setImageResource(R.mipmap.ic_error_result);
+        mSrl.setRefreshing(false);
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.tyc.tdribbble;
 import android.app.Application;
 
 import com.tyc.tdribbble.utils.SpUtils;
+import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
 
@@ -16,6 +17,7 @@ public class TDribbbleApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        MobclickAgent.setScenarioType(getApplicationContext(), MobclickAgent.EScenarioType.E_UM_NORMAL);
         EventBus.builder().addIndex(new MyEventBusIndex()).installDefaultEventBus();
         token= SpUtils.getSpUtils(this).getString("token");
     }
@@ -24,4 +26,5 @@ public class TDribbbleApp extends Application {
     public void onLowMemory() {
         super.onLowMemory();
     }
+
 }

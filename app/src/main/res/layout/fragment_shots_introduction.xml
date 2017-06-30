@@ -47,6 +47,7 @@
                         android:id="@+id/tv_location"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:visibility="gone"
                         android:drawableStart="@drawable/ic_location_grey_12dp"
                         android:layout_marginStart="8dp"
                         android:textSize="12sp" />
@@ -83,6 +84,7 @@
             android:layout_height="wrap_content"
             android:drawableStart="@drawable/ic_attachments_red_24dp"
             android:textSize="14sp"
+            android:visibility="gone"
             android:layout_margin="8dp" />
     </LinearLayout>
 </android.support.v4.widget.NestedScrollView>

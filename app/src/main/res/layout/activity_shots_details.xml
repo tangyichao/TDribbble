@@ -8,6 +8,7 @@
     android:fitsSystemWindows="true">
 
     <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:theme="@style/AppTheme.AppBarOverlay"
@@ -20,6 +21,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
+            app:contentScrim="@android:color/transparent"
+            app:statusBarScrim="@android:color/transparent"
             app:layout_scrollFlags="scroll|enterAlwaysCollapsed|exitUntilCollapsed">
             <!--scroll|enterAlwaysCollapsed|exitUntilCollapsed-->
             <com.tyc.tdribbble.view.widget.BadgedFourThreeImageView
@@ -42,7 +45,7 @@
                 android:id="@+id/tl_user_shots"
                 android:layout_width="wrap_content"
                 app:tabMode="scrollable"
-                app:tabContentStart="200dp"
+                app:tabContentStart="10dp"
                 android:layout_gravity="bottom"
                 app:tabSelectedTextColor="@color/colorAccent"
                 android:layout_height="?attr/actionBarSize" />
@@ -55,4 +58,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_favorite"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/fab_margin"
+        android:src="@drawable/ic_favorite_white_24dp"
+        app:layout_anchor="@id/app_bar"
+        app:layout_anchorGravity="bottom|end" />
 </android.support.design.widget.CoordinatorLayout>

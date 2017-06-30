@@ -3,15 +3,13 @@ package com.tyc.tdribbble.ui.shotsdetails;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.util.Pair;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.RecyclerView;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -20,10 +18,11 @@ import android.view.WindowManager;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.tyc.tdribbble.R;
-import com.tyc.tdribbble.adapter.CommentsAdapter;
+import com.tyc.tdribbble.TDribbbleApp;
 import com.tyc.tdribbble.adapter.TFragmentPageAdapter;
 import com.tyc.tdribbble.base.BaseActivity;
 import com.tyc.tdribbble.entity.ShotsEntity;
+import com.tyc.tdribbble.entity.TTEntity;
 import com.tyc.tdribbble.ui.bigimage.BigImageActivity;
 import com.tyc.tdribbble.ui.shotsdetails.Comments.CommentsFragment;
 import com.tyc.tdribbble.ui.shotsdetails.introduction.ShotsIntroductionFragment;
@@ -41,7 +40,7 @@ import butterknife.OnClick;
  * 作者：tangyc on 2017/6/23
  * 邮箱：874500641@qq.com
  */
-public class ShotsDetailsActivity extends BaseActivity {
+public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsView {
     @BindView(R.id.iv_shots)
     BadgedFourThreeImageView mIvShots;
 
@@ -49,9 +48,14 @@ public class ShotsDetailsActivity extends BaseActivity {
     TabLayout mTlUserShots;
     @BindView(R.id.vp_user_shots)
     ViewPager mVpUserShots;
+    @BindView(R.id.fab_favorite)
+    FloatingActionButton mFabFavorite;
+    @BindView(R.id.cl)
+    CoordinatorLayout cl;
     private List<Fragment> list = new ArrayList<>();
     private String[] tabStrs = {"简介", "评论"};
     ShotsEntity shots;
+    private ShotsDetailsPresenter presenter;
     @Override
     protected int layoutResID() {
         return R.layout.activity_shots_details;
@@ -79,8 +83,8 @@ public class ShotsDetailsActivity extends BaseActivity {
         FragmentManager fm = getSupportFragmentManager();
         TFragmentPageAdapter adapter = new TFragmentPageAdapter(fm, tabStrs, list);
         mVpUserShots.setAdapter(adapter);
-
-
+        presenter = new ShotsDetailsPresenter(this);
+        presenter.checklikeShot(String.valueOf(shots.getId()), TDribbbleApp.token);
     }
 
     @Override
@@ -96,6 +100,7 @@ public class ShotsDetailsActivity extends BaseActivity {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(Color.TRANSPARENT);
         window.setNavigationBarColor(Color.TRANSPARENT);
+
     }
 
     @Override
@@ -104,16 +109,49 @@ public class ShotsDetailsActivity extends BaseActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick(R.id.iv_shots)
-    public void onViewClicked() {
-        Intent intent = new Intent();
-        intent.setClass(this, BigImageActivity.class);
-        intent.putExtra("shots", shots);
-        if (shots.isAnimated()) {
-            startActivity(intent);
-        } else {
-            startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(this, mIvShots, getResources().getString(R.string.str_shots_tran)).toBundle());
+
+    @OnClick({R.id.iv_shots, R.id.fab_favorite})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.iv_shots: {
+                Intent intent = new Intent();
+                intent.setClass(this, BigImageActivity.class);
+                intent.putExtra("shots", shots);
+                if (shots.isAnimated()) {
+                    startActivity(intent);
+                } else {
+                    startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(this, mIvShots, getResources().getString(R.string.str_shots_tran)).toBundle());
+                }
+                break;
+            }
+            case R.id.fab_favorite:
+                presenter.likeShot(String.valueOf(shots.getId()), TDribbbleApp.token);
+                break;
         }
+    }
+
+
+    @Override
+    public void likeShot(TTEntity ttEntity) {
+        mFabFavorite.setImageResource(R.drawable.ic_favorite_red_24dp);
+    }
+
+    @Override
+    public void unlikeShot(TTEntity ttEntity) {
+        mFabFavorite.setImageResource(R.drawable.ic_favorite_white_24dp);
+    }
+
+    @Override
+    public void checklikeShot(boolean isLike) {
+        if (isLike) {
+            mFabFavorite.setImageResource(R.drawable.ic_favorite_red_24dp);
+        } else {
+            mFabFavorite.setImageResource(R.drawable.ic_favorite_white_24dp);
+        }
+    }
+
+    @Override
+    public void showError() {
 
     }
 }

@@ -28,6 +28,7 @@ import com.tyc.tdribbble.utils.ScreenUtils;
 import com.tyc.tdribbble.utils.TimeUtils;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -44,6 +45,13 @@ public class CommentsAdapter extends RecyclerView.Adapter {
     private Context context;
     private List<CommentsEntity> commentsEntities;
     private boolean isFooter = false;
+    private OnClickLikeListener listener;
+
+
+    public void setListener(OnClickLikeListener listener) {
+        this.listener = listener;
+    }
+
     public CommentsAdapter(Context context, List<CommentsEntity> commentsEntities) {
         this.context = context;
         this.commentsEntities = commentsEntities;
@@ -93,6 +101,12 @@ public class CommentsAdapter extends RecyclerView.Adapter {
                             Pair.create((View) ((CommentsViewHolder) holder).mTvName, context.getResources().getString(R.string.str_name_tran))).toBundle());
                 }
             });
+            ((CommentsViewHolder) holder).mTvLikesCount.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    listener.onClick(commentsEntities.get(holder.getAdapterPosition()));
+                }
+            });
         } else {
             if (isFooter) {
                 ((FooterViewHolder) holder).mLlLoading.setVisibility(View.GONE);
@@ -128,6 +142,14 @@ public class CommentsAdapter extends RecyclerView.Adapter {
         notifyDataSetChanged();
     }
 
+    public void swipeLike(long id) {
+        for (int i = 0; i < commentsEntities.size(); i++) {
+            if (commentsEntities.get(i).getId() == id) {
+                notifyItemChanged(i);
+            }
+        }
+        // notifyDataSetChanged();
+    }
     public class CommentsViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.iv_avatar)
         CircleImageView mTvAvatar;
@@ -159,5 +181,9 @@ public class CommentsAdapter extends RecyclerView.Adapter {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    public interface OnClickLikeListener {
+        public void onClick(Object object);
     }
 }

@@ -7,6 +7,7 @@ import com.tyc.tdribbble.api.ApiManager;
 import com.tyc.tdribbble.api.ApiService;
 import com.tyc.tdribbble.entity.CommentsEntity;
 import com.tyc.tdribbble.entity.FollowersEntity;
+import com.tyc.tdribbble.entity.TTEntity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -48,6 +49,25 @@ public class CommentsModel implements ICommentsModel {
                     @Override
                     public void accept(@NonNull Throwable throwable) throws Exception {
                         iCommentsView.showError();
+                    }
+                });
+    }
+
+    @Override
+    public void likeComment(String shotId, String commentId, String token) {
+        ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1, token).create(ApiService.class);
+        service.getLikeComment(shotId, commentId, token)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Consumer<TTEntity>() {
+                    @Override
+                    public void accept(@NonNull TTEntity ttentity) throws Exception {
+                        iCommentsView.likeComment(ttentity);
+                    }
+                }, new Consumer<Throwable>() {
+                    @Override
+                    public void accept(@NonNull Throwable throwable) throws Exception {
+                        Log.i("debug", throwable.getMessage());
                     }
                 });
     }

@@ -20,4 +20,9 @@ public class CommentsPresenter implements ICommentsPresenter {
         model.loadComments(shotId, hashMap, token);
     }
 
+    @Override
+    public void likeComment(String shotId, String commentId, String token) {
+        model.likeComment(shotId, commentId, token);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.tyc.tdribbble.ui.user;
 
+import android.animation.Animator;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -18,6 +20,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.adapter.TFragmentPageAdapter;
 import com.tyc.tdribbble.base.BaseActivity;
@@ -75,7 +80,9 @@ public class UserActivity extends BaseActivity {
         UserEntity user = (UserEntity) getIntent().getSerializableExtra("user");
         String avatar = user.getAvatarUrl();
         Glide.with(this).load(avatar).into(mIvAvatar);
-        Glide.with(this).load(avatar).bitmapTransform(new BlurTransformation(this, 18, 3)).override(width, width).into(mIvAvatarBig);
+        Glide.with(this).load(avatar).bitmapTransform(new BlurTransformation(this, 20)).override(width, width).into(mIvAvatarBig);
+
+
         String name = user.getName();
         mTvName.setText(name);
 
@@ -89,6 +96,21 @@ public class UserActivity extends BaseActivity {
         mVpUser.setAdapter(adapter);
 
 
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+//        int centerX = (mIvAvatarBig.getLeft() + mIvAvatarBig.getRight()) / 2;
+//        int centerY = (mIvAvatarBig.getTop() + mIvAvatarBig.getBottom()) / 2;
+//        // Math.hypot(x,y):  返回sqrt(x2 +y2)
+//        // 获取扩散的半径
+//        float finalRadius = (float) Math.hypot((double) centerX, (double) centerY);
+//        // 定义揭露动画
+//        Animator mCircularReveal = ViewAnimationUtils.createCircularReveal(
+//                mIvAvatarBig, centerX, centerY, 0, finalRadius);
+//        // 设置动画持续时间，并开始动画
+//        mCircularReveal.setDuration(230).start();
     }
 
     @Override
@@ -106,12 +128,6 @@ public class UserActivity extends BaseActivity {
         window.setNavigationBarColor(Color.TRANSPARENT);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 
     @OnClick({R.id.iv_avatar_big, R.id.iv_avatar})
     public void onViewClicked(View view) {

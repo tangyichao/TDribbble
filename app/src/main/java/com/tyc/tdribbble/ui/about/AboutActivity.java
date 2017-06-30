@@ -63,6 +63,11 @@ public class AboutActivity extends BaseActivity {
                     "Java HTML Parser, with best of DOM, CSS, and jquery.",
                     "https://github.com/jhy/jsoup/",
                     "https://avatars.githubusercontent.com/u/76934",
+                    true),
+            new Library("RxLifecycle",
+                    "Lifecycle handling APIs for Android apps using RxJava",
+                    "https://github.com/trello/RxLifecycle",
+                    "https://avatars3.githubusercontent.com/u/6181431",
                     true)
     };
 

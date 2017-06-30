@@ -1,8 +1,10 @@
 package com.tyc.tdribbble.api;
 
+import com.tyc.tdribbble.entity.AttachmentsEntity;
 import com.tyc.tdribbble.entity.CommentsEntity;
 import com.tyc.tdribbble.entity.FollowersEntity;
 import com.tyc.tdribbble.entity.ShotsEntity;
+import com.tyc.tdribbble.entity.TTEntity;
 import com.tyc.tdribbble.entity.TokenEntity;
 import com.tyc.tdribbble.entity.UserEntity;
 
@@ -11,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.POST;
@@ -25,11 +28,24 @@ import retrofit2.http.QueryMap;
 public interface ApiService {
     @POST(ApiConstants.TOKEN)
     Observable<TokenEntity> getToKen(@Query(ApiConstants.OAuthKey.CLIENT_ID) String clientID,@Query(ApiConstants.OAuthKey.CLIENT_SECRET) String clientSecret,@Query(ApiConstants.OAuthKey.REDIRECT_URI) String redirectUri,@Query(ApiConstants.OAuthKey.CODE) String code);
+
     @GET(ApiConstants.USER)
     Observable<UserEntity> getUser(@Query(ApiConstants.OAuthKey.TOKEN)String token);
-    //@Headers("Authorization: Bearer 9416495d875cf69abfe9d0bd16b0a007dea727d1d0512e102fed64a5009cfd07")
+
     @GET(ApiConstants.SHOTS)
     Observable<List<ShotsEntity>> getShots(@QueryMap Map<String,String> map,@Header("Authorization") String token);
+
+    @GET(ApiConstants.ONESHOTS)
+    Observable<ShotsEntity> getShot(@Path("shotId") String shotId, @Header("Authorization") String token);
+
+    @GET(ApiConstants.LIKESHOT)
+    Observable<TTEntity> checkLikeShot(@Path(ApiConstants.SHOTID) String shotId, @Header("Authorization") String token);
+
+    @POST(ApiConstants.LIKESHOT)
+    Observable<TTEntity> getLikeShot(@Path(ApiConstants.SHOTID) String shotId, @Header("Authorization") String token);
+
+    @DELETE(ApiConstants.LIKESHOT)
+    Observable<TTEntity> unLikeShot(@Path(ApiConstants.SHOTID) String shotId, @Header("Authorization") String token);
 
     @GET(ApiConstants.SEARCH)
     Observable<List<ShotsEntity>> getSearch(@QueryMap Map<String, String> map);
@@ -42,4 +58,10 @@ public interface ApiService {
 
     @GET(ApiConstants.COMMENTS)
     Observable<List<CommentsEntity>> getComments(@Path(ApiConstants.SHOTID) String shotId, @QueryMap HashMap<String, String> hashMap, @Header("Authorization") String token);
+
+    @POST(ApiConstants.LIKECOMMENT)
+    Observable<TTEntity> getLikeComment(@Path(ApiConstants.SHOTID) String shotId, @Path(ApiConstants.COMMENTID) String commentId, @Header("Authorization") String token);
+
+    @GET(ApiConstants.ATTACHMENTS)
+    Observable<List<AttachmentsEntity>> getAttachments(@Path(ApiConstants.SHOTID) String shotId, @Header("Authorization") String token);
 }

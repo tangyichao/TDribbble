@@ -3,19 +3,19 @@ package com.tyc.tdribbble.ui.user.followers;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.TDribbbleApp;
 import com.tyc.tdribbble.adapter.FollowersAdapter;
 import com.tyc.tdribbble.entity.FollowersEntity;
-import com.tyc.tdribbble.entity.ShotsEntity;
-import com.tyc.tdribbble.ui.user.fragment.UserInfoFragment;
 
 import java.util.List;
 
@@ -32,6 +32,10 @@ public class UserFollowersFragment extends Fragment implements IFollowersView {
     RecyclerView mRvFollowers;
     Unbinder unbinder;
     FollowersPresenter followersPresenter;
+    @BindView(R.id.srl)
+    SwipeRefreshLayout mSrl;
+    @BindView(R.id.iv_empty_error)
+    ImageView mIvEmptyError;
 
     public static UserFollowersFragment newInstance(String userId) {
         UserFollowersFragment fragment = new UserFollowersFragment();
@@ -56,19 +60,31 @@ public class UserFollowersFragment extends Fragment implements IFollowersView {
         followersPresenter = new FollowersPresenter(this);
         followersPresenter.loadFollowers(userId, TDribbbleApp.token);
         mRvFollowers.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+        mSrl.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+        mSrl.setRefreshing(true);
     }
 
     @Override
     public void showFollowers(List<FollowersEntity> followersEntities) {
-        mRvFollowers.setAdapter(new FollowersAdapter(getActivity(), followersEntities));
-        mRvFollowers.addItemDecoration(new DividerItemDecoration(
-                getActivity(), DividerItemDecoration.VERTICAL));
+        if (followersEntities.size() > 0) {
+            mRvFollowers.setVisibility(View.VISIBLE);
+            mRvFollowers.setAdapter(new FollowersAdapter(getActivity(), followersEntities));
+            mRvFollowers.addItemDecoration(new DividerItemDecoration(
+                    getActivity(), DividerItemDecoration.VERTICAL));
+            mIvEmptyError.setVisibility(View.GONE);
+        } else {
+            mRvFollowers.setVisibility(View.GONE);
+            mIvEmptyError.setVisibility(View.VISIBLE);
+        }
+        mSrl.setRefreshing(false);
     }
 
     @Override
     public void showError() {
-
+        mRvFollowers.setVisibility(View.GONE);
+        mIvEmptyError.setVisibility(View.VISIBLE);
+        mIvEmptyError.setImageResource(R.mipmap.ic_error_result);
+        mSrl.setRefreshing(false);
     }
 
     @Override

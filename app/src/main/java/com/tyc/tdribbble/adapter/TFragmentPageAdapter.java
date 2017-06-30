@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.view.View;
 
 import com.tyc.tdribbble.ui.user.UserActivity;
 
@@ -21,6 +22,11 @@ public class TFragmentPageAdapter extends FragmentPagerAdapter {
         super(fm);
         this.tabStrs = tabStrs;
         this.list = list;
+    }
+
+    @Override
+    public boolean isViewFromObject(View view, Object object) {
+        return super.isViewFromObject(view, object);
     }
 
     @Override

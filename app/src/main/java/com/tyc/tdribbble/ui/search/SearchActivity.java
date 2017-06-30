@@ -59,7 +59,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         if (!TextUtils.isEmpty(search)) {
             mComplete.setText(search);
         }
-        map.put("page", "1");
+        map.put(ApiConstants.PAGE, "1");
         map.put("per_page", "12");
 
 
@@ -87,7 +87,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                             LinearLayoutManager manager = new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, false);
                             mRvSearch.setLayoutManager(manager);
                             new LinearSnapHelper().attachToRecyclerView(mRvSearch);
-                            mRvSearch.setAdapter(new LinearShotsAdapter(SearchActivity.this, shotsEntities, 0));
+                            mRvSearch.setAdapter(new LinearShotsAdapter(SearchActivity.this, shotsEntities, 5));
                         } else {
                             Log.i("debug", "" + shotsEntities.size() + " is 0");
                         }

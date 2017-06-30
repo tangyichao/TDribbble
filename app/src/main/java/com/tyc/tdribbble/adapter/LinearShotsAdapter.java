@@ -106,6 +106,11 @@ public class LinearShotsAdapter extends RecyclerView.Adapter {
             ((LinearShotsViewHolder) holder).mTvTitle.setText(title);
             ((LinearShotsViewHolder) (holder)).mLlCounts.setVisibility(View.VISIBLE);
             int attachments = shotsEntities.get(position).getAttachmentsCount();
+            if (attachments > 0) {
+                ((LinearShotsViewHolder) holder).mTvAttachmentsCount.setText(String.valueOf(attachments));
+            } else {
+                ((LinearShotsViewHolder) holder).mTvAttachmentsCount.setVisibility(View.GONE);
+            }
             ((LinearShotsViewHolder) holder).mTvAttachmentsCount.setText(String.valueOf(attachments));
             int likesCount = shotsEntities.get(position).getLikesCount();
             ((LinearShotsViewHolder) holder).mTvLikesCount.setText(String.valueOf(likesCount));
@@ -122,7 +127,7 @@ public class LinearShotsAdapter extends RecyclerView.Adapter {
         if (isAnimated) {
             String hidpi=shotsEntities.get(position).getImages().getHidpi();
             Glide.with(context).load(hidpi).asGif().placeholder(R.drawable.bg_linear_shots).override(width, height).diskCacheStrategy(DiskCacheStrategy.SOURCE).dontTransform().fitCenter().into(((LinearShotsViewHolder) holder).mIvShots);
-            if (type == 0 || type == 2) {
+            if (type == 0 || type == 2 || type == 5) {
                  ((LinearShotsViewHolder) holder).mIvIsGif.setImageResource(R.mipmap.ic_gif);
            }else{
                 ((LinearShotsViewHolder) holder).mIvIsGif.setImageResource(R.mipmap.ic_gif_small);
@@ -138,6 +143,7 @@ public class LinearShotsAdapter extends RecyclerView.Adapter {
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setClass(context, ShotsDetailsActivity.class);
+                intent.putExtra("type", type);
                 intent.putExtra("shots", shotsEntities.get(holder.getAdapterPosition()));
                 if (!isAnimated) {
                     context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context,

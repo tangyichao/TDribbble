@@ -18,8 +18,11 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.google.android.flexbox.FlexboxLayout;
 import com.tyc.tdribbble.R;
+import com.tyc.tdribbble.TDribbbleApp;
 import com.tyc.tdribbble.entity.ShotsEntity;
+import com.tyc.tdribbble.entity.UserEntity;
 import com.tyc.tdribbble.ui.search.SearchActivity;
+import com.tyc.tdribbble.ui.shotsdetails.attachments.AttachmentsActivity;
 import com.tyc.tdribbble.ui.user.UserActivity;
 import com.tyc.tdribbble.utils.DisplayUtils;
 import com.tyc.tdribbble.utils.HtmlFormatUtils;
@@ -35,7 +38,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 作者：tangyc on 2017/6/23
  * 邮箱：874500641@qq.com
  */
-public class ShotsIntroductionFragment extends Fragment {
+public class ShotsIntroductionFragment extends Fragment implements IShotsIntroductionView {
 
 
     Unbinder unbinder;
@@ -75,16 +78,31 @@ public class ShotsIntroductionFragment extends Fragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         shots = (ShotsEntity) getArguments().getSerializable("shots");
-        String avatar = shots.getUser().getAvatarUrl();
-        Glide.with(getActivity()).load(avatar).into(mIvAvatar);
-        String location = shots.getUser().getLocation();
-        if (TextUtils.isEmpty(location)) {
-            mTvLocation.setVisibility(View.GONE);
+        if (TextUtils.isEmpty(shots.getCreatedAt()) || shots.getUser() == null) {
+            ShotsIntroductionPresenter presenter = new ShotsIntroductionPresenter(this);
+            presenter.loadShotsIntroduction(String.valueOf(shots.getId()), TDribbbleApp.token);
         } else {
-            mTvLocation.setText(location);
+            showShot(shots);
         }
-        String name = shots.getUser().getName();
-        mTvName.setText(name);
+
+    }
+
+    private void showShot(ShotsEntity shots) {
+
+        UserEntity userEntity = shots.getUser();
+        if (userEntity != null) {
+            String avatar = userEntity.getAvatarUrl();
+            Glide.with(getActivity()).load(avatar).into(mIvAvatar);
+            String name = userEntity.getName();
+            mTvName.setText(name);
+            String location = userEntity.getLocation();
+            if (TextUtils.isEmpty(location)) {
+                mTvLocation.setVisibility(View.GONE);
+            } else {
+                mTvLocation.setVisibility(View.VISIBLE);
+                mTvLocation.setText(location);
+            }
+        }
         String time = shots.getUpdatedAt();
         mTvTime.setText(TimeUtils.getTimeFromISO8601(time) + "创建");
         if (shots.getTags() != null) {
@@ -97,6 +115,7 @@ public class ShotsIntroductionFragment extends Fragment {
         HtmlFormatUtils.Html2StringNoP(mTvDesc, desc);
         int attachmentsCount = shots.getAttachmentsCount();
         if (attachmentsCount > 0) {
+            mTvAttachments.setVisibility(View.VISIBLE);
             mTvAttachments.setText(attachmentsCount + "个插件");
         } else {
             mTvAttachments.setVisibility(View.GONE);
@@ -158,11 +177,20 @@ public class ShotsIntroductionFragment extends Fragment {
             }
             case R.id.tv_attachments:
                 Intent intent = new Intent();
-                intent.setAction(Intent.ACTION_VIEW);
-                Uri content_url = Uri.parse(shots.getAttachmentsUrl());
-                intent.setData(content_url);
+                intent.setClass(getActivity(), AttachmentsActivity.class);
+                intent.putExtra("shotId", shots.getId());
                 startActivity(intent);
                 break;
         }
+    }
+
+    @Override
+    public void showShotsIntroduction(ShotsEntity shotsEntity) {
+        showShot(shotsEntity);
+    }
+
+    @Override
+    public void showError() {
+
     }
 }

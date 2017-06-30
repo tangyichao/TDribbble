@@ -13,15 +13,20 @@ public class ApiConstants {
     public static final String BASE_URL_V1= "https://api.dribbble.com/v1/";
     public static final String USER= "user";
     public static final String SHOTS="shots";
+    public static final String ONESHOTS = "shots/{shotId}";
     public static final String SEARCH = "search";
     public static final String FOLLOWERS = "users/{userId}/followers";
     public static final String USERSHOTS = "users/{userId}/shots";
     public static final String COMMENTS = "shots/{shotId}/comments";
+    public static final String ATTACHMENTS = "shots/{shotId}/attachments";
+    public static final String LIKECOMMENT = "shots/{shotId}/comments/{commentId}/like";
+    public static final String LIKESHOT = "shots/{shotId}/like";
     public static final String USERID = "userId";
+
     public static final String SHOTID = "shotId";
-
-
+    public static final String COMMENTID = "commentId";
     public static final String PAGE = "page";
+    public static final String DATE = "date";
   public interface Shots{
       /**
        * 类型，默认返回所有类型

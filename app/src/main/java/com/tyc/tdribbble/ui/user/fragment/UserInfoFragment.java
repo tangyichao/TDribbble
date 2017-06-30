@@ -1,5 +1,7 @@
 package com.tyc.tdribbble.ui.user.fragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +16,7 @@ import com.tyc.tdribbble.entity.UserEntity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 /**
@@ -46,6 +49,7 @@ public class UserInfoFragment extends Fragment {
     @BindView(R.id.tv_teams_count)
     TextView mTvTeamsCount;
 
+    private UserEntity user;
     public static UserInfoFragment newInstance(UserEntity user) {
         UserInfoFragment fragment = new UserInfoFragment();
         Bundle bundle = new Bundle();
@@ -65,7 +69,7 @@ public class UserInfoFragment extends Fragment {
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        UserEntity user = (UserEntity) getArguments().getSerializable("user");
+        user = (UserEntity) getArguments().getSerializable("user");
         mTvFollowersCount.setText(user.getFollowersCount() + "粉丝");
         mTvFollowingsCount.setText(user.getFollowingsCount() + "关注");
         mTvFavoriteCount.setText(user.getLikesCount() + "点赞");
@@ -75,7 +79,11 @@ public class UserInfoFragment extends Fragment {
         mTvTeamsCount.setText(user.getTeamsCount() + "团队");
         mTvCommentsCount.setText(user.getLikesReceivedCount() + "被喜欢");
         String location = user.getLocation();
-        mTvLocation.setText(location);
+        if (TextUtils.isEmpty(location)) {
+            mTvLocation.setVisibility(View.GONE);
+        } else {
+            mTvLocation.setText(location);
+        }
         String web = user.getLinks().getWeb();
         if (TextUtils.isEmpty(web)) {
             mTvWeb.setVisibility(View.GONE);
@@ -94,5 +102,24 @@ public class UserInfoFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+    }
+
+    @OnClick({R.id.tv_web, R.id.tv_twitter})
+    public void onViewClicked(View view) {
+        switch (view.getId()) {
+            case R.id.tv_web: {
+                openUri(user.getLinks().getWeb());
+                break;
+            }
+            case R.id.tv_twitter:
+                openUri(user.getLinks().getTwitter());
+                break;
+        }
+    }
+
+    private void openUri(String uriStr) {
+        Uri uri = Uri.parse(uriStr);
+        Intent it = new Intent(Intent.ACTION_VIEW, uri);
+        startActivity(it);
     }
 }

@@ -113,19 +113,11 @@ public class HomeActivity extends BaseActivity
         token = TDribbbleApp.token;
         setSupportActionBar(mToolbar);
         View headerLayout = mNavView.getHeaderView(0);
-        // setTranslucentForDrawerLayout(this, mDrawerLayout);
         mIvAvatar = headerLayout.findViewById(R.id.iv_avatar);
         mIvAvatar.setOnClickListener(this);
         mTvName = headerLayout.findViewById(R.id.tv_name);
         mTvName.setOnClickListener(this);
         mIvBg = headerLayout.findViewById(R.id.iv_bg);
-        mFab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         mSrlShots.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -138,29 +130,24 @@ public class HomeActivity extends BaseActivity
         mSpTime.setDropDownHorizontalOffset(height);////设置选择微调的弹出窗口中像素的水平偏移。在mode_dropdown唯一有效的；
         mSpTime.setDropDownVerticalOffset(height);//设置选择微调的弹出窗口中像素的垂直偏移。在mode_dropdown唯一有效的；
 
-//        ArrayAdapter<CharSequence> timeAdapter = ArrayAdapter.createFromResource ( this , R.array.time , R.layout.item_spinnerlayout );
-//        mSpTime.setAdapter(timeAdapter);
 
         mSpList.setDropDownWidth(width/3);//设置下拉菜单的宽度
         mSpList.setDropDownHorizontalOffset(height);////设置选择微调的弹出窗口中像素的水平偏移。在mode_dropdown唯一有效的；
         mSpList.setDropDownVerticalOffset(height);//设置选择微调的弹出窗口中像素的垂直偏移。在mode_dropdown唯一有效的；
 
-//        ArrayAdapter<CharSequence> listAdapter = ArrayAdapter.createFromResource ( this , R.array.list, R.layout.item_spinnerlayout );
-//        mSpList.setAdapter(listAdapter);
 
         mSpSort.setDropDownWidth(width/3);//设置下拉菜单的宽度
         mSpSort.setDropDownHorizontalOffset( height);////设置选择微调的弹出窗口中像素的水平偏移。在mode_dropdown唯一有效的；
         mSpSort.setDropDownVerticalOffset( height);//设置选择微调的弹出窗口中像素的垂直偏移。在mode_dropdown唯一有效的；
 
-//        ArrayAdapter<CharSequence> sortAdapter = ArrayAdapter.createFromResource ( this , R.array.sort , R.layout.item_spinnerlayout );
-//        mSpSort.setAdapter(sortAdapter);
+
 
         homePresenter = new HomePresenter(this);
         mSpList.setOnItemSelectedListener(this);
         mSpSort.setOnItemSelectedListener(this);
         mSpTime.setOnItemSelectedListener(this);
 
-        hashMap.put("date", TimeUtils.dateToStr(TimeUtils.FORMAT_DATE, null));
+        hashMap.put(ApiConstants.DATE, TimeUtils.dateToStr(TimeUtils.FORMAT_DATE, null));
         hashMap.put(ApiConstants.PAGE, String.valueOf(count));
         final LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setAutoMeasureEnabled(true);
@@ -235,7 +222,6 @@ public class HomeActivity extends BaseActivity
             {
                 adapter.chageType(type);
             }
-
             return true;
         }
         if (id == R.id.action_small_image) {
