@@ -30,7 +30,7 @@ public class HomeModel implements IHomeModel {
     public void loadShots(Map<String, String> map, String token, final int type) {
         {
             ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1,token).create(ApiService.class);
-            service.getShots(map," Bearer "+token)
+            service.getShots(map)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Consumer<List<ShotsEntity>>() {

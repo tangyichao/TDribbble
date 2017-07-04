@@ -169,9 +169,9 @@ public class HomeActivity extends BaseActivity
                 if((lastItemPosition==count-2||count<2)&&!isFlag)
                 {
                     isFlag=true;
-                    hashMap.remove("page");
+                    hashMap.remove(ApiConstants.PAGE);
                     count++;
-                    hashMap.put("page",String.valueOf(count));
+                    hashMap.put(ApiConstants.PAGE, String.valueOf(count));
                     homePresenter.loadShots(hashMap, TDribbbleApp.token, 1);
                 }
             }

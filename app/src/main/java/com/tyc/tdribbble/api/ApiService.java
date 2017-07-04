@@ -33,35 +33,35 @@ public interface ApiService {
     Observable<UserEntity> getUser(@Query(ApiConstants.OAuthKey.TOKEN)String token);
 
     @GET(ApiConstants.SHOTS)
-    Observable<List<ShotsEntity>> getShots(@QueryMap Map<String,String> map,@Header("Authorization") String token);
+    Observable<List<ShotsEntity>> getShots(@QueryMap Map<String, String> map);
 
     @GET(ApiConstants.ONESHOTS)
-    Observable<ShotsEntity> getShot(@Path("shotId") String shotId, @Header("Authorization") String token);
+    Observable<ShotsEntity> getShot(@Path("shotId") String shotId);
 
     @GET(ApiConstants.LIKESHOT)
-    Observable<TTEntity> checkLikeShot(@Path(ApiConstants.SHOTID) String shotId, @Header("Authorization") String token);
+    Observable<TTEntity> checkLikeShot(@Path(ApiConstants.SHOTID) String shotId);
 
     @POST(ApiConstants.LIKESHOT)
-    Observable<TTEntity> getLikeShot(@Path(ApiConstants.SHOTID) String shotId, @Header("Authorization") String token);
+    Observable<TTEntity> getLikeShot(@Path(ApiConstants.SHOTID) String shotId);
 
     @DELETE(ApiConstants.LIKESHOT)
-    Observable<TTEntity> unLikeShot(@Path(ApiConstants.SHOTID) String shotId, @Header("Authorization") String token);
+    Observable<TTEntity> unLikeShot(@Path(ApiConstants.SHOTID) String shotId);
 
     @GET(ApiConstants.SEARCH)
     Observable<List<ShotsEntity>> getSearch(@QueryMap Map<String, String> map);
 
     @GET(ApiConstants.FOLLOWERS)
-    Observable<List<FollowersEntity>> getFollowers(@Path(ApiConstants.USERID) String userId, @Header("Authorization") String token);
+    Observable<List<FollowersEntity>> getFollowers(@Path(ApiConstants.USERID) String userId);
 
     @GET(ApiConstants.USERSHOTS)
-    Observable<List<ShotsEntity>> getUserShots(@Path(ApiConstants.USERID) String userId, @Header("Authorization") String token);
+    Observable<List<ShotsEntity>> getUserShots(@Path(ApiConstants.USERID) String userId);
 
     @GET(ApiConstants.COMMENTS)
-    Observable<List<CommentsEntity>> getComments(@Path(ApiConstants.SHOTID) String shotId, @QueryMap HashMap<String, String> hashMap, @Header("Authorization") String token);
+    Observable<List<CommentsEntity>> getComments(@Path(ApiConstants.SHOTID) String shotId, @QueryMap HashMap<String, String> hashMap);
 
     @POST(ApiConstants.LIKECOMMENT)
-    Observable<TTEntity> getLikeComment(@Path(ApiConstants.SHOTID) String shotId, @Path(ApiConstants.COMMENTID) String commentId, @Header("Authorization") String token);
+    Observable<TTEntity> getLikeComment(@Path(ApiConstants.SHOTID) String shotId, @Path(ApiConstants.COMMENTID) String commentId);
 
     @GET(ApiConstants.ATTACHMENTS)
-    Observable<List<AttachmentsEntity>> getAttachments(@Path(ApiConstants.SHOTID) String shotId, @Header("Authorization") String token);
+    Observable<List<AttachmentsEntity>> getAttachments(@Path(ApiConstants.SHOTID) String shotId);
 }

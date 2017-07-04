@@ -29,7 +29,7 @@ public class ShotsModel implements IShotsModel {
     @Override
     public void loadShots(String userId, String token) {
         ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1, token).create(ApiService.class);
-        service.getUserShots(userId, token)
+        service.getUserShots(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<ShotsEntity>>() {

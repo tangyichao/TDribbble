@@ -1,5 +1,7 @@
 package com.tyc.tdribbble.api;
 
+import com.tyc.tdribbble.utils.interceptor.AuthInterceptor;
+
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
 
@@ -33,7 +35,7 @@ public class ApiManager {
                 .client(client).build();
     }
     public static Retrofit getRetrofitUser(String url, final String token){
-        OkHttpClient client=new OkHttpClient().newBuilder().readTimeout(20, TimeUnit.SECONDS).authenticator(new Authenticator(){
+        OkHttpClient client = new OkHttpClient().newBuilder().readTimeout(20, TimeUnit.SECONDS).addInterceptor(new AuthInterceptor(token)).authenticator(new Authenticator() {
 
             @Override
             public Request authenticate(Route route, Response response) throws IOException {
@@ -47,11 +49,11 @@ public class ApiManager {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client).build();
     }
-    public static Retrofit getRetrofitShots(String url){
-        OkHttpClient client=new OkHttpClient().newBuilder().readTimeout(20, TimeUnit.SECONDS).build();
-        return  new Retrofit.Builder().baseUrl(url)
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-                .addConverterFactory(GsonConverterFactory.create())
-                .client(client).build();
-    }
+//    public static Retrofit getRetrofitShots(String url){
+//        OkHttpClient client=new OkHttpClient().newBuilder().readTimeout(20, TimeUnit.SECONDS).build();
+//        return  new Retrofit.Builder().baseUrl(url)
+//                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+//                .addConverterFactory(GsonConverterFactory.create())
+//                .client(client).build();
+//    }
 }

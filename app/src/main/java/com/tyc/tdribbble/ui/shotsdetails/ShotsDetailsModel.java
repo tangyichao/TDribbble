@@ -32,7 +32,7 @@ public class ShotsDetailsModel implements IShotsDetailsModel {
     @Override
     public void likeShot(String shotId, String token) {
         ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1, token).create(ApiService.class);
-        service.getLikeShot(shotId, token)
+        service.getLikeShot(shotId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<TTEntity>() {
@@ -52,7 +52,7 @@ public class ShotsDetailsModel implements IShotsDetailsModel {
     @Override
     public void unlikeShot(String shotId, String token) {
         ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1, token).create(ApiService.class);
-        service.unLikeShot(shotId, token)
+        service.unLikeShot(shotId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<TTEntity>() {
@@ -72,7 +72,7 @@ public class ShotsDetailsModel implements IShotsDetailsModel {
     @Override
     public void checklikeShot(String shotId, String token) {
         ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1, token).create(ApiService.class);
-        service.checkLikeShot(shotId, token)
+        service.checkLikeShot(shotId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<TTEntity>() {

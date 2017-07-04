@@ -29,7 +29,7 @@ public class AttachmentsModel implements IAttachmentsModel {
     @Override
     public void loadAttachments(String shotId, String token) {
         ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1, token).create(ApiService.class);
-        service.getAttachments(shotId, token)
+        service.getAttachments(shotId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<List<AttachmentsEntity>>() {
