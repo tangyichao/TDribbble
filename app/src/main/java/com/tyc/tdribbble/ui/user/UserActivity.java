@@ -25,6 +25,7 @@ import com.bumptech.glide.request.animation.GlideAnimation;
 import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.adapter.TFragmentPageAdapter;
+import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.base.BaseActivity;
 import com.tyc.tdribbble.entity.UserEntity;
 import com.tyc.tdribbble.ui.bigimage.BigImageActivity;
@@ -77,7 +78,7 @@ public class UserActivity extends BaseActivity {
         params.height = width;
         params.width = width;
         mIvAvatarBig.setLayoutParams(params);
-        UserEntity user = (UserEntity) getIntent().getSerializableExtra("user");
+        UserEntity user = (UserEntity) getIntent().getSerializableExtra(ApiConstants.USER);
         String avatar = user.getAvatarUrl();
         Glide.with(this).load(avatar).into(mIvAvatar);
         Glide.with(this).load(avatar).bitmapTransform(new BlurTransformation(this, 20)).override(width, width).into(mIvAvatarBig);

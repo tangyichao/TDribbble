@@ -19,6 +19,8 @@ import com.bumptech.glide.Glide;
 import com.google.android.flexbox.FlexboxLayout;
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.TDribbbleApp;
+import com.tyc.tdribbble.api.ApiConstants;
+import com.tyc.tdribbble.base.BaseFragment;
 import com.tyc.tdribbble.entity.ShotsEntity;
 import com.tyc.tdribbble.entity.UserEntity;
 import com.tyc.tdribbble.ui.search.SearchActivity;
@@ -38,10 +40,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
  * 作者：tangyc on 2017/6/23
  * 邮箱：874500641@qq.com
  */
-public class ShotsIntroductionFragment extends Fragment implements IShotsIntroductionView {
+public class ShotsIntroductionFragment extends BaseFragment implements IShotsIntroductionView {
 
 
-    Unbinder unbinder;
     @BindView(R.id.iv_avatar)
     CircleImageView mIvAvatar;
     @BindView(R.id.tv_name)
@@ -66,25 +67,21 @@ public class ShotsIntroductionFragment extends Fragment implements IShotsIntrodu
         return fragment;
     }
 
-    @Nullable
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.fragment_shots_introduction, null);
-        unbinder = ButterKnife.bind(this, view);
-        return view;
+    public int layoutResID() {
+        return R.layout.fragment_shots_introduction;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+    public void initData() {
         shots = (ShotsEntity) getArguments().getSerializable("shots");
         if (TextUtils.isEmpty(shots.getCreatedAt()) || shots.getUser() == null) {
             ShotsIntroductionPresenter presenter = new ShotsIntroductionPresenter(this);
-            presenter.loadShotsIntroduction(String.valueOf(shots.getId()), TDribbbleApp.token);
+            presenter.loadShotsIntroduction(String.valueOf(shots.getId()));
         } else {
             showShot(shots);
         }
-
     }
 
     private void showShot(ShotsEntity shots) {
@@ -112,7 +109,8 @@ public class ShotsIntroductionFragment extends Fragment implements IShotsIntrodu
             }
         }
         String desc = shots.getDescription();
-        HtmlFormatUtils.Html2StringNoP(mTvDesc, desc);
+        if (!TextUtils.isEmpty(desc))
+            HtmlFormatUtils.Html2StringNoP(mTvDesc, desc);
         int attachmentsCount = shots.getAttachmentsCount();
         if (attachmentsCount > 0) {
             mTvAttachments.setVisibility(View.VISIBLE);
@@ -156,11 +154,6 @@ public class ShotsIntroductionFragment extends Fragment implements IShotsIntrodu
         return textView;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 
 
     @OnClick({R.id.iv_avatar, R.id.tv_attachments})
@@ -169,7 +162,7 @@ public class ShotsIntroductionFragment extends Fragment implements IShotsIntrodu
             case R.id.iv_avatar: {
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), UserActivity.class);
-                intent.putExtra("user", shots.getUser());
+                intent.putExtra(ApiConstants.USER, shots.getUser());
                 startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(getActivity(),
                         Pair.create((View) mIvAvatar, getResources().getString(R.string.str_avatar_tran)),
                         Pair.create((View) mTvName, getResources().getString(R.string.str_name_tran))).toBundle());
@@ -178,7 +171,7 @@ public class ShotsIntroductionFragment extends Fragment implements IShotsIntrodu
             case R.id.tv_attachments:
                 Intent intent = new Intent();
                 intent.setClass(getActivity(), AttachmentsActivity.class);
-                intent.putExtra("shotId", shots.getId());
+                intent.putExtra(ApiConstants.SHOTID, shots.getId());
                 startActivity(intent);
                 break;
         }

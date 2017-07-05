@@ -14,8 +14,8 @@ public class ShotsIntroductionPresenter implements IShotsIntroductionPresenter {
     }
 
     @Override
-    public void loadShotsIntroduction(String shotId, String token) {
-        model.loadShotsIntroduction(shotId, token);
+    public void loadShotsIntroduction(String shotId) {
+        model.loadShotsIntroduction(shotId);
     }
 
 }

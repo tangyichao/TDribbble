@@ -27,9 +27,9 @@ public class HomeModel implements IHomeModel {
     }
 
     @Override
-    public void loadShots(Map<String, String> map, String token, final int type) {
+    public void loadShots(Map<String, String> map, final int type) {
         {
-            ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1,token).create(ApiService.class);
+            ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1).create(ApiService.class);
             service.getShots(map)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
@@ -59,9 +59,9 @@ public class HomeModel implements IHomeModel {
     }
 
     @Override
-    public void loadUser(String token) {
-        ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1, token).create(ApiService.class);
-        service.getUser(token)
+    public void loadUser() {
+        ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1).create(ApiService.class);
+        service.getUser()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<UserEntity>() {

@@ -1,7 +1,9 @@
 package com.tyc.tdribbble.ui.home;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,8 +22,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.InflateException;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -110,7 +115,7 @@ public class HomeActivity extends BaseActivity
 
     @Override
     protected void initData() {
-        token = TDribbbleApp.token;
+        token = TDribbbleApp.TOKEN;
         setSupportActionBar(mToolbar);
         View headerLayout = mNavView.getHeaderView(0);
         mIvAvatar = headerLayout.findViewById(R.id.iv_avatar);
@@ -172,12 +177,12 @@ public class HomeActivity extends BaseActivity
                     hashMap.remove(ApiConstants.PAGE);
                     count++;
                     hashMap.put(ApiConstants.PAGE, String.valueOf(count));
-                    homePresenter.loadShots(hashMap, TDribbbleApp.token, 1);
+                    homePresenter.loadShots(hashMap, 1);
                 }
             }
         });
         if (!TextUtils.isEmpty(token)) {
-            homePresenter.loadUser(token);
+            homePresenter.loadUser();
         }
     }
 
@@ -201,6 +206,7 @@ public class HomeActivity extends BaseActivity
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
+
         getMenuInflater().inflate(R.menu.home, menu);
         return true;
     }
@@ -295,7 +301,7 @@ public class HomeActivity extends BaseActivity
                 } else {
                     Intent intent = new Intent();
                     intent.setClass(HomeActivity.this, UserActivity.class);
-                    intent.putExtra("user", userEntity);
+                    intent.putExtra(ApiConstants.USER, userEntity);
                     startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(this,
                             Pair.create((View) mIvAvatar, getResources().getString(R.string.str_avatar_tran)),
                             Pair.create((View) mTvName, getResources().getString(R.string.str_name_tran))).toBundle());
@@ -308,7 +314,7 @@ public class HomeActivity extends BaseActivity
     @Subscribe(threadMode = ThreadMode.MAIN, sticky = true)
     public void onMessageEvent(UserEntity userEntity) {
         this.userEntity = userEntity;
-        Glide.with(this).load(userEntity.getAvatarUrl()).asGif().error(R.drawable.bg_default_avatar).into(mIvAvatar);
+        Glide.with(this).load(userEntity.getAvatarUrl()).error(R.mipmap.ic_default_avatar).into(mIvAvatar);
         Glide.with(this).load(userEntity.getAvatarUrl()).bitmapTransform(new BlurTransformation(this, 18, 3)).into(mIvBg);
         mTvName.setText(userEntity.getName());
         mIvAvatar.setEnabled(true);
@@ -342,7 +348,7 @@ public class HomeActivity extends BaseActivity
     @Override
     public void showUser(UserEntity userEntity) {
         this.userEntity = userEntity;
-        Glide.with(this).load(userEntity.getAvatarUrl()).error(R.drawable.bg_default_avatar).into(mIvAvatar);
+        Glide.with(this).load(userEntity.getAvatarUrl()).error(R.mipmap.ic_default_avatar).into(mIvAvatar);
         Glide.with(this).load(userEntity.getAvatarUrl()).bitmapTransform(new BlurTransformation(this, 18, 3)).into(mIvBg);
         mTvName.setText(userEntity.getName());
         mIvAvatar.setEnabled(true);
@@ -368,7 +374,7 @@ public class HomeActivity extends BaseActivity
 
     @Override
     public void onRefresh() {
-        homePresenter.loadShots(hashMap, token, 0);
+        homePresenter.loadShots(hashMap, 0);
     }
 
     @Override
@@ -388,7 +394,7 @@ public class HomeActivity extends BaseActivity
 //        TextView tv = (TextView)view;
 //        tv.setGravity(Gravity.CENTER);
 //
-        homePresenter.loadShots(hashMap, TDribbbleApp.token, 0);
+        homePresenter.loadShots(hashMap, 0);
         mSrlShots.setRefreshing(true);
 
     }

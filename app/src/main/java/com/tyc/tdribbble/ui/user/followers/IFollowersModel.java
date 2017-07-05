@@ -6,6 +6,6 @@ package com.tyc.tdribbble.ui.user.followers;
  */
 public interface IFollowersModel {
 
-    public void loadFollowers(String userId, String token);
+    public void loadFollowers(String userId);
 
 }

@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.tyc.tdribbble.R;
+import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.entity.FollowersEntity;
 import com.tyc.tdribbble.ui.home.HomeActivity;
 import com.tyc.tdribbble.ui.user.UserActivity;
@@ -51,7 +52,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Foll
 
     @Override
     public void onBindViewHolder(final FollowersViewHolder holder, int position) {
-        Glide.with(context).load(followersEntities.get(position).getFollower().getAvatarUrl()).error(R.drawable.bg_default_avatar).into(holder.mTvAvatar);
+        Glide.with(context).load(followersEntities.get(position).getFollower().getAvatarUrl()).error(R.mipmap.ic_default_avatar).into(holder.mTvAvatar);
         String location = followersEntities.get(position).getFollower().getLocation();
         if (!TextUtils.isEmpty(location))
             holder.mTvLocation.setText(location);
@@ -70,7 +71,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Foll
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setClass(context, UserActivity.class);
-                intent.putExtra("user", followersEntities.get(holder.getAdapterPosition()).getFollower());
+                intent.putExtra(ApiConstants.USER, followersEntities.get(holder.getAdapterPosition()).getFollower());
                 context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation((FragmentActivity) context,
                         Pair.create((View) holder.mTvAvatar, context.getResources().getString(R.string.str_avatar_tran)),
                         Pair.create((View) holder.mTvName, context.getResources().getString(R.string.str_name_tran))).toBundle());

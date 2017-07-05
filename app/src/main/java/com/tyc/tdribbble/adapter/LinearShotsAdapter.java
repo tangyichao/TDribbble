@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.tyc.tdribbble.R;
+import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.entity.ShotsEntity;
 import com.tyc.tdribbble.ui.home.HomeActivity;
 import com.tyc.tdribbble.ui.shotsdetails.ShotsDetailsActivity;
@@ -87,7 +88,7 @@ public class LinearShotsAdapter extends RecyclerView.Adapter {
                 public void onClick(View view) {
                     Intent intent = new Intent();
                     intent.setClass(context, UserActivity.class);
-                    intent.putExtra("user", shotsEntities.get(holder.getAdapterPosition()).getUser());
+                    intent.putExtra(ApiConstants.USER, shotsEntities.get(holder.getAdapterPosition()).getUser());
                     context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation((HomeActivity) context,
                             Pair.create(view, context.getResources().getString(R.string.str_avatar_tran)),
                             Pair.create((View) ((LinearShotsViewHolder) holder).mTvName, context.getResources().getString(R.string.str_name_tran))).toBundle());

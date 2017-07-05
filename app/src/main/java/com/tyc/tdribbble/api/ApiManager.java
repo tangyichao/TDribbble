@@ -1,5 +1,8 @@
 package com.tyc.tdribbble.api;
 
+import android.text.TextUtils;
+
+import com.tyc.tdribbble.TDribbbleApp;
 import com.tyc.tdribbble.utils.interceptor.AuthInterceptor;
 
 import java.io.IOException;
@@ -34,13 +37,14 @@ public class ApiManager {
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client).build();
     }
-    public static Retrofit getRetrofitUser(String url, final String token){
-        OkHttpClient client = new OkHttpClient().newBuilder().readTimeout(20, TimeUnit.SECONDS).addInterceptor(new AuthInterceptor(token)).authenticator(new Authenticator() {
+
+    public static Retrofit getRetrofitUser(String url) {
+        OkHttpClient client = new OkHttpClient().newBuilder().readTimeout(20, TimeUnit.SECONDS).addInterceptor(new AuthInterceptor((!TextUtils.isEmpty(TDribbbleApp.TOKEN) ? TDribbbleApp.TOKEN : ApiConstants.OAuth.TOKEN))).authenticator(new Authenticator() {
 
             @Override
             public Request authenticate(Route route, Response response) throws IOException {
                 return response.request().newBuilder()
-                        .header("Authorization","Bearer "+token)
+                        .header("Authorization", "Bearer " + (!TextUtils.isEmpty(TDribbbleApp.TOKEN) ? TDribbbleApp.TOKEN : ApiConstants.OAuth.TOKEN))
                         .build();
             }
         }).build();

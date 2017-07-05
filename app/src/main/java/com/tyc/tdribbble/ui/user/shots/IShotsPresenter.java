@@ -6,5 +6,5 @@ package com.tyc.tdribbble.ui.user.shots;
  */
 public interface IShotsPresenter {
 
-    public void loadShots(String userId, String token);
+    public void loadShots(String userId);
 }

@@ -8,7 +8,7 @@ import java.util.HashMap;
  */
 public interface ICommentsModel {
 
-    public void loadComments(String shotId, HashMap<String, String> hashMap, String token);
+    public void loadComments(String shotId, HashMap<String, String> hashMap);
 
-    public void likeComment(String shotId, String commentId, String token);
+    public void likeComment(String shotId, String commentId);
 }

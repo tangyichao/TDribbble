@@ -6,6 +6,6 @@ package com.tyc.tdribbble.ui.shotsdetails.attachments;
  */
 public interface IAttachmentsModel {
 
-    public void loadAttachments(String shotId, String token);
+    public void loadAttachments(String shotId);
 
 }

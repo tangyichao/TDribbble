@@ -59,7 +59,7 @@ public class ApiConstants {
 
         String CLIENT_SECRET = "bd30f7ee220bcc73a6058114d19547c3f3452469227a3594520c5ff8b27dcd19";
 
-        String TOKEN = "02d08f10e824ec7ed54636b8f9bc46e23e6e343c9c3d130295103004f0006a65";
+       String TOKEN = "a052d7b929180147a8d477aebdf82bb60988660cbec9908b690cc6f6b77d5cfc";
 
         String REDIRECT_URI = "http://weibo.com/tyc10086/home?wvr=5";
 

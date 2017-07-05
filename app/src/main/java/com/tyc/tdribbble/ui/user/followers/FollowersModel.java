@@ -33,8 +33,8 @@ public class FollowersModel implements IFollowersModel {
 
 
     @Override
-    public void loadFollowers(String userId, String token) {
-        ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1, token).create(ApiService.class);
+    public void loadFollowers(String userId) {
+        ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1).create(ApiService.class);
         service.getFollowers(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

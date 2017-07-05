@@ -30,13 +30,13 @@ public interface ApiService {
     Observable<TokenEntity> getToKen(@Query(ApiConstants.OAuthKey.CLIENT_ID) String clientID,@Query(ApiConstants.OAuthKey.CLIENT_SECRET) String clientSecret,@Query(ApiConstants.OAuthKey.REDIRECT_URI) String redirectUri,@Query(ApiConstants.OAuthKey.CODE) String code);
 
     @GET(ApiConstants.USER)
-    Observable<UserEntity> getUser(@Query(ApiConstants.OAuthKey.TOKEN)String token);
+    Observable<UserEntity> getUser();
 
     @GET(ApiConstants.SHOTS)
     Observable<List<ShotsEntity>> getShots(@QueryMap Map<String, String> map);
 
     @GET(ApiConstants.ONESHOTS)
-    Observable<ShotsEntity> getShot(@Path("shotId") String shotId);
+    Observable<ShotsEntity> getShot(@Path(ApiConstants.SHOTID) String shotId);
 
     @GET(ApiConstants.LIKESHOT)
     Observable<TTEntity> checkLikeShot(@Path(ApiConstants.SHOTID) String shotId);

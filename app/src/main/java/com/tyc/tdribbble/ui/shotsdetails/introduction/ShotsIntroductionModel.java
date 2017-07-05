@@ -26,8 +26,8 @@ public class ShotsIntroductionModel implements IShotsIntroductionModel {
 
 
     @Override
-    public void loadShotsIntroduction(String shotId, String token) {
-        ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1, token).create(ApiService.class);
+    public void loadShotsIntroduction(String shotId) {
+        ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1).create(ApiService.class);
         service.getShot(shotId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

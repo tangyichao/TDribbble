@@ -14,8 +14,8 @@ public class AttachmentsPresenter implements IAttachmentsPresenter {
     }
 
     @Override
-    public void loadAttachments(String shotId, String token) {
-        model.loadAttachments(shotId, token);
+    public void loadAttachments(String shotId) {
+        model.loadAttachments(shotId);
     }
 
 }

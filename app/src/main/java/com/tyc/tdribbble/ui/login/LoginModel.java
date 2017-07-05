@@ -51,9 +51,9 @@ public class LoginModel implements ILoginModel{
     }
 
     @Override
-    public void loadUser(String token) {
-        ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1,token).create(ApiService.class);
-        service.getUser(token)
+    public void loadUser() {
+        ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1).create(ApiService.class);
+        service.getUser()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Consumer<UserEntity>() {
@@ -70,7 +70,6 @@ public class LoginModel implements ILoginModel{
                     @Override
                     public void accept(@NonNull Throwable throwable) throws Exception {
                         iLoginView.showError();
-                        Log.i("debug",throwable.getMessage());
                     }
                 });
     }

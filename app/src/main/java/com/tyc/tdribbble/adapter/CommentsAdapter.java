@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.tyc.tdribbble.R;
+import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.entity.CommentsEntity;
 import com.tyc.tdribbble.entity.FollowersEntity;
 import com.tyc.tdribbble.ui.user.UserActivity;
@@ -73,7 +74,7 @@ public class CommentsAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (holder.getItemViewType() == COMMENTSTYPE) {
-            Glide.with(context).load(commentsEntities.get(position).getUser().getAvatarUrl()).error(R.drawable.bg_default_avatar).into(((CommentsViewHolder) holder).mTvAvatar);
+            Glide.with(context).load(commentsEntities.get(position).getUser().getAvatarUrl()).error(R.mipmap.ic_default_avatar).into(((CommentsViewHolder) holder).mTvAvatar);
             String location = commentsEntities.get(position).getUser().getLocation();
             if (!TextUtils.isEmpty(location))
                 ((CommentsViewHolder) holder).mTvLocation.setText(location);
@@ -95,7 +96,7 @@ public class CommentsAdapter extends RecyclerView.Adapter {
                 public void onClick(View view) {
                     Intent intent = new Intent();
                     intent.setClass(context, UserActivity.class);
-                    intent.putExtra("user", commentsEntities.get(holder.getAdapterPosition()).getUser());
+                    intent.putExtra(ApiConstants.USER, commentsEntities.get(holder.getAdapterPosition()).getUser());
                     context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation((FragmentActivity) context,
                             Pair.create((View) ((CommentsViewHolder) holder).mTvAvatar, context.getResources().getString(R.string.str_avatar_tran)),
                             Pair.create((View) ((CommentsViewHolder) holder).mTvName, context.getResources().getString(R.string.str_name_tran))).toBundle());

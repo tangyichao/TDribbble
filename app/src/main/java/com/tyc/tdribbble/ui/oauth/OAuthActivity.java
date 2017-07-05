@@ -2,8 +2,11 @@ package com.tyc.tdribbble.ui.oauth;
 
 import android.content.Intent;
 import android.net.http.SslError;
+import android.os.Handler;
+import android.util.Log;
 import android.view.View;
 import android.webkit.SslErrorHandler;
+import android.webkit.WebChromeClient;
 import android.webkit.WebResourceRequest;
 import android.webkit.WebResourceResponse;
 import android.webkit.WebSettings;
@@ -31,12 +34,24 @@ public class OAuthActivity extends BaseActivity {
     @Override
     protected void initData() {
         mPbOauth.setVisibility(View.VISIBLE);
+        mWvOauth.setVisibility(View.INVISIBLE);
         WebSettings settings= mWvOauth.getSettings();
         settings.setJavaScriptEnabled(true);
         settings.setJavaScriptCanOpenWindowsAutomatically(true);
         settings.setLayoutAlgorithm(WebSettings.LayoutAlgorithm.NARROW_COLUMNS);
         settings.setMixedContentMode(WebSettings.MIXED_CONTENT_COMPATIBILITY_MODE);
         mWvOauth.loadUrl(getIntent().getStringExtra("url"));
+        mWvOauth.setWebChromeClient(new WebChromeClient() {
+            @Override
+            public void onProgressChanged(WebView view, int newProgress) {
+                if (newProgress == 100) {
+                    mWvOauth.setVisibility(View.VISIBLE);
+                    mPbOauth.setVisibility(View.GONE);
+                }
+                //   Log.i("debug","onProgressChanged"+System.currentTimeMillis());
+                super.onProgressChanged(view, newProgress);
+            }
+        });
         mWvOauth.setWebViewClient(new WebViewClient(){
             @Override
             public void onReceivedSslError(WebView view, SslErrorHandler handler, SslError error) {
@@ -50,9 +65,8 @@ public class OAuthActivity extends BaseActivity {
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
-                mPbOauth.setVisibility(View.GONE);
+                Log.i("debug", "onPageFinished" + System.currentTimeMillis());
             }
-
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
                 String url=request.getUrl().toString();
@@ -67,13 +81,13 @@ public class OAuthActivity extends BaseActivity {
                             Intent intent=new Intent();
                             intent.putExtra("code",codeStr);
                             setResult(RESULT_OK,intent);
+                            finish();
                             break;
                         }
                     }
                 }else{
                     view.loadUrl(url);
                 }
-
                 return true;
             }
         });

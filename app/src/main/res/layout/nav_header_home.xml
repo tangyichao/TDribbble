@@ -2,6 +2,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:src="@drawable/side_nav_bar"
     android:layout_height="@dimen/nav_header_height">
 
     <ImageView
@@ -25,7 +26,7 @@
         android:id="@+id/iv_avatar"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:src="@drawable/ic_default_avatar"
+        android:src="@mipmap/ic_default_avatar"
         android:transitionName="@string/str_avatar_tran" />
 
     <TextView
@@ -35,7 +36,7 @@
         android:textSize="14sp"
         android:transitionName="@string/str_name_tran"
         android:text="@string/str_click_login"
-        android:textColor="@color/colorTextClick" />
+        android:textColor="@color/white" />
     </LinearLayout>
 
 

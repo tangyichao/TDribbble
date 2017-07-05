@@ -15,6 +15,8 @@ import android.widget.ImageView;
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.TDribbbleApp;
 import com.tyc.tdribbble.adapter.FollowersAdapter;
+import com.tyc.tdribbble.api.ApiConstants;
+import com.tyc.tdribbble.base.BaseFragment;
 import com.tyc.tdribbble.entity.FollowersEntity;
 
 import java.util.List;
@@ -27,10 +29,9 @@ import butterknife.Unbinder;
  * 作者：tangyc on 2017/6/23
  * 邮箱：874500641@qq.com
  */
-public class UserFollowersFragment extends Fragment implements IFollowersView {
+public class UserFollowersFragment extends BaseFragment implements IFollowersView {
     @BindView(R.id.rv_followers)
     RecyclerView mRvFollowers;
-    Unbinder unbinder;
     FollowersPresenter followersPresenter;
     @BindView(R.id.srl)
     SwipeRefreshLayout mSrl;
@@ -40,25 +41,22 @@ public class UserFollowersFragment extends Fragment implements IFollowersView {
     public static UserFollowersFragment newInstance(String userId) {
         UserFollowersFragment fragment = new UserFollowersFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("userId", userId);
+        bundle.putString(ApiConstants.USERID, userId);
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    @Nullable
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.fragment_followers, null);
-        unbinder = ButterKnife.bind(this, view);
-        return view;
+    public int layoutResID() {
+        return R.layout.fragment_followers;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        String userId = getArguments().getString("userId");
+    public void initData() {
+        String userId = getArguments().getString(ApiConstants.USERID);
         followersPresenter = new FollowersPresenter(this);
-        followersPresenter.loadFollowers(userId, TDribbbleApp.token);
+        followersPresenter.loadFollowers(userId);
         mRvFollowers.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSrl.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         mSrl.setRefreshing(true);
@@ -87,9 +85,4 @@ public class UserFollowersFragment extends Fragment implements IFollowersView {
         mSrl.setRefreshing(false);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 }

@@ -17,8 +17,8 @@ public class FollowersPresenter implements IFollowersPresenter {
     }
 
     @Override
-    public void loadFollowers(String userId, String token) {
-        model.loadFollowers(userId, token);
+    public void loadFollowers(String userId) {
+        model.loadFollowers(userId);
     }
 
 }

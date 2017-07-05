@@ -14,8 +14,8 @@ public class ShotsPresenter implements IShotsPresenter {
     }
 
     @Override
-    public void loadShots(String userId, String token) {
-        model.loadShots(userId, token);
+    public void loadShots(String userId) {
+        model.loadShots(userId);
     }
 
 }

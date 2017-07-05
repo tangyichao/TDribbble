@@ -6,5 +6,5 @@ package com.tyc.tdribbble.ui.shotsdetails.introduction;
  */
 public interface IShotsIntroductionPresenter {
 
-    public void loadShotsIntroduction(String shotId, String token);
+    public void loadShotsIntroduction(String shotId);
 }

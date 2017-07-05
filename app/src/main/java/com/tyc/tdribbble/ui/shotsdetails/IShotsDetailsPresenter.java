@@ -8,9 +8,9 @@ import java.util.HashMap;
  */
 public interface IShotsDetailsPresenter {
 
-    public void likeShot(String shotId, String token);
+    public void likeShot(String shotId);
 
-    public void unlikeShot(String shotId, String token);
+    public void unlikeShot(String shotId);
 
-    public void checklikeShot(String shotId, String token);
+    public void checklikeShot(String shotId);
 }

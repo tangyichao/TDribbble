@@ -7,7 +7,7 @@ import java.util.Map;
  * 邮箱：874500641@qq.com
  */
 public interface IHomePresenter {
-    void loadShots(Map<String, String> map, String token, int type);
+    void loadShots(Map<String, String> map, int type);
 
-    void loadUser(String token);
+    void loadUser();
 }

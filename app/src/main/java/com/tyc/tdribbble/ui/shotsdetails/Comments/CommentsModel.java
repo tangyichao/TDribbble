@@ -31,8 +31,8 @@ public class CommentsModel implements ICommentsModel {
 
 
     @Override
-    public void loadComments(String shotId, final HashMap<String, String> hashMap, String token) {
-        ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1, token).create(ApiService.class);
+    public void loadComments(String shotId, final HashMap<String, String> hashMap) {
+        ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1).create(ApiService.class);
         service.getComments(shotId, hashMap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -54,8 +54,8 @@ public class CommentsModel implements ICommentsModel {
     }
 
     @Override
-    public void likeComment(String shotId, String commentId, String token) {
-        ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1, token).create(ApiService.class);
+    public void likeComment(String shotId, String commentId) {
+        ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1).create(ApiService.class);
         service.getLikeComment(shotId, commentId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

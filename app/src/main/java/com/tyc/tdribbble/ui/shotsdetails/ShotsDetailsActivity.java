@@ -84,7 +84,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
         TFragmentPageAdapter adapter = new TFragmentPageAdapter(fm, tabStrs, list);
         mVpUserShots.setAdapter(adapter);
         presenter = new ShotsDetailsPresenter(this);
-        presenter.checklikeShot(String.valueOf(shots.getId()), TDribbbleApp.token);
+        presenter.checklikeShot(String.valueOf(shots.getId()));
     }
 
     @Override
@@ -125,7 +125,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
                 break;
             }
             case R.id.fab_favorite:
-                presenter.likeShot(String.valueOf(shots.getId()), TDribbbleApp.token);
+                presenter.likeShot(String.valueOf(shots.getId()));
                 break;
         }
     }

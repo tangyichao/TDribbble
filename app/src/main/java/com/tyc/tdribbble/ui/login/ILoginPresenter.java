@@ -6,5 +6,6 @@ package com.tyc.tdribbble.ui.login;
  */
 public interface ILoginPresenter {
     public void loadToken(String code);
-    public void loadUser(String token);
+
+    public void loadUser();
 }

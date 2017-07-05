@@ -12,6 +12,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.tyc.tdribbble.R;
+import com.tyc.tdribbble.api.ApiConstants;
+import com.tyc.tdribbble.base.BaseFragment;
 import com.tyc.tdribbble.entity.UserEntity;
 
 import butterknife.BindView;
@@ -23,7 +25,7 @@ import butterknife.Unbinder;
  * 作者：tangyc on 2017/6/23
  * 邮箱：874500641@qq.com
  */
-public class UserInfoFragment extends Fragment {
+public class UserInfoFragment extends BaseFragment {
     @BindView(R.id.tv_followers_count)
     TextView mTvFollowersCount;
     @BindView(R.id.tv_followings_count)
@@ -39,7 +41,6 @@ public class UserInfoFragment extends Fragment {
     @BindView(R.id.tv_twitter)
     TextView mTvTwitter;
 
-    Unbinder unbinder;
     @BindView(R.id.tv_projects_count)
     TextView mTvProjectsCount;
     @BindView(R.id.tv_shots_count)
@@ -53,23 +54,19 @@ public class UserInfoFragment extends Fragment {
     public static UserInfoFragment newInstance(UserEntity user) {
         UserInfoFragment fragment = new UserInfoFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("user", user);
+        bundle.putSerializable(ApiConstants.USER, user);
         fragment.setArguments(bundle);
         return fragment;
     }
 
-    @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.fragment_user_info, null);
-        unbinder = ButterKnife.bind(this, view);
-        return view;
+    public int layoutResID() {
+        return R.layout.fragment_user_info;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        user = (UserEntity) getArguments().getSerializable("user");
+    public void initData() {
+        user = (UserEntity) getArguments().getSerializable(ApiConstants.USER);
         mTvFollowersCount.setText(user.getFollowersCount() + "粉丝");
         mTvFollowingsCount.setText(user.getFollowingsCount() + "关注");
         mTvFavoriteCount.setText(user.getLikesCount() + "点赞");
@@ -98,12 +95,6 @@ public class UserInfoFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
-
     @OnClick({R.id.tv_web, R.id.tv_twitter})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -116,7 +107,6 @@ public class UserInfoFragment extends Fragment {
                 break;
         }
     }
-
     private void openUri(String uriStr) {
         Uri uri = Uri.parse(uriStr);
         Intent it = new Intent(Intent.ACTION_VIEW, uri);

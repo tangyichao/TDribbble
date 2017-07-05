@@ -16,13 +16,13 @@ public class CommentsPresenter implements ICommentsPresenter {
     }
 
     @Override
-    public void loadComments(String shotId, HashMap<String, String> hashMap, String token) {
-        model.loadComments(shotId, hashMap, token);
+    public void loadComments(String shotId, HashMap<String, String> hashMap) {
+        model.loadComments(shotId, hashMap);
     }
 
     @Override
-    public void likeComment(String shotId, String commentId, String token) {
-        model.likeComment(shotId, commentId, token);
+    public void likeComment(String shotId, String commentId) {
+        model.likeComment(shotId, commentId);
     }
 
 }

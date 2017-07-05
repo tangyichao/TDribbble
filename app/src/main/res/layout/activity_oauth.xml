@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
     tools:context="com.tyc.tdribbble.ui.oauth.OAuthActivity">
     <WebView
         android:id="@+id/wv_oauth"
@@ -12,6 +13,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
+        android:background="@android:color/transparent"
         app:layout_constraintTop_toTopOf="parent" />
     <ProgressBar
         android:id="@+id/pb_oauth"

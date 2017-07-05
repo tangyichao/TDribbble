@@ -17,18 +17,18 @@ public class ShotsDetailsPresenter implements IShotsDetailsPresenter {
 
 
     @Override
-    public void likeShot(String shotId, String token) {
-        model.likeShot(shotId, token);
+    public void likeShot(String shotId) {
+        model.likeShot(shotId);
     }
 
     @Override
-    public void unlikeShot(String shotId, String token) {
-        model.unlikeShot(shotId, token);
+    public void unlikeShot(String shotId) {
+        model.unlikeShot(shotId);
     }
 
     @Override
-    public void checklikeShot(String shotId, String token) {
-        model.checklikeShot(shotId, token);
+    public void checklikeShot(String shotId) {
+        model.checklikeShot(shotId);
     }
 
 }

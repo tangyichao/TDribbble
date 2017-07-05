@@ -12,12 +12,12 @@ public class HomePresenter implements IHomePresenter {
         homeModel=new HomeModel(iHomeView);
     }
     @Override
-    public void loadShots(Map<String, String> map, String token, int type) {
-        homeModel.loadShots(map, token, type);
+    public void loadShots(Map<String, String> map, int type) {
+        homeModel.loadShots(map, type);
     }
 
     @Override
-    public void loadUser(String token) {
-        homeModel.loadUser(token);
+    public void loadUser() {
+        homeModel.loadUser();
     }
 }

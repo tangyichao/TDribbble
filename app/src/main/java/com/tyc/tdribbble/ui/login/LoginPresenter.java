@@ -19,7 +19,7 @@ public class LoginPresenter implements ILoginPresenter {
     }
 
     @Override
-    public void loadUser(String token) {
-        model.loadUser(token);
+    public void loadUser() {
+        model.loadUser();
     }
 }

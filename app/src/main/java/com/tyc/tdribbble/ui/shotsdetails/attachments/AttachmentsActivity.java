@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.TDribbbleApp;
 import com.tyc.tdribbble.adapter.AttachmentsAdapter;
+import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.base.BaseActivity;
 import com.tyc.tdribbble.entity.AttachmentsEntity;
 
@@ -34,11 +35,11 @@ public class AttachmentsActivity extends BaseActivity implements IAttachmentsVie
 
     @Override
     protected void initData() {
-        int shotId = getIntent().getIntExtra("shotId", 0);
+        int shotId = getIntent().getIntExtra(ApiConstants.SHOTID, 0);
         mSfl.setRefreshing(true);
         mSfl.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         AttachmentsPresenter presenter = new AttachmentsPresenter(this);
-        presenter.loadAttachments(String.valueOf(shotId), TDribbbleApp.token);
+        presenter.loadAttachments(String.valueOf(shotId));
         mRvAttachments.setLayoutManager(new LinearLayoutManager(this));
     }
 

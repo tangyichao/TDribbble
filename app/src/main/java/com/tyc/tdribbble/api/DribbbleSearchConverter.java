@@ -47,7 +47,7 @@ public class DribbbleSearchConverter implements Converter<ResponseBody, List<Sho
     private DribbbleSearchConverter() {
     }
 
-    static final DribbbleSearchConverter INSTANCE = new DribbbleSearchConverter();
+    private static final DribbbleSearchConverter INSTANCE = new DribbbleSearchConverter();
 
     private static final String HOST = "https://dribbble.com";
     private static final Pattern PATTERN_PLAYER_ID =

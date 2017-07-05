@@ -2,37 +2,32 @@ package com.tyc.tdribbble.ui.shotsdetails.Comments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.TDribbbleApp;
 import com.tyc.tdribbble.adapter.CommentsAdapter;
 import com.tyc.tdribbble.api.ApiConstants;
+import com.tyc.tdribbble.base.BaseFragment;
 import com.tyc.tdribbble.entity.CommentsEntity;
 import com.tyc.tdribbble.entity.TTEntity;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * 作者：tangyc on 2017/6/23
  * 邮箱：874500641@qq.com
  */
-public class CommentsFragment extends Fragment implements ICommentsView {
+public class CommentsFragment extends BaseFragment implements ICommentsView {
     @BindView(R.id.rv_comments)
     RecyclerView mRvComments;
     CommentsPresenter commentsPresenter;
@@ -40,7 +35,6 @@ public class CommentsFragment extends Fragment implements ICommentsView {
     ImageView mIvEmptyError;
     @BindView(R.id.srl)
     SwipeRefreshLayout mSrl;
-    Unbinder unbinder;
     private boolean isFlag = false;
     private HashMap<String, String> hashMap = new HashMap<>();
     int pageNum = 1;
@@ -49,26 +43,25 @@ public class CommentsFragment extends Fragment implements ICommentsView {
     public static CommentsFragment newInstance(String shotId) {
         CommentsFragment fragment = new CommentsFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("shotId", shotId);
+        bundle.putString(ApiConstants.SHOTID, shotId);
         fragment.setArguments(bundle);
         return fragment;
     }
 
     @Nullable
+
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.fragment_comments, null);
-        unbinder = ButterKnife.bind(this, view);
-        return view;
+    public int layoutResID() {
+        return R.layout.fragment_comments;
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-        shotId = getArguments().getString("shotId");
+    public void initData() {
+        shotId = getArguments().getString(ApiConstants.SHOTID);
         hashMap.put(ApiConstants.PAGE, String.valueOf(pageNum));
         commentsPresenter = new CommentsPresenter(this);
-        commentsPresenter.loadComments(shotId, hashMap, TDribbbleApp.token);
+        commentsPresenter.loadComments(shotId, hashMap);
         mSrl.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         mSrl.setRefreshing(true);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -91,7 +84,7 @@ public class CommentsFragment extends Fragment implements ICommentsView {
                     isFlag = true;
                     pageNum++;
                     hashMap.put(ApiConstants.PAGE, String.valueOf(pageNum));
-                    commentsPresenter.loadComments(shotId, hashMap, TDribbbleApp.token);
+                    commentsPresenter.loadComments(shotId, hashMap);
                     //mSrl.setRefreshing(true);
                 }
             }
@@ -116,7 +109,7 @@ public class CommentsFragment extends Fragment implements ICommentsView {
             public void onClick(Object object) {
                 CommentsEntity entity = (CommentsEntity) object;
                 Log.i("debug", "" + String.valueOf(entity.getId()) + shotId);
-                commentsPresenter.likeComment(shotId, String.valueOf(entity.getId()), TDribbbleApp.token);
+                commentsPresenter.likeComment(shotId, String.valueOf(entity.getId()));
             }
         });
         mIvEmptyError.setVisibility(View.GONE);
@@ -144,9 +137,4 @@ public class CommentsFragment extends Fragment implements ICommentsView {
         mSrl.setRefreshing(false);
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        unbinder.unbind();
-    }
 }

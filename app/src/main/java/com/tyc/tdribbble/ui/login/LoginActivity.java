@@ -1,7 +1,6 @@
 package com.tyc.tdribbble.ui.login;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +9,7 @@ import android.widget.TextView;
 
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.TDribbbleApp;
+import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.base.BaseActivity;
 import com.tyc.tdribbble.entity.UserEntity;
 import com.tyc.tdribbble.ui.oauth.OAuthActivity;
@@ -19,7 +19,6 @@ import com.tyc.tdribbble.utils.StringOauth;
 import org.greenrobot.eventbus.EventBus;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class LoginActivity extends BaseActivity implements ILoginView {
@@ -82,15 +81,13 @@ public class LoginActivity extends BaseActivity implements ILoginView {
 
     @Override
     public void showToken(String token) {
-        Log.i("debug", token);
-        TDribbbleApp.token=token;
-        SpUtils.getSpUtils(this).putString("token",token);
-        mPresnter.loadUser(token);
+        TDribbbleApp.TOKEN = token;
+        SpUtils.getSpUtils(this).putString(ApiConstants.OAuth.TOKEN, token);
+        mPresnter.loadUser();
     }
 
     @Override
     public void showError() {
-        Log.i("debug", "onError");
         mTvCome.setVisibility(View.GONE);
         mPbLogin.setVisibility(View.GONE);
         mBtnLogin.setVisibility(View.VISIBLE);
