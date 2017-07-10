@@ -48,8 +48,6 @@ public class CommentsFragment extends BaseFragment implements ICommentsView {
         return fragment;
     }
 
-    @Nullable
-
 
     @Override
     public int layoutResID() {
@@ -61,7 +59,7 @@ public class CommentsFragment extends BaseFragment implements ICommentsView {
         shotId = getArguments().getString(ApiConstants.SHOTID);
         hashMap.put(ApiConstants.PAGE, String.valueOf(pageNum));
         commentsPresenter = new CommentsPresenter(this);
-        commentsPresenter.loadComments(shotId, hashMap);
+        commentsPresenter.loadComments(this,shotId, hashMap);
         mSrl.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         mSrl.setRefreshing(true);
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -84,7 +82,7 @@ public class CommentsFragment extends BaseFragment implements ICommentsView {
                     isFlag = true;
                     pageNum++;
                     hashMap.put(ApiConstants.PAGE, String.valueOf(pageNum));
-                    commentsPresenter.loadComments(shotId, hashMap);
+                    commentsPresenter.loadComments(CommentsFragment.this,shotId, hashMap);
                     //mSrl.setRefreshing(true);
                 }
             }
@@ -108,8 +106,7 @@ public class CommentsFragment extends BaseFragment implements ICommentsView {
             @Override
             public void onClick(Object object) {
                 CommentsEntity entity = (CommentsEntity) object;
-                Log.i("debug", "" + String.valueOf(entity.getId()) + shotId);
-                commentsPresenter.likeComment(shotId, String.valueOf(entity.getId()));
+                commentsPresenter.likeComment(CommentsFragment.this,shotId, String.valueOf(entity.getId()));
             }
         });
         mIvEmptyError.setVisibility(View.GONE);

@@ -1,5 +1,6 @@
 package com.tyc.tdribbble.ui.shotsdetails.attachments;
 
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.api.ApiManager;
 import com.tyc.tdribbble.api.ApiService;
@@ -27,11 +28,12 @@ public class AttachmentsModel implements IAttachmentsModel {
 
 
     @Override
-    public void loadAttachments(String shotId) {
+    public void loadAttachments(RxAppCompatActivity rxAppCompatActivity,String shotId) {
         ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1).create(ApiService.class);
         service.getAttachments(shotId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.<List<AttachmentsEntity>>bindToLifecycle())
                 .subscribe(new Consumer<List<AttachmentsEntity>>() {
                     @Override
                     public void accept(@NonNull List<AttachmentsEntity> attachmentsEntities) throws Exception {

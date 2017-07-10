@@ -12,6 +12,7 @@ import com.trello.rxlifecycle2.LifecycleTransformer;
 import com.trello.rxlifecycle2.RxLifecycle;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -28,36 +29,16 @@ import io.reactivex.subjects.BehaviorSubject;
  */
 
 
-public abstract class BaseActivity extends AppCompatActivity implements LifecycleProvider<ActivityEvent> {
-    private final BehaviorSubject<ActivityEvent> lifecycleSubject = BehaviorSubject.create();
+public abstract class BaseActivity extends RxAppCompatActivity  {
+
     private Unbinder bind;
 
-    @Override
-    @NonNull
-    @CheckResult
-    public final Observable<ActivityEvent> lifecycle() {
-        return lifecycleSubject.hide();
-    }
 
-    @Override
-    @NonNull
-    @CheckResult
-    public final <T> LifecycleTransformer<T> bindUntilEvent(@NonNull ActivityEvent event) {
-        return RxLifecycle.bindUntilEvent(lifecycleSubject, event);
-    }
-
-    @Override
-    @NonNull
-    @CheckResult
-    public final <T> LifecycleTransformer<T> bindToLifecycle() {
-        return RxLifecycleAndroid.bindActivity(lifecycleSubject);
-    }
 
     @Override
     @CallSuper
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        lifecycleSubject.onNext(ActivityEvent.CREATE);
         initToolbar();
         setContentView(layoutResID());
         EventBus.getDefault().register(this);
@@ -74,14 +55,12 @@ public abstract class BaseActivity extends AppCompatActivity implements Lifecycl
 
     @Override
     protected void onResume() {
-        lifecycleSubject.onNext(ActivityEvent.RESUME);
         super.onResume();
         MobclickAgent.onResume(this);
     }
 
     @Override
     protected void onPause() {
-        lifecycleSubject.onNext(ActivityEvent.PAUSE);
         super.onPause();
         MobclickAgent.onPause(this);
     }
@@ -93,7 +72,6 @@ public abstract class BaseActivity extends AppCompatActivity implements Lifecycl
     @Override
     @CallSuper
     protected void onDestroy() {
-        lifecycleSubject.onNext(ActivityEvent.DESTROY);
         super.onDestroy();
         bind.unbind();
         EventBus.getDefault().unregister(this);
@@ -103,13 +81,11 @@ public abstract class BaseActivity extends AppCompatActivity implements Lifecycl
     @CallSuper
     protected void onStart() {
         super.onStart();
-        lifecycleSubject.onNext(ActivityEvent.START);
     }
 
     @Override
     @CallSuper
     protected void onStop() {
-        lifecycleSubject.onNext(ActivityEvent.STOP);
         super.onStop();
     }
 

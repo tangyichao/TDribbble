@@ -18,4 +18,8 @@
     <string name="str_shots_tran">shotsTran</string>
     <string name="str_finish_app">再次返回退出应用</string>
     <string name="str_about">关于</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
 </resources>

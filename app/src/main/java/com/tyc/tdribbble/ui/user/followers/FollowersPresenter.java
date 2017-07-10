@@ -1,5 +1,6 @@
 package com.tyc.tdribbble.ui.user.followers;
 
+import com.trello.rxlifecycle2.components.support.RxFragment;
 import com.tyc.tdribbble.ui.login.ILoginPresenter;
 import com.tyc.tdribbble.ui.login.ILoginView;
 
@@ -17,8 +18,8 @@ public class FollowersPresenter implements IFollowersPresenter {
     }
 
     @Override
-    public void loadFollowers(String userId) {
-        model.loadFollowers(userId);
+    public void loadFollowers(RxFragment rxFragment,String userId) {
+        model.loadFollowers(rxFragment,userId);
     }
 
 }

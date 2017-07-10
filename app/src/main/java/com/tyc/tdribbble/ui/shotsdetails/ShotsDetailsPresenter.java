@@ -1,5 +1,7 @@
 package com.tyc.tdribbble.ui.shotsdetails;
 
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+
 import java.util.HashMap;
 
 /**
@@ -17,18 +19,33 @@ public class ShotsDetailsPresenter implements IShotsDetailsPresenter {
 
 
     @Override
-    public void likeShot(String shotId) {
-        model.likeShot(shotId);
+    public void likeShot(RxAppCompatActivity rxAppCompatActivity,String shotId) {
+        model.likeShot(rxAppCompatActivity,shotId);
     }
 
     @Override
-    public void unlikeShot(String shotId) {
-        model.unlikeShot(shotId);
+    public void unlikeShot(RxAppCompatActivity rxAppCompatActivity,String shotId) {
+        model.unlikeShot(rxAppCompatActivity,shotId);
     }
 
     @Override
-    public void checklikeShot(String shotId) {
-        model.checklikeShot(shotId);
+    public void checklikeShot(RxAppCompatActivity rxAppCompatActivity,String shotId) {
+        model.checklikeShot(rxAppCompatActivity,shotId);
+    }
+
+    @Override
+    public void loadComments(RxAppCompatActivity rxAppCompatActivity, String shotId, HashMap<String, String> hashMap) {
+        model.loadComments(rxAppCompatActivity,shotId,hashMap);
+    }
+
+    @Override
+    public void likeComment(RxAppCompatActivity rxAppCompatActivity, String shotId, String commentId) {
+        model.likeComment(rxAppCompatActivity,shotId,commentId);
+    }
+
+    @Override
+    public void loadShotsIntroduction(RxAppCompatActivity rxAppCompatActivity, String shotId) {
+        model.loadShotsIntroduction(rxAppCompatActivity,shotId);
     }
 
 }

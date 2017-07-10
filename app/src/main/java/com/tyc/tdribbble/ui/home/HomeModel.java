@@ -2,6 +2,7 @@ package com.tyc.tdribbble.ui.home;
 
 import android.util.Log;
 
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.api.ApiManager;
 import com.tyc.tdribbble.api.ApiService;
@@ -27,18 +28,18 @@ public class HomeModel implements IHomeModel {
     }
 
     @Override
-    public void loadShots(Map<String, String> map, final int type) {
+    public void loadShots(RxAppCompatActivity rxAppCompatActivity, Map<String, String> map, final int type) {
         {
             ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1).create(ApiService.class);
             service.getShots(map)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
+                    .compose(rxAppCompatActivity.<List<ShotsEntity>>bindToLifecycle())
                     .subscribe(new Consumer<List<ShotsEntity>>() {
                         @Override
                         public void accept(@NonNull List<ShotsEntity> shotsEntities) throws Exception {
                             if(shotsEntities.size()>0)
                             {
-
                                 if (type == 0) {
                                     iHomeView.showShots(shotsEntities);
                                 }else{
@@ -55,15 +56,19 @@ public class HomeModel implements IHomeModel {
                                 iHomeView.showError();
                         }
                     });
+
         }
+
+
     }
 
     @Override
-    public void loadUser() {
+    public void loadUser(RxAppCompatActivity rxAppCompatActivity) {
         ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1).create(ApiService.class);
         service.getUser()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.<UserEntity>bindToLifecycle())
                 .subscribe(new Consumer<UserEntity>() {
                     @Override
                     public void accept(@NonNull UserEntity userEntity) throws Exception {

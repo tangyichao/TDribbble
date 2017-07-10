@@ -62,7 +62,7 @@ public class ShotsIntroductionFragment extends BaseFragment implements IShotsInt
     public static ShotsIntroductionFragment newInstance(ShotsEntity shotsEntity) {
         ShotsIntroductionFragment fragment = new ShotsIntroductionFragment();
         Bundle bundle = new Bundle();
-        bundle.putSerializable("shots", shotsEntity);
+        bundle.putSerializable(ApiConstants.SHOTS,shotsEntity);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -75,10 +75,10 @@ public class ShotsIntroductionFragment extends BaseFragment implements IShotsInt
 
     @Override
     public void initData() {
-        shots = (ShotsEntity) getArguments().getSerializable("shots");
+        shots = (ShotsEntity) getArguments().getSerializable(ApiConstants.SHOTS);
         if (TextUtils.isEmpty(shots.getCreatedAt()) || shots.getUser() == null) {
             ShotsIntroductionPresenter presenter = new ShotsIntroductionPresenter(this);
-            presenter.loadShotsIntroduction(String.valueOf(shots.getId()));
+            presenter.loadShotsIntroduction(this,String.valueOf(shots.getId()));
         } else {
             showShot(shots);
         }

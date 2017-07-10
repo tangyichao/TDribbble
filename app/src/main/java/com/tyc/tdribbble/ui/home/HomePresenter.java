@@ -1,5 +1,7 @@
 package com.tyc.tdribbble.ui.home;
 
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+
 import java.util.Map;
 
 /**
@@ -12,12 +14,12 @@ public class HomePresenter implements IHomePresenter {
         homeModel=new HomeModel(iHomeView);
     }
     @Override
-    public void loadShots(Map<String, String> map, int type) {
-        homeModel.loadShots(map, type);
+    public void loadShots(RxAppCompatActivity rxAppCompatActivity, Map<String, String> map, int type) {
+        homeModel.loadShots(rxAppCompatActivity,map, type);
     }
 
     @Override
-    public void loadUser() {
-        homeModel.loadUser();
+    public void loadUser(RxAppCompatActivity rxAppCompatActivity) {
+        homeModel.loadUser(rxAppCompatActivity);
     }
 }

@@ -1,5 +1,8 @@
 package com.tyc.tdribbble.ui.shotsdetails;
 
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.trello.rxlifecycle2.components.support.RxFragment;
+
 import java.util.HashMap;
 
 /**
@@ -8,9 +11,15 @@ import java.util.HashMap;
  */
 public interface IShotsDetailsPresenter {
 
-    public void likeShot(String shotId);
+    public void likeShot(RxAppCompatActivity rxAppCompatActivity,String shotId);
 
-    public void unlikeShot(String shotId);
+    public void unlikeShot(RxAppCompatActivity rxAppCompatActivity,String shotId);
 
-    public void checklikeShot(String shotId);
+    public void checklikeShot(RxAppCompatActivity rxAppCompatActivity,String shotId);
+
+    public void loadComments(RxAppCompatActivity rxAppCompatActivity,String shotId, HashMap<String, String> hashMap);
+
+    public void likeComment(RxAppCompatActivity rxAppCompatActivity,String shotId, String commentId);
+
+    public void loadShotsIntroduction(RxAppCompatActivity rxAppCompatActivity, String shotId);
 }

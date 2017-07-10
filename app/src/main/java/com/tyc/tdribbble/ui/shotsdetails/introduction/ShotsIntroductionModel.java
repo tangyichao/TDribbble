@@ -1,5 +1,7 @@
 package com.tyc.tdribbble.ui.shotsdetails.introduction;
 
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.trello.rxlifecycle2.components.support.RxFragment;
 import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.api.ApiManager;
 import com.tyc.tdribbble.api.ApiService;
@@ -26,11 +28,12 @@ public class ShotsIntroductionModel implements IShotsIntroductionModel {
 
 
     @Override
-    public void loadShotsIntroduction(String shotId) {
+    public void loadShotsIntroduction(RxFragment rxFragment, String shotId) {
         ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1).create(ApiService.class);
         service.getShot(shotId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxFragment.<ShotsEntity>bindToLifecycle())
                 .subscribe(new Consumer<ShotsEntity>() {
                     @Override
                     public void accept(@NonNull ShotsEntity shotsEntity) throws Exception {

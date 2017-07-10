@@ -53,7 +53,7 @@ public class UserShotsFragment extends BaseFragment implements IShotsView {
     public void initData() {
         String userId = getArguments().getString(ApiConstants.USERID);
         shotsPresenter = new ShotsPresenter(this);
-        shotsPresenter.loadShots(userId);
+        shotsPresenter.loadShots(this,userId);
         LinearLayoutManager manager = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         mRvFollowers.setLayoutManager(manager);
         new LinearSnapHelper().attachToRecyclerView(mRvFollowers);

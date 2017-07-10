@@ -2,6 +2,7 @@ package com.tyc.tdribbble.ui.login;
 
 import android.util.Log;
 
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.api.ApiManager;
 import com.tyc.tdribbble.api.ApiService;
@@ -25,11 +26,12 @@ public class LoginModel implements ILoginModel{
     }
 
     @Override
-    public void loadToken(String code) {
+    public void loadToken(RxAppCompatActivity rxAppCompatActivity, String code) {
         ApiService service = ApiManager.getRetrofit(ApiConstants.BASE_URL).create(ApiService.class);
         service.getToKen(ApiConstants.OAuth.CLIENT_ID, ApiConstants.OAuth.CLIENT_SECRET, ApiConstants.OAuth.REDIRECT_URI, code)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.<TokenEntity>bindToLifecycle())
                 .subscribe(new Consumer<TokenEntity>() {
                     @Override
                     public void accept(@NonNull TokenEntity tokenEntity) throws Exception {
@@ -51,11 +53,12 @@ public class LoginModel implements ILoginModel{
     }
 
     @Override
-    public void loadUser() {
+    public void loadUser(RxAppCompatActivity rxAppCompatActivity) {
         ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1).create(ApiService.class);
         service.getUser()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.<UserEntity>bindToLifecycle())
                 .subscribe(new Consumer<UserEntity>() {
                     @Override
                     public void accept(@NonNull UserEntity userEntity) throws Exception {

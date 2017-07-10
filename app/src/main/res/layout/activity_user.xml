@@ -80,6 +80,7 @@
                 android:layout_width="match_parent"
                 app:tabMode="scrollable"
                 app:tabContentStart="10dp"
+                app:tabSelectedTextColor="@color/colorAccent"
                 android:layout_gravity="bottom"
                 android:layout_height="?attr/actionBarSize" />
         </android.support.design.widget.CollapsingToolbarLayout>

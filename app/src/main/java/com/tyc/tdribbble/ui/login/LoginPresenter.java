@@ -1,5 +1,7 @@
 package com.tyc.tdribbble.ui.login;
 
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+
 /**
  * 作者：tangyc on 2017/6/21
  * 邮箱：874500641@qq.com
@@ -14,12 +16,12 @@ public class LoginPresenter implements ILoginPresenter {
     }
 
     @Override
-    public void loadToken(String code) {
-        model.loadToken(code);
+    public void loadToken(RxAppCompatActivity rxAppCompatActivity,String code) {
+        model.loadToken(rxAppCompatActivity,code);
     }
 
     @Override
-    public void loadUser() {
-        model.loadUser();
+    public void loadUser(RxAppCompatActivity rxAppCompatActivity) {
+        model.loadUser(rxAppCompatActivity);
     }
 }

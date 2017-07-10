@@ -56,7 +56,7 @@ public class UserFollowersFragment extends BaseFragment implements IFollowersVie
     public void initData() {
         String userId = getArguments().getString(ApiConstants.USERID);
         followersPresenter = new FollowersPresenter(this);
-        followersPresenter.loadFollowers(userId);
+        followersPresenter.loadFollowers(this,userId);
         mRvFollowers.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSrl.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         mSrl.setRefreshing(true);

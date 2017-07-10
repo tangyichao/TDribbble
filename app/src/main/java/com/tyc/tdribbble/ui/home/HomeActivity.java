@@ -48,6 +48,7 @@ import com.tyc.tdribbble.entity.ShotsEntity;
 import com.tyc.tdribbble.entity.UserEntity;
 import com.tyc.tdribbble.ui.about.AboutActivity;
 import com.tyc.tdribbble.ui.login.LoginActivity;
+import com.tyc.tdribbble.ui.myuser.shots.MyUserShotsActivity;
 import com.tyc.tdribbble.ui.search.SearchActivity;
 import com.tyc.tdribbble.ui.user.UserActivity;
 import com.tyc.tdribbble.utils.DisplayUtils;
@@ -177,12 +178,12 @@ public class HomeActivity extends BaseActivity
                     hashMap.remove(ApiConstants.PAGE);
                     count++;
                     hashMap.put(ApiConstants.PAGE, String.valueOf(count));
-                    homePresenter.loadShots(hashMap, 1);
+                    homePresenter.loadShots(HomeActivity.this,hashMap, 1);
                 }
             }
         });
         if (!TextUtils.isEmpty(token)) {
-            homePresenter.loadUser();
+            homePresenter.loadUser(this);
         }
     }
 
@@ -264,8 +265,19 @@ public class HomeActivity extends BaseActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-        if (id == R.id.nav_camera) {
+        if (id == R.id.nav_shots) {
             // Handle the camera action
+            if (TextUtils.isEmpty(token)) {
+                Intent intent = new Intent();
+                intent.setClass(HomeActivity.this, LoginActivity.class);
+                intent.putExtra("url", StringOauth.getOauthSting());
+                startActivityForResult(intent, REQUEST_CODE);
+            }else{
+                Intent intent = new Intent();
+                intent.setClass(HomeActivity.this, MyUserShotsActivity.class);
+                intent.putExtra(ApiConstants.USERID,String.valueOf(userEntity.getId()));
+                startActivity(intent);
+            }
 
         } else if (id == R.id.nav_gallery) {
 
@@ -374,7 +386,7 @@ public class HomeActivity extends BaseActivity
 
     @Override
     public void onRefresh() {
-        homePresenter.loadShots(hashMap, 0);
+        homePresenter.loadShots(this,hashMap, 0);
     }
 
     @Override
@@ -394,7 +406,7 @@ public class HomeActivity extends BaseActivity
 //        TextView tv = (TextView)view;
 //        tv.setGravity(Gravity.CENTER);
 //
-        homePresenter.loadShots(hashMap, 0);
+        homePresenter.loadShots(this,hashMap, 0);
         mSrlShots.setRefreshing(true);
 
     }

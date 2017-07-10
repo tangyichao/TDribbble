@@ -2,6 +2,7 @@ package com.tyc.tdribbble.ui.shotsdetails.Comments;
 
 import android.util.Log;
 
+import com.trello.rxlifecycle2.components.support.RxFragment;
 import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.api.ApiManager;
 import com.tyc.tdribbble.api.ApiService;
@@ -31,11 +32,12 @@ public class CommentsModel implements ICommentsModel {
 
 
     @Override
-    public void loadComments(String shotId, final HashMap<String, String> hashMap) {
+    public void loadComments(RxFragment rxFragment,String shotId, final HashMap<String, String> hashMap) {
         ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1).create(ApiService.class);
         service.getComments(shotId, hashMap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxFragment.<List<CommentsEntity>>bindToLifecycle())
                 .subscribe(new Consumer<List<CommentsEntity>>() {
                     @Override
                     public void accept(@NonNull List<CommentsEntity> commentsEntities) throws Exception {
@@ -54,11 +56,12 @@ public class CommentsModel implements ICommentsModel {
     }
 
     @Override
-    public void likeComment(String shotId, String commentId) {
+    public void likeComment(RxFragment rxFragment,String shotId, String commentId) {
         ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1).create(ApiService.class);
         service.getLikeComment(shotId, commentId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxFragment.<TTEntity>bindToLifecycle())
                 .subscribe(new Consumer<TTEntity>() {
                     @Override
                     public void accept(@NonNull TTEntity ttentity) throws Exception {

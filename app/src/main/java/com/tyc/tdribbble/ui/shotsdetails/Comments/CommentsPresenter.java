@@ -1,5 +1,7 @@
 package com.tyc.tdribbble.ui.shotsdetails.Comments;
 
+import com.trello.rxlifecycle2.components.support.RxFragment;
+
 import java.util.HashMap;
 
 /**
@@ -16,13 +18,13 @@ public class CommentsPresenter implements ICommentsPresenter {
     }
 
     @Override
-    public void loadComments(String shotId, HashMap<String, String> hashMap) {
-        model.loadComments(shotId, hashMap);
+    public void loadComments(RxFragment rxFragment,String shotId, HashMap<String, String> hashMap) {
+        model.loadComments(rxFragment,shotId, hashMap);
     }
 
     @Override
-    public void likeComment(String shotId, String commentId) {
-        model.likeComment(shotId, commentId);
+    public void likeComment(RxFragment rxFragment,String shotId, String commentId) {
+        model.likeComment(rxFragment,shotId, commentId);
     }
 
 }

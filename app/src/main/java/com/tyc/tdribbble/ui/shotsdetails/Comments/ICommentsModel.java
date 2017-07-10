@@ -1,5 +1,7 @@
 package com.tyc.tdribbble.ui.shotsdetails.Comments;
 
+import com.trello.rxlifecycle2.components.support.RxFragment;
+
 import java.util.HashMap;
 
 /**
@@ -8,7 +10,7 @@ import java.util.HashMap;
  */
 public interface ICommentsModel {
 
-    public void loadComments(String shotId, HashMap<String, String> hashMap);
+    public void loadComments(RxFragment rxFragment,String shotId, HashMap<String, String> hashMap);
 
-    public void likeComment(String shotId, String commentId);
+    public void likeComment(RxFragment rxFragment,String shotId, String commentId);
 }

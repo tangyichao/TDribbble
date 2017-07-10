@@ -145,7 +145,7 @@ public class LinearShotsAdapter extends RecyclerView.Adapter {
                 Intent intent = new Intent();
                 intent.setClass(context, ShotsDetailsActivity.class);
                 intent.putExtra("type", type);
-                intent.putExtra("shots", shotsEntities.get(holder.getAdapterPosition()));
+                intent.putExtra(ApiConstants.SHOTS, shotsEntities.get(holder.getAdapterPosition()));
                 if (!isAnimated) {
                     context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context,
                             Pair.create((View) ((LinearShotsViewHolder) holder).mIvShots, context.getResources().getString(R.string.str_shots_tran))).toBundle());

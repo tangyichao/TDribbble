@@ -1,6 +1,7 @@
 package com.tyc.tdribbble.ui.shotsdetails;
 
 import com.tyc.tdribbble.entity.CommentsEntity;
+import com.tyc.tdribbble.entity.ShotsEntity;
 import com.tyc.tdribbble.entity.TTEntity;
 
 import java.util.List;
@@ -17,4 +18,12 @@ public interface IShotsDetailsView {
     public void checklikeShot(boolean isLike);
 
     public void showError();
+
+    public void showComments(List<CommentsEntity> commentsEntities);
+
+    public void likeComment(TTEntity ttEntity);
+    public void showEmpty();
+    public void showCommentsError();
+    public void showShotsIntroduction(ShotsEntity shotsEntity);
+
 }

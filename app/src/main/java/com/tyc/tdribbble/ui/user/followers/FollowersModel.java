@@ -2,6 +2,7 @@ package com.tyc.tdribbble.ui.user.followers;
 
 import android.util.Log;
 
+import com.trello.rxlifecycle2.components.support.RxFragment;
 import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.api.ApiManager;
 import com.tyc.tdribbble.api.ApiService;
@@ -33,11 +34,12 @@ public class FollowersModel implements IFollowersModel {
 
 
     @Override
-    public void loadFollowers(String userId) {
+    public void loadFollowers(RxFragment rxFragment,String userId) {
         ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1).create(ApiService.class);
         service.getFollowers(userId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxFragment.<List<FollowersEntity>>bindToLifecycle())
                 .subscribe(new Consumer<List<FollowersEntity>>() {
                     @Override
                     public void accept(@NonNull List<FollowersEntity> followersEntities) throws Exception {

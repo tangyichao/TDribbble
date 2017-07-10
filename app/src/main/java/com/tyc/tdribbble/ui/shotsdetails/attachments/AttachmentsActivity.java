@@ -39,7 +39,7 @@ public class AttachmentsActivity extends BaseActivity implements IAttachmentsVie
         mSfl.setRefreshing(true);
         mSfl.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         AttachmentsPresenter presenter = new AttachmentsPresenter(this);
-        presenter.loadAttachments(String.valueOf(shotId));
+        presenter.loadAttachments(this,String.valueOf(shotId));
         mRvAttachments.setLayoutManager(new LinearLayoutManager(this));
     }
 

@@ -1,5 +1,7 @@
 package com.tyc.tdribbble.ui.home;
 
+import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+
 import java.util.Map;
 
 /**
@@ -7,8 +9,8 @@ import java.util.Map;
  * 邮箱：874500641@qq.com
  */
 public interface IHomeModel {
-    public void loadShots(Map<String, String> map, int type);
+    public void loadShots(RxAppCompatActivity rxAppCompatActivity, Map<String, String> map, int type);
 
-    public void loadUser();
+    public void loadUser(RxAppCompatActivity rxAppCompatActivity);
 
 }

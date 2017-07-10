@@ -65,7 +65,7 @@ public class LoginActivity extends BaseActivity implements ILoginView {
             mPbLogin.setVisibility(View.VISIBLE);
             mBtnLogin.setVisibility(View.GONE);
             String code = data.getStringExtra("code");
-            mPresnter.loadToken(code);
+            mPresnter.loadToken(this,code);
         }else{
             mTvCome.setVisibility(View.GONE);
             mPbLogin.setVisibility(View.GONE);
@@ -83,7 +83,7 @@ public class LoginActivity extends BaseActivity implements ILoginView {
     public void showToken(String token) {
         TDribbbleApp.TOKEN = token;
         SpUtils.getSpUtils(this).putString(ApiConstants.OAuth.TOKEN, token);
-        mPresnter.loadUser();
+        mPresnter.loadUser(this);
     }
 
     @Override
