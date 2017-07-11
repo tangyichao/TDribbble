@@ -52,7 +52,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Foll
 
     @Override
     public void onBindViewHolder(final FollowersViewHolder holder, int position) {
-        Glide.with(context).load(followersEntities.get(position).getFollower().getAvatarUrl()).error(R.mipmap.ic_default_avatar).into(holder.mTvAvatar);
+        Glide.with(context).load(followersEntities.get(position).getFollower().getAvatarUrl()).error(R.mipmap.ic_default_avatar).into(holder.mIvAvatar);
         String location = followersEntities.get(position).getFollower().getLocation();
         if (!TextUtils.isEmpty(location))
             holder.mTvLocation.setText(location);
@@ -73,7 +73,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Foll
                 intent.setClass(context, UserActivity.class);
                 intent.putExtra(ApiConstants.USER, followersEntities.get(holder.getAdapterPosition()).getFollower());
                 context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation((FragmentActivity) context,
-                        Pair.create((View) holder.mTvAvatar, context.getResources().getString(R.string.str_avatar_tran)),
+                        Pair.create((View) holder.mIvAvatar, context.getResources().getString(R.string.str_avatar_tran)),
                         Pair.create((View) holder.mTvName, context.getResources().getString(R.string.str_name_tran))).toBundle());
             }
         });
@@ -86,7 +86,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Foll
 
     public class FollowersViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.iv_avatar)
-        CircleImageView mTvAvatar;
+        CircleImageView mIvAvatar;
         @BindView(R.id.tv_name)
         TextView mTvName;
         @BindView(R.id.tv_location)

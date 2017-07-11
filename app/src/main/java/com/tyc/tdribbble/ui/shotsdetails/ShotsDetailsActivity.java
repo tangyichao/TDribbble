@@ -7,8 +7,8 @@ import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,9 +33,7 @@ import com.tyc.tdribbble.entity.TTEntity;
 import com.tyc.tdribbble.entity.UserEntity;
 import com.tyc.tdribbble.ui.bigimage.BigImageActivity;
 import com.tyc.tdribbble.ui.search.SearchActivity;
-import com.tyc.tdribbble.ui.shotsdetails.Comments.CommentsFragment;
-import com.tyc.tdribbble.ui.shotsdetails.Comments.CommentsPresenter;
-import com.tyc.tdribbble.ui.shotsdetails.introduction.ShotsIntroductionPresenter;
+import com.tyc.tdribbble.ui.user.UserActivity;
 import com.tyc.tdribbble.utils.DisplayUtils;
 import com.tyc.tdribbble.utils.HtmlFormatUtils;
 import com.tyc.tdribbble.utils.ScreenUtils;
@@ -82,6 +80,8 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
     TextView mTvDesc;
     @BindView(R.id.tv_attachments)
     TextView mTvAttachments;
+    @BindView(R.id.tv_title)
+    TextView mTvTitle;
 
     private ShotsDetailsPresenter presenter;
     private HashMap<String, String> hashMap = new HashMap<>();
@@ -109,20 +109,21 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
             Glide.with(ShotsDetailsActivity.this).load(normal).placeholder(R.drawable.bg_linear_shots).override(width, width * 3 / 4).into(mIvShots);
         }
         presenter = new ShotsDetailsPresenter(this);
-
         if (TextUtils.isEmpty(shots.getCreatedAt()) || shots.getUser() == null) {
-            presenter.loadShotsIntroduction(this,String.valueOf(shots.getId()));
+            presenter.loadShotsIntroduction(this, String.valueOf(shots.getId()));
         } else {
             showShot(shots);
         }
-
         presenter.checklikeShot(this, String.valueOf(shots.getId()));
         hashMap.put(ApiConstants.PAGE, String.valueOf(pageNum));
-        presenter.loadComments(this,String.valueOf(shots.getId()), hashMap);
+        presenter.loadComments(this, String.valueOf(shots.getId()), hashMap);
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setAutoMeasureEnabled(true);
+        linearLayoutManager.setSmoothScrollbarEnabled(true);
         mRvComments.setLayoutManager(linearLayoutManager);
+        mRvComments.setHasFixedSize(true);
+        mRvComments.setNestedScrollingEnabled(false);
     }
 
     @Override
@@ -148,7 +149,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
     }
 
 
-    @OnClick({R.id.iv_shots, R.id.fab_favorite})
+    @OnClick({R.id.iv_shots, R.id.fab_favorite, R.id.iv_avatar})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_shots: {
@@ -162,9 +163,19 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
                 }
                 break;
             }
-            case R.id.fab_favorite:
+            case R.id.fab_favorite: {
                 presenter.likeShot(this, String.valueOf(shots.getId()));
                 break;
+            }
+            case R.id.iv_avatar: {
+                Intent intent = new Intent();
+                intent.setClass(this, UserActivity.class);
+                intent.putExtra(ApiConstants.USER, shots.getUser());
+                startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                        Pair.create((View) mIvAvatar, getResources().getString(R.string.str_avatar_tran)),
+                        Pair.create((View) mTvName, getResources().getString(R.string.str_name_tran))).toBundle());
+                break;
+            }
         }
     }
 
@@ -208,7 +219,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
             @Override
             public void onClick(Object object) {
                 CommentsEntity entity = (CommentsEntity) object;
-                presenter.likeComment(ShotsDetailsActivity.this,String.valueOf(shots.getId()), String.valueOf(entity.getId()));
+                presenter.likeComment(ShotsDetailsActivity.this, String.valueOf(shots.getId()), String.valueOf(entity.getId()));
             }
         });
 
@@ -233,9 +244,12 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
     public void showShotsIntroduction(ShotsEntity shotsEntity) {
         showShot(shotsEntity);
     }
+
     private void showShot(ShotsEntity shots) {
 
         UserEntity userEntity = shots.getUser();
+        String title = shots.getTitle();
+        mTvTitle.setText(title);
         if (userEntity != null) {
             String avatar = userEntity.getAvatarUrl();
             Glide.with(this).load(avatar).into(mIvAvatar);
@@ -268,6 +282,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
             mTvAttachments.setVisibility(View.GONE);
         }
     }
+
     /**
      * 动态创建TextView
      *

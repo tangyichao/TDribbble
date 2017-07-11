@@ -5,7 +5,8 @@
     android:foreground="?android:attr/selectableItemBackground"
     android:background="@drawable/bg_linear_tag"
     android:orientation="horizontal"
-    android:padding="4dp">
+    android:layout_margin="10dp"
+    android:padding="10dp">
 
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/iv_avatar"
@@ -37,7 +38,6 @@
             android:maxLines="2"
             android:ellipsize="end"
             android:textSize="12sp" />
-
     </LinearLayout>
 </LinearLayout>
 

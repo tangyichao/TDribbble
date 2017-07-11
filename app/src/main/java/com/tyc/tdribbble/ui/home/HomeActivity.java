@@ -279,7 +279,7 @@ public class HomeActivity extends BaseActivity
                 startActivity(intent);
             }
 
-        } else if (id == R.id.nav_gallery) {
+        } else if (id == R.id.nav_home) {
 
         } else if (id == R.id.nav_favorite) {
 
@@ -304,7 +304,7 @@ public class HomeActivity extends BaseActivity
         switch (view.getId()) {
             case R.id.iv_avatar:
 
-                if (TextUtils.isEmpty(token)) {
+                if (TextUtils.isEmpty(token) || userEntity == null) {
                     Intent intent = new Intent();
                     intent.setClass(HomeActivity.this, LoginActivity.class);
                     intent.putExtra("url", StringOauth.getOauthSting());
@@ -352,7 +352,6 @@ public class HomeActivity extends BaseActivity
         }else{
             ((LinearShotsAdapter) mRvShots.getAdapter()).addData(shotsEntities);
         }
-
         isFlag=false;
 
     }

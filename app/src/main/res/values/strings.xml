@@ -6,6 +6,7 @@
     <string name="str_login">登陆</string>
     <string name="str_click_login">点击头像登陆</string>
     <string name="str_welcome">欢迎回来</string>
+    <string name="str_home">首页</string>
     <string name="str_favorite">收藏</string>
     <string name="str_shots">作品</string>
     <string name="str_settings">设置</string>
@@ -19,7 +20,5 @@
     <string name="str_finish_app">再次返回退出应用</string>
     <string name="str_about">关于</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="str_comment">评论一下</string>
 </resources>
