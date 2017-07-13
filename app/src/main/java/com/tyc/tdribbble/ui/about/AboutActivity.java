@@ -1,15 +1,21 @@
 package com.tyc.tdribbble.ui.about;
 
+import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 
+import com.azoft.carousellayoutmanager.CarouselLayoutManager;
+import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
+import com.azoft.carousellayoutmanager.CenterScrollListener;
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.adapter.LibsAdapter;
 import com.tyc.tdribbble.base.BaseActivity;
 import com.tyc.tdribbble.entity.Library;
 
 import butterknife.BindView;
-import github.hellocsl.layoutmanager.gallery.GalleryLayoutManager;
+import butterknife.ButterKnife;
 
 /**
  * 作者：tangyc on 2017/6/29
@@ -68,8 +74,15 @@ public class AboutActivity extends BaseActivity {
                     "Lifecycle handling APIs for Android apps using RxJava",
                     "https://github.com/trello/RxLifecycle",
                     "https://avatars3.githubusercontent.com/u/6181431",
+                    true),
+            new Library("CarouselLayoutManager",
+                    "Android Carousel LayoutManager for RecyclerView",
+                    "https://github.com/Azoft/CarouselLayoutManager",
+                    "https://avatars1.githubusercontent.com/u/6938975",
                     true)
     };
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
 
 
     @Override
@@ -79,21 +92,29 @@ public class AboutActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+        setSupportActionBar(mToolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+        final CarouselLayoutManager layoutCarouseManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
+        layoutCarouseManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
 
-        GalleryLayoutManager layoutGalleryManager = new GalleryLayoutManager(GalleryLayoutManager.HORIZONTAL);
-        layoutGalleryManager.attach(mRvLib, 30);
-        mRvLib.setAdapter(new LibsAdapter(this, libs));
-        layoutGalleryManager.setItemTransformer(new ScaleTransformer());
+        mRvLib.setLayoutManager(layoutCarouseManager);
+        mRvLib.setHasFixedSize(true);
+        LibsAdapter libsAdapter = new LibsAdapter(this, libs);
+        mRvLib.setAdapter(libsAdapter);
+        mRvLib.addOnScrollListener(new CenterScrollListener());
     }
 
-    private class ScaleTransformer implements GalleryLayoutManager.ItemTransformer {
-        @Override
-        public void transformItem(GalleryLayoutManager layoutManager, View item, float fraction) {
-            item.setPivotX(item.getWidth() / 2.0f);
-            item.setPivotY(item.getHeight() / 2.0f);
-            float scale = 1 - 0.3f * Math.abs(fraction);
-            item.setScaleX(scale);
-            item.setScaleY(scale);
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
         }
+        return super.onOptionsItemSelected(item);
     }
 }

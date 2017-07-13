@@ -33,7 +33,7 @@
         <activity
             android:name=".ui.login.LoginActivity"
             android:launchMode="singleTask"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.user.UserActivity"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -48,12 +48,14 @@
             android:theme="@style/FullScreenTheme" />
         <activity
             android:name=".ui.about.AboutActivity"
-            android:label="@string/str_about" />
+            android:label="@string/str_about"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.search.SearchActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.shotsdetails.attachments.AttachmentsActivity"
+            android:label="@string/str_attachments"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
@@ -62,10 +64,6 @@
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="github" />
-
-        <activity
-            android:name=".ui.MainActivity"
-            android:label="@string/title_activity_main"></activity>
     </application>
 
 </manifest>

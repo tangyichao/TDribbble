@@ -3,9 +3,9 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="str_login">登陆</string>
+    <string name="str_login">登陆Dribbble</string>
     <string name="str_click_login">点击头像登陆</string>
-    <string name="str_welcome">欢迎回来</string>
+    <string name="str_welcome">欢迎回来TDribbble</string>
     <string name="str_home">首页</string>
     <string name="str_favorite">收藏</string>
     <string name="str_shots">作品</string>
@@ -18,7 +18,10 @@
     <string name="str_name_tran">nameTran</string>
     <string name="str_shots_tran">shotsTran</string>
     <string name="str_finish_app">再次返回退出应用</string>
+    <string name="str_empty">数据为空</string>
+    <string name="str_error">网络错误</string>
     <string name="str_about">关于</string>
-    <string name="title_activity_main">MainActivity</string>
     <string name="str_comment">评论一下</string>
+    <string name="str_thinks">感谢</string>
+    <string name="str_attachments">附件</string>
 </resources>

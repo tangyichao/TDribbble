@@ -79,8 +79,6 @@ public class HomeActivity extends BaseActivity
     private static final int REQUEST_CODE = 102;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
-    @BindView(R.id.fab)
-    FloatingActionButton mFab;
     @BindView(R.id.nav_view)
     NavigationView mNavView;
     @BindView(R.id.drawer_layout)
@@ -123,7 +121,12 @@ public class HomeActivity extends BaseActivity
         mIvAvatar.setOnClickListener(this);
         mTvName = headerLayout.findViewById(R.id.tv_name);
         mTvName.setOnClickListener(this);
+
         mIvBg = headerLayout.findViewById(R.id.iv_bg);
+        MenuItem menuItem = mNavView.getMenu().getItem(0);
+        menuItem.setChecked(true);//设置为选中状态
+        mNavView.setItemTextColor(ContextCompat.getColorStateList(this, R.color.selector_menu));
+        mNavView.setItemIconTintList(ContextCompat.getColorStateList(this, R.color.selector_menu));
         mSrlShots.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, mDrawerLayout, mToolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -367,12 +370,14 @@ public class HomeActivity extends BaseActivity
 
     @Override
     public void showError() {
-
+        mSrlShots.setRefreshing(false);
+        Snackbar.make(mRvShots, R.string.str_error, Snackbar.LENGTH_LONG).show();
     }
 
     @Override
     public void showEmpty() {
-
+        mSrlShots.setRefreshing(false);
+        Snackbar.make(mRvShots, R.string.str_empty, Snackbar.LENGTH_LONG).show();
     }
 
 

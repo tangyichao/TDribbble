@@ -40,7 +40,6 @@ public class MyUserShotsActivity extends BaseActivity implements IShotsView {
     @Override
     protected void initData() {
         String userId = getIntent().getStringExtra(ApiConstants.USERID);
-        Log.i("debug",userId+"========");
         shotsPresenter = new ShotsPresenter(this);
       //  shotsPresenter.loadShots(this,userId);
         LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);

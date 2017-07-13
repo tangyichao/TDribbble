@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimary"
     tools:context="com.tyc.tdribbble.ui.login.LoginActivity">
 
     <Button
@@ -13,12 +12,10 @@
         android:layout_height="wrap_content"
         android:text="@string/str_login"
         android:textSize="18sp"
-        android:textColor="@android:color/white"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginLeft="8dp"
+        android:textAllCaps="false"
+        android:padding="8dp"
         android:background="@drawable/bg_btn_login"
+        android:foreground="?android:attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"

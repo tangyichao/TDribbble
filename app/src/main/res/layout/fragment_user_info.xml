@@ -25,7 +25,7 @@
             <TextView
                 android:id="@+id/tv_followers_count"
                 android:layout_width="match_parent"
-                android:drawableStart="@drawable/ic_follower_red_24dp"
+                android:drawableStart="@drawable/ic_follower_grey_24dp"
                 android:drawablePadding="16dp"
                 android:layout_weight="1"
                 android:textSize="12sp"
@@ -35,7 +35,7 @@
             <TextView
                 android:id="@+id/tv_followings_count"
                 android:layout_width="match_parent"
-                android:drawableStart="@drawable/ic_following_red_24dp"
+                android:drawableStart="@drawable/ic_following_grey_24dp"
                 android:drawablePadding="16dp"
                 android:layout_weight="1"
                 android:textSize="12sp"
@@ -45,7 +45,7 @@
             <TextView
                 android:id="@+id/tv_favorite_count"
                 android:layout_width="match_parent"
-                android:drawableStart="@drawable/ic_favorite_red_24dp"
+                android:drawableStart="@drawable/ic_favorite_grey_24dp"
                 android:drawablePadding="16dp"
                 android:layout_weight="1"
                 android:textSize="12sp"
@@ -55,7 +55,7 @@
             <TextView
                 android:id="@+id/tv_buckets_count"
                 android:layout_width="match_parent"
-                android:drawableStart="@drawable/ic_bucket_red_24dp"
+                android:drawableStart="@drawable/ic_bucket_grey_24dp"
                 android:drawablePadding="16dp"
                 android:layout_weight="1"
                 android:textSize="12sp"
@@ -73,7 +73,7 @@
             <TextView
                 android:id="@+id/tv_shots_count"
                 android:layout_width="match_parent"
-                android:drawableStart="@drawable/ic_shot_red_24dp"
+                android:drawableStart="@drawable/ic_shot_grey_24dp"
                 android:drawablePadding="16dp"
                 android:layout_weight="1"
                 android:textSize="12sp"
@@ -83,7 +83,7 @@
             <TextView
                 android:id="@+id/tv_comments_count"
                 android:layout_width="match_parent"
-                android:drawableStart="@drawable/ic_comment_red_24dp"
+                android:drawableStart="@drawable/ic_comment_grey_24dp"
                 android:drawablePadding="16dp"
                 android:layout_weight="1"
                 android:textSize="12sp"
@@ -92,7 +92,7 @@
             <TextView
                 android:id="@+id/tv_teams_count"
                 android:layout_width="match_parent"
-                android:drawableStart="@drawable/ic_team_red_24dp"
+                android:drawableStart="@drawable/ic_team_grey_24dp"
                 android:drawablePadding="16dp"
                 android:layout_weight="1"
                 android:textSize="12sp"
@@ -102,7 +102,7 @@
             <TextView
                 android:id="@+id/tv_projects_count"
                 android:layout_width="match_parent"
-                android:drawableStart="@drawable/ic_project_red_24dp"
+                android:drawableStart="@drawable/ic_project_grey_24dp"
                 android:drawablePadding="16dp"
                 android:layout_weight="1"
                 android:textSize="12sp"

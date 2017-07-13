@@ -2,6 +2,7 @@ package com.tyc.tdribbble.ui.shotsdetails;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -9,11 +10,14 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.util.Pair;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.NestedScrollView;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -23,6 +27,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.flexbox.FlexboxLayout;
+import com.orhanobut.logger.Logger;
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.adapter.CommentsAdapter;
 import com.tyc.tdribbble.api.ApiConstants;
@@ -33,6 +38,7 @@ import com.tyc.tdribbble.entity.TTEntity;
 import com.tyc.tdribbble.entity.UserEntity;
 import com.tyc.tdribbble.ui.bigimage.BigImageActivity;
 import com.tyc.tdribbble.ui.search.SearchActivity;
+import com.tyc.tdribbble.ui.shotsdetails.attachments.AttachmentsActivity;
 import com.tyc.tdribbble.ui.user.UserActivity;
 import com.tyc.tdribbble.utils.DisplayUtils;
 import com.tyc.tdribbble.utils.HtmlFormatUtils;
@@ -80,12 +86,25 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
     TextView mTvDesc;
     @BindView(R.id.tv_attachments)
     TextView mTvAttachments;
-    @BindView(R.id.tv_title)
-    TextView mTvTitle;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.iv_avatar_author)
+    CircleImageView mIvAvatarAuthor;
+    @BindView(R.id.tv_favorite_count)
+    TextView mTvFavoriteCount;
+    @BindView(R.id.tv_views_count)
+    TextView mTvViewsCount;
+    @BindView(R.id.tv_buckets_count)
+    TextView mTvBucketsCount;
+    @BindView(R.id.tv_comments_count)
+    TextView mTvCommentsCount;
+    @BindView(R.id.nsv)
+    NestedScrollView mNsv;
 
     private ShotsDetailsPresenter presenter;
     private HashMap<String, String> hashMap = new HashMap<>();
     int pageNum = 1;
+    private boolean isFlag = false;
 
     @Override
     protected int layoutResID() {
@@ -94,6 +113,10 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
 
     @Override
     protected void initData() {
+        setSupportActionBar(mToolbar);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        }
         final int width = ScreenUtils.getScreenWidth(this);
         ViewGroup.LayoutParams params = mIvShots.getLayoutParams();
         params.width = width;
@@ -108,15 +131,17 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
             String normal = shots.getImages().getNormal();
             Glide.with(ShotsDetailsActivity.this).load(normal).placeholder(R.drawable.bg_linear_shots).override(width, width * 3 / 4).into(mIvShots);
         }
+        String title = shots.getTitle();
+        setTitle(title);
         presenter = new ShotsDetailsPresenter(this);
+        hashMap.put(ApiConstants.PAGE, String.valueOf(pageNum));
         if (TextUtils.isEmpty(shots.getCreatedAt()) || shots.getUser() == null) {
             presenter.loadShotsIntroduction(this, String.valueOf(shots.getId()));
         } else {
             showShot(shots);
         }
-        presenter.checklikeShot(this, String.valueOf(shots.getId()));
-        hashMap.put(ApiConstants.PAGE, String.valueOf(pageNum));
         presenter.loadComments(this, String.valueOf(shots.getId()), hashMap);
+        presenter.checklikeShot(this, String.valueOf(shots.getId()));
 
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         linearLayoutManager.setAutoMeasureEnabled(true);
@@ -124,6 +149,53 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
         mRvComments.setLayoutManager(linearLayoutManager);
         mRvComments.setHasFixedSize(true);
         mRvComments.setNestedScrollingEnabled(false);
+//        mRvComments.addOnScrollListener(new RecyclerView.OnScrollListener() {
+//            @Override
+//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+//                super.onScrollStateChanged(recyclerView, newState);
+//
+//            }
+//
+//            @Override
+//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+//                super.onScrolled(recyclerView, dx, dy);
+//                int lastItemPosition = linearLayoutManager.findLastVisibleItemPosition();
+//                int count = recyclerView.getAdapter().getItemCount();
+//                if ((lastItemPosition == count - 2 || count < 2) && !isFlag) {
+//                    Logger.i("true");
+//                    isFlag = true;
+//                    hashMap.remove(ApiConstants.PAGE);
+//                    pageNum++;
+//                    hashMap.put(ApiConstants.PAGE, String.valueOf(pageNum));
+//                    presenter.loadComments(ShotsDetailsActivity.this, String.valueOf(shots.getId()), hashMap);
+//                }
+//            }
+//        });
+
+        mNsv.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+                if (scrollY == (v.getChildAt(0).getMeasuredHeight() - v.getMeasuredHeight()) && !isFlag) {
+                    // 底部
+                    isFlag = true;
+                    hashMap.remove(ApiConstants.PAGE);
+                    pageNum++;
+                    hashMap.put(ApiConstants.PAGE, String.valueOf(pageNum));
+                    presenter.loadComments(ShotsDetailsActivity.this, String.valueOf(shots.getId()), hashMap);
+                }
+            }
+        });
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -139,7 +211,6 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(Color.TRANSPARENT);
         window.setNavigationBarColor(Color.TRANSPARENT);
-
     }
 
     @Override
@@ -149,7 +220,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
     }
 
 
-    @OnClick({R.id.iv_shots, R.id.fab_favorite, R.id.iv_avatar})
+    @OnClick({R.id.iv_shots, R.id.fab_favorite, R.id.iv_avatar, R.id.tv_attachments})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_shots: {
@@ -176,6 +247,13 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
                         Pair.create((View) mTvName, getResources().getString(R.string.str_name_tran))).toBundle());
                 break;
             }
+            case R.id.tv_attachments: {
+                Intent intent = new Intent();
+                intent.setClass(this, AttachmentsActivity.class);
+                intent.putExtra(ApiConstants.SHOTID, shots.getId());
+                startActivity(intent);
+                break;
+            }
         }
     }
 
@@ -183,6 +261,11 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
     @Override
     public void likeShot(TTEntity ttEntity) {
         mFabFavorite.setImageResource(R.drawable.ic_favorite_red_24dp);
+        Integer count = Integer.valueOf(mTvFavoriteCount.getText().toString().trim()) + 1;
+        mTvFavoriteCount.setText(String.valueOf(count));
+        Drawable drawable = getResources().getDrawable(R.drawable.ic_favorite_red_24dp);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        mTvFavoriteCount.setCompoundDrawables(drawable, null, null, null);
     }
 
     @Override
@@ -194,6 +277,9 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
     public void checklikeShot(boolean isLike) {
         if (isLike) {
             mFabFavorite.setImageResource(R.drawable.ic_favorite_red_24dp);
+            Drawable drawable = getResources().getDrawable(R.drawable.ic_favorite_red_24dp);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mTvFavoriteCount.setCompoundDrawables(drawable, null, null, null);
         } else {
             mFabFavorite.setImageResource(R.drawable.ic_favorite_white_24dp);
         }
@@ -206,6 +292,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
 
     @Override
     public void showComments(List<CommentsEntity> commentsEntities) {
+        isFlag = false;
         mRvComments.setVisibility(View.VISIBLE);
         if (mRvComments.getAdapter() == null) {
             CommentsAdapter adapter = new CommentsAdapter(this, commentsEntities);
@@ -248,8 +335,6 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
     private void showShot(ShotsEntity shots) {
 
         UserEntity userEntity = shots.getUser();
-        String title = shots.getTitle();
-        mTvTitle.setText(title);
         if (userEntity != null) {
             String avatar = userEntity.getAvatarUrl();
             Glide.with(this).load(avatar).into(mIvAvatar);
@@ -263,6 +348,10 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
                 mTvLocation.setText(location);
             }
         }
+        mTvCommentsCount.setText(String.valueOf(shots.getCommentsCount()));
+        mTvViewsCount.setText(String.valueOf(shots.getViewsCount()));
+        mTvBucketsCount.setText(String.valueOf(shots.getBucketsCount()));
+        mTvFavoriteCount.setText(String.valueOf(shots.getLikesCount()));
         String time = shots.getUpdatedAt();
         mTvTime.setText(TimeUtils.getTimeFromISO8601(time) + "创建");
         if (shots.getTags() != null) {
@@ -283,16 +372,11 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
         }
     }
 
-    /**
-     * 动态创建TextView
-     *
-     * @return
-     */
     private TextView createNewFlexItemTextView(final String tag) {
         TextView textView = new TextView(this);
         textView.setGravity(Gravity.CENTER);
         textView.setText(tag);
-        textView.setTextSize(12);
+        textView.setTextSize(14);
         textView.setTextColor(getResources().getColor(R.color.colorAccent));
         textView.setBackgroundResource(R.drawable.bg_linear_tag);
         textView.setOnClickListener(new View.OnClickListener() {
@@ -304,7 +388,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
                 startActivity(intent);
             }
         });
-        int padding = DisplayUtils.dip2px(this, 4);
+        int padding = DisplayUtils.dip2px(this, 6);
         int paddingLeftAndRight = DisplayUtils.dip2px(this, 8);
         ViewCompat.setPaddingRelative(textView, paddingLeftAndRight, padding, paddingLeftAndRight, padding);
         FlexboxLayout.LayoutParams layoutParams = new FlexboxLayout.LayoutParams(

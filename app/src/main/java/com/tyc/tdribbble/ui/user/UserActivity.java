@@ -1,18 +1,16 @@
 package com.tyc.tdribbble.ui.user;
 
-import android.animation.Animator;
-import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.view.ViewPager;
-import android.support.v7.widget.CardView;
-import android.text.TextUtils;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -20,19 +18,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.drawable.GlideDrawable;
-import com.bumptech.glide.request.animation.GlideAnimation;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.adapter.TFragmentPageAdapter;
 import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.base.BaseActivity;
 import com.tyc.tdribbble.entity.UserEntity;
-import com.tyc.tdribbble.ui.bigimage.BigImageActivity;
 import com.tyc.tdribbble.ui.user.followers.UserFollowersFragment;
 import com.tyc.tdribbble.ui.user.fragment.UserInfoFragment;
 import com.tyc.tdribbble.ui.user.shots.UserShotsFragment;
-import com.tyc.tdribbble.utils.HtmlFormatUtils;
 import com.tyc.tdribbble.utils.ScreenUtils;
 
 import java.util.ArrayList;
@@ -61,6 +54,10 @@ public class UserActivity extends BaseActivity {
     TabLayout mTlUser;
     @BindView(R.id.vp_user)
     ViewPager mVpUser;
+    @BindView(R.id.toolbar)
+    Toolbar mToolbar;
+    @BindView(R.id.app_bar)
+    AppBarLayout appBar;
 
 
     private List<Fragment> list = new ArrayList<>();
@@ -73,6 +70,10 @@ public class UserActivity extends BaseActivity {
 
     @Override
     protected void initData() {
+//        setSupportActionBar(mToolbar);
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        }
         int width = ScreenUtils.getScreenWidth(this);
         ViewGroup.LayoutParams params = mIvAvatarBig.getLayoutParams();
         params.height = width;
@@ -86,8 +87,7 @@ public class UserActivity extends BaseActivity {
 
         String name = user.getName();
         mTvName.setText(name);
-
-
+        // setTitle(name);
         list.add(UserInfoFragment.newInstance(user));
         list.add(UserShotsFragment.newInstance(String.valueOf(user.getId())));
         list.add(UserFollowersFragment.newInstance(String.valueOf(user.getId())));
@@ -138,5 +138,22 @@ public class UserActivity extends BaseActivity {
             case R.id.iv_avatar:
                 break;
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                finish();
+                break;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

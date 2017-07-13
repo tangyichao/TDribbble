@@ -2,6 +2,7 @@ package com.tyc.tdribbble.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.util.Pair;
@@ -47,10 +48,23 @@ public class LibsAdapter extends RecyclerView.Adapter<LibsAdapter.LibsViewHolder
     }
 
     @Override
-    public void onBindViewHolder(LibsViewHolder holder, int position) {
+    public void onBindViewHolder(final LibsViewHolder holder, int position) {
         holder.mTvName.setText(libs[position].getName());
         holder.mTvDesc.setText(libs[position].getDesc());
         Glide.with(context).load(libs[position].getImageUrl()).into(holder.mTvAvatar);
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    Intent intent = new Intent();
+                    intent.setAction(Intent.ACTION_VIEW);
+                    intent.setData(Uri.parse(libs[holder.getAdapterPosition()].getUrl()));
+                    context.startActivity(intent);
+                } catch (Exception e) {
+                    e.getMessage();
+                }
+            }
+        });
     }
 
     @Override

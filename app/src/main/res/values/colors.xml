@@ -6,11 +6,11 @@
     <color name="colorPrimary">#424242</color>
     <color name="colorPrimaryDark">#212121</color>
     <color name="colorAccent">#E94180</color>
-
+    <color name="gray">#313131</color>
     <color name="colorTextClick">#009688</color>
+    <color name="colorText">#efefef</color>
+    <color name="colorTextHint">#888888</color>
     <color name="white">#FFFFFF</color>
     <color name="bg_white_e">#eeeeee</color>
-    <color name="bg_white_a">#aaaaaa</color>
-    <color name="gray">#44999999</color>
     <color name="iconGrey">#9DA0A3</color>
 </resources>

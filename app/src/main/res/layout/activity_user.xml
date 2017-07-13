@@ -17,11 +17,11 @@
         app:expandedTitleMarginStart="48dp">
 
         <android.support.design.widget.CollapsingToolbarLayout
-            android:id="@+id/ctl"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fitsSystemWindows="true"
-            app:contentScrim="@android:color/transparent"
+            app:titleEnabled="false"
+            app:contentScrim="@color/colorPrimary"
             app:statusBarScrim="@android:color/transparent"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap">
             <!--scroll|enterAlwaysCollapsed|exitUntilCollapsed-->
@@ -70,11 +70,9 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:fitsSystemWindows="true"
                 app:layout_collapseMode="pin"
-                app:layout_scrollFlags="scroll|enterAlways"
                 app:popupTheme="@style/AppTheme.PopupOverlay" />
-
+            <!--  app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"-->
             <android.support.design.widget.TabLayout
                 android:id="@+id/tl_user"
                 android:layout_width="match_parent"

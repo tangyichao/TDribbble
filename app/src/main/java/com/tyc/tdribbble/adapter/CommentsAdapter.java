@@ -135,11 +135,7 @@ public class CommentsAdapter extends RecyclerView.Adapter {
 
     public void addData(List<CommentsEntity> commentsEntities) {
         this.commentsEntities.addAll(commentsEntities);
-        if (commentsEntities.size() > 0) {
-            isFooter = false;
-        } else {
-            isFooter = true;
-        }
+        isFooter = commentsEntities.size() <= 0;
         notifyDataSetChanged();
     }
 

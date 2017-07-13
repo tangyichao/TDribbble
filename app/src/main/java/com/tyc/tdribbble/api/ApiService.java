@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import okhttp3.Response;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -37,6 +38,9 @@ public interface ApiService {
 
     @GET(ApiConstants.ONESHOTS)
     Observable<ShotsEntity> getShot(@Path(ApiConstants.SHOTID) String shotId);
+
+    @GET(ApiConstants.ONESHOTS)
+    Observable<String> getShotStr(@Path(ApiConstants.SHOTID) String shotId);
 
     @GET(ApiConstants.LIKESHOT)
     Observable<TTEntity> checkLikeShot(@Path(ApiConstants.SHOTID) String shotId);
