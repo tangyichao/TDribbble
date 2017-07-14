@@ -1,5 +1,6 @@
 package com.tyc.tdribbble.ui.login;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.util.Log;
 import android.view.View;
@@ -52,7 +53,7 @@ public class LoginActivity extends BaseActivity implements ILoginView {
                 Intent intent = new Intent();
                 intent.setClass(LoginActivity.this, OAuthActivity.class);
                 intent.putExtra("url", StringOauth.getOauthSting());
-                startActivityForResult(intent, REQUEST_CODE);
+                startActivityForResult(intent, REQUEST_CODE, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
                 break;
         }
     }

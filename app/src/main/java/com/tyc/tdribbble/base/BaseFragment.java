@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+
 import com.trello.rxlifecycle2.components.support.RxFragment;
 
 import butterknife.ButterKnife;
@@ -22,7 +23,9 @@ public abstract class BaseFragment extends RxFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), layoutResID(), null);
+        // View view = View.inflate(getActivity(), layoutResID(), null);
+        View view = inflater.inflate(layoutResID(),
+                container, false);
         unbinder = ButterKnife.bind(this, view);
         return view;
     }

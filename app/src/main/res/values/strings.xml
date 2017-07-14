@@ -9,6 +9,7 @@
     <string name="str_home">首页</string>
     <string name="str_favorite">收藏</string>
     <string name="str_shots">作品</string>
+    <string name="str_follower">粉丝</string>
     <string name="str_settings">设置</string>
     <string name="action_large_image">仅大图</string>
     <string name="action_small_image">仅小图</string>
@@ -22,6 +23,6 @@
     <string name="str_error">网络错误</string>
     <string name="str_about">关于</string>
     <string name="str_comment">评论一下</string>
-    <string name="str_thinks">感谢</string>
+    <string name="str_thinks">感谢开源源代码许可</string>
     <string name="str_attachments">附件</string>
 </resources>

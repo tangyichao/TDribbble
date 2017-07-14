@@ -1,12 +1,12 @@
 package com.tyc.tdribbble.adapter;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,7 +89,7 @@ public class LinearShotsAdapter extends RecyclerView.Adapter {
                     Intent intent = new Intent();
                     intent.setClass(context, UserActivity.class);
                     intent.putExtra(ApiConstants.USER, shotsEntities.get(holder.getAdapterPosition()).getUser());
-                    context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation((HomeActivity) context,
+                    context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((HomeActivity) context,
                             Pair.create(view, context.getResources().getString(R.string.str_avatar_tran)),
                             Pair.create((View) ((LinearShotsViewHolder) holder).mTvName, context.getResources().getString(R.string.str_name_tran))).toBundle());
                 }
@@ -147,7 +147,7 @@ public class LinearShotsAdapter extends RecyclerView.Adapter {
                 intent.putExtra("type", type);
                 intent.putExtra(ApiConstants.SHOTS, shotsEntities.get(holder.getAdapterPosition()));
                 if (!isAnimated) {
-                    context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation((Activity) context,
+                    context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((Activity) context,
                             Pair.create((View) ((LinearShotsViewHolder) holder).mIvShots, context.getResources().getString(R.string.str_shots_tran))).toBundle());
                 } else {
                     context.startActivity(intent);

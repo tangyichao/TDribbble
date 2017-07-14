@@ -26,7 +26,9 @@ public class ApiConstants {
     public static final String SHOTID = "shotId";
     public static final String COMMENTID = "commentId";
     public static final String PAGE = "page";
+    public static final String PERPAGE = "per_page";
     public static final String DATE = "date";
+    public static final String BODY = "body";
   public interface Shots{
       /**
        * 类型，默认返回所有类型
@@ -67,9 +69,7 @@ public class ApiConstants {
 
         String STATE = "tangyc";
 
-//         params.put(ApiConstants.ParamKey.CLIENT_ID, ApiConstants.ParamValue.CLIENT_ID);
-//        params.put(ApiConstants.ParamKey.REDIRECT_URI, ApiConstants.ParamValue.REDIRECT_URI);
-//        params.put(ApiConstants.ParamKey.SCOPE, ApiConstants.ParamValue.SCOPE);
-//        params.put(ApiConstants.ParamKey.STATE, ApiConstants.ParamValue.STATE)
     }
+
+
 }

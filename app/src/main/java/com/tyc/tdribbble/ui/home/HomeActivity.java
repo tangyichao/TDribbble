@@ -1,17 +1,17 @@
 package com.tyc.tdribbble.ui.home;
 
 import android.app.Activity;
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.util.Pair;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -24,6 +24,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.util.Pair;
 import android.view.Gravity;
 import android.view.InflateException;
 import android.view.LayoutInflater;
@@ -101,6 +102,7 @@ public class HomeActivity extends BaseActivity
     private LinearShotsAdapter adapter;
     private String token;
     private int count = 1;
+    private int perpage = 20;
     private  HashMap<String, String> hashMap = new HashMap<>();
     private HomePresenter  homePresenter;
     private boolean isFlag=false;
@@ -157,6 +159,8 @@ public class HomeActivity extends BaseActivity
         mSpTime.setOnItemSelectedListener(this);
 
         hashMap.put(ApiConstants.DATE, TimeUtils.dateToStr(TimeUtils.FORMAT_DATE, null));
+
+        hashMap.put(ApiConstants.PERPAGE, String.valueOf(perpage));
         hashMap.put(ApiConstants.PAGE, String.valueOf(count));
         final LinearLayoutManager linearLayoutManager=new LinearLayoutManager(this);
         linearLayoutManager.setAutoMeasureEnabled(true);
@@ -257,7 +261,7 @@ public class HomeActivity extends BaseActivity
         if (id == R.id.action_search) {
             Intent intent = new Intent();
             intent.setClass(this, SearchActivity.class);
-            startActivity(intent);
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -265,7 +269,7 @@ public class HomeActivity extends BaseActivity
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
         if (id == R.id.nav_shots) {
@@ -274,10 +278,11 @@ public class HomeActivity extends BaseActivity
                 Intent intent = new Intent();
                 intent.setClass(HomeActivity.this, LoginActivity.class);
                 intent.putExtra("url", StringOauth.getOauthSting());
-                startActivityForResult(intent, REQUEST_CODE);
+                startActivityForResult(intent, REQUEST_CODE, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
             }else{
                 Intent intent = new Intent();
                 intent.setClass(HomeActivity.this, MyUserShotsActivity.class);
+                intent.putExtra("type", 2);
                 intent.putExtra(ApiConstants.USERID,String.valueOf(userEntity.getId()));
                 startActivity(intent);
             }
@@ -286,14 +291,25 @@ public class HomeActivity extends BaseActivity
 
         } else if (id == R.id.nav_favorite) {
 
-        } else if (id == R.id.nav_manage) {
-
+        } else if (id == R.id.nav_follower) {
+            if (TextUtils.isEmpty(token)) {
+                Intent intent = new Intent();
+                intent.setClass(HomeActivity.this, LoginActivity.class);
+                intent.putExtra("url", StringOauth.getOauthSting());
+                startActivityForResult(intent, REQUEST_CODE, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+            } else {
+                Intent intent = new Intent();
+                intent.setClass(HomeActivity.this, MyUserShotsActivity.class);
+                intent.putExtra("type", 2);
+                intent.putExtra(ApiConstants.USERID, String.valueOf(userEntity.getId()));
+                startActivity(intent);
+            }
         } else if (id == R.id.nav_share) {
 
         } else if (id == R.id.nav_settings) {
             Intent intent = new Intent();
             intent.setClass(this, AboutActivity.class);
-            startActivity(intent);
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -311,13 +327,12 @@ public class HomeActivity extends BaseActivity
                     Intent intent = new Intent();
                     intent.setClass(HomeActivity.this, LoginActivity.class);
                     intent.putExtra("url", StringOauth.getOauthSting());
-                    startActivityForResult(intent, REQUEST_CODE);
-                    view.setEnabled(false);
+                    startActivityForResult(intent, REQUEST_CODE, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
                 } else {
                     Intent intent = new Intent();
                     intent.setClass(HomeActivity.this, UserActivity.class);
                     intent.putExtra(ApiConstants.USER, userEntity);
-                    startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this,
                             Pair.create((View) mIvAvatar, getResources().getString(R.string.str_avatar_tran)),
                             Pair.create((View) mTvName, getResources().getString(R.string.str_name_tran))).toBundle());
                 }
@@ -417,30 +432,7 @@ public class HomeActivity extends BaseActivity
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-//        for(int j=0;j<adapterView.getCount();j++)
-//        {
-//            TextView itemTv = (TextView) adapterView.getChildAt(j);
-//            itemTv.setGravity(Gravity.CENTER);
-//        }
+
     }
 
-    /**
-     * 为 DrawerLayout 布局设置状态栏透明
-     *
-     * @param activity     需要设置的activity
-     * @param drawerLayout DrawerLayout
-     */
-    public static void setTranslucentForDrawerLayout(Activity activity, DrawerLayout drawerLayout) {
-        // 设置状态栏透明
-        activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-        // 设置内容布局属性
-        ViewGroup contentLayout = (ViewGroup) drawerLayout.getChildAt(0);
-        contentLayout.setFitsSystemWindows(true);
-        contentLayout.setClipToPadding(true);
-        // 设置抽屉布局属性
-        ViewGroup vg = (ViewGroup) drawerLayout.getChildAt(1);
-        vg.setFitsSystemWindows(false);
-        // 设置 DrawerLayout 属性
-        drawerLayout.setFitsSystemWindows(false);
-    }
 }

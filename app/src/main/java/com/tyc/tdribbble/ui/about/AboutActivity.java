@@ -5,6 +5,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.azoft.carousellayoutmanager.CarouselLayoutManager;
 import com.azoft.carousellayoutmanager.CarouselZoomPostLayoutListener;
@@ -83,6 +84,8 @@ public class AboutActivity extends BaseActivity {
     };
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
+    @BindView(R.id.tv_version)
+    TextView mTvVersion;
 
 
     @Override
@@ -95,7 +98,7 @@ public class AboutActivity extends BaseActivity {
         setSupportActionBar(mToolbar);
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayHomeAsUpEnabled(false);
         }
         final CarouselLayoutManager layoutCarouseManager = new CarouselLayoutManager(CarouselLayoutManager.HORIZONTAL, true);
         layoutCarouseManager.setPostLayoutListener(new CarouselZoomPostLayoutListener());
@@ -116,5 +119,12 @@ public class AboutActivity extends BaseActivity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

@@ -14,6 +14,7 @@ import java.util.Map;
 
 import io.reactivex.Observable;
 import okhttp3.Response;
+import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -39,8 +40,7 @@ public interface ApiService {
     @GET(ApiConstants.ONESHOTS)
     Observable<ShotsEntity> getShot(@Path(ApiConstants.SHOTID) String shotId);
 
-    @GET(ApiConstants.ONESHOTS)
-    Observable<String> getShotStr(@Path(ApiConstants.SHOTID) String shotId);
+
 
     @GET(ApiConstants.LIKESHOT)
     Observable<TTEntity> checkLikeShot(@Path(ApiConstants.SHOTID) String shotId);
@@ -62,6 +62,9 @@ public interface ApiService {
 
     @GET(ApiConstants.COMMENTS)
     Observable<List<CommentsEntity>> getComments(@Path(ApiConstants.SHOTID) String shotId, @QueryMap HashMap<String, String> hashMap);
+
+    @POST(ApiConstants.COMMENTS)
+    Observable<CommentsEntity> createComments(@Path(ApiConstants.SHOTID) String shotId, @Query(ApiConstants.BODY) String body, @Query(ApiConstants.OAuthKey.SCOPE) String scope);
 
     @POST(ApiConstants.LIKECOMMENT)
     Observable<TTEntity> getLikeComment(@Path(ApiConstants.SHOTID) String shotId, @Path(ApiConstants.COMMENTID) String commentId);

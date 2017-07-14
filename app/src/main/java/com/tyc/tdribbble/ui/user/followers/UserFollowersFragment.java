@@ -1,19 +1,14 @@
 package com.tyc.tdribbble.ui.user.followers;
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import com.tyc.tdribbble.R;
-import com.tyc.tdribbble.TDribbbleApp;
 import com.tyc.tdribbble.adapter.FollowersAdapter;
 import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.base.BaseFragment;
@@ -22,8 +17,6 @@ import com.tyc.tdribbble.entity.FollowersEntity;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 
 /**
  * 作者：tangyc on 2017/6/23

@@ -111,7 +111,7 @@ public class ShotsDetailsModel implements IShotsDetailsModel {
                 if (commentsEntities.size() > 0 || Integer.valueOf(hashMap.get(ApiConstants.PAGE)) > 1) {
                     iShotsDetails.showComments(commentsEntities);
                 } else {
-                    iShotsDetails.showCommentsError();
+                    iShotsDetails.showCommentsEmpty();
                 }
             }
         }, new Consumer<Throwable>() {
@@ -214,4 +214,25 @@ public class ShotsDetailsModel implements IShotsDetailsModel {
 //                    }
 //                });
     }
+
+    @Override
+    public void createComment(RxAppCompatActivity rxAppCompatActivity, String shotId, String body) {
+        ApiService service = ApiManager.getRetrofitUser(ApiConstants.BASE_URL_V1).create(ApiService.class);
+        service.createComments(shotId, body, ApiConstants.OAuth.SCOPE)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .compose(rxAppCompatActivity.<CommentsEntity>bindToLifecycle()).subscribe(new Consumer<CommentsEntity>() {
+            @Override
+            public void accept(@NonNull CommentsEntity commentsEntity) throws Exception {
+                iShotsDetails.createComment(commentsEntity);
+            }
+        }, new Consumer<Throwable>() {
+            @Override
+            public void accept(@NonNull Throwable throwable) throws Exception {
+                Log.i("debug", throwable.getMessage());
+            }
+        });
+    }
+
+
 }

@@ -48,4 +48,9 @@ public class ShotsDetailsPresenter implements IShotsDetailsPresenter {
         model.loadShotsIntroduction(rxAppCompatActivity,shotId);
     }
 
+    @Override
+    public void createComment(RxAppCompatActivity rxAppCompatActivity, String shotId, String body) {
+        model.createComment(rxAppCompatActivity, shotId, body);
+    }
+
 }

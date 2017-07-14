@@ -1,37 +1,25 @@
 package com.tyc.tdribbble.ui.myuser.shots;
 
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSnapHelper;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
+
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 
 import com.tyc.tdribbble.R;
-import com.tyc.tdribbble.adapter.LinearShotsAdapter;
 import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.base.BaseActivity;
-import com.tyc.tdribbble.entity.ShotsEntity;
-import com.tyc.tdribbble.ui.user.shots.IShotsView;
-import com.tyc.tdribbble.ui.user.shots.ShotsPresenter;
-
-import java.util.List;
-
-import butterknife.BindView;
+import com.tyc.tdribbble.ui.user.followers.UserFollowersFragment;
+import com.tyc.tdribbble.ui.user.shots.UserShotsFragment;
 
 /**
  * 作者：tangyc on 2017/7/10
  * 邮箱：874500641@qq.com
  */
-public class MyUserShotsActivity extends BaseActivity implements IShotsView {
-    @BindView(R.id.rv_shots)
-    RecyclerView mRvShots;
-    @BindView(R.id.iv_empty_error)
-    ImageView mIvEmptyError;
-    @BindView(R.id.srl)
-    SwipeRefreshLayout mSrl;
-    ShotsPresenter shotsPresenter;
+public class MyUserShotsActivity extends BaseActivity {
+
+
     @Override
     protected int layoutResID() {
         return R.layout.activity_myuser_shots;
@@ -39,34 +27,20 @@ public class MyUserShotsActivity extends BaseActivity implements IShotsView {
 
     @Override
     protected void initData() {
+        int type = getIntent().getIntExtra("type", 0);
         String userId = getIntent().getStringExtra(ApiConstants.USERID);
-        shotsPresenter = new ShotsPresenter(this);
-      //  shotsPresenter.loadShots(this,userId);
-        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        mRvShots.setLayoutManager(manager);
-        new LinearSnapHelper().attachToRecyclerView(mRvShots);
-    }
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction transaction = manager.beginTransaction();
+        if (type == 1) {
 
-    @Override
-    public void showShots(List<ShotsEntity> shotsEntities) {
-        if (shotsEntities.size() > 0) {
-            mRvShots.setVisibility(View.VISIBLE);
-            LinearShotsAdapter adapter = new LinearShotsAdapter(this, shotsEntities, 0);
-            mRvShots.setAdapter(adapter);
-            mIvEmptyError.setVisibility(View.GONE);
-        } else {
-            mRvShots.setVisibility(View.GONE);
-            mIvEmptyError.setVisibility(View.VISIBLE);
+            UserShotsFragment userShotsFragment = UserShotsFragment.newInstance(userId);
+            transaction.replace(R.id.frameLayout, userShotsFragment);
+            transaction.commit();
+        } else if (type == 2) {
+            UserFollowersFragment userFollowersFragment = UserFollowersFragment.newInstance(userId);
+            transaction.replace(R.id.frameLayout, userFollowersFragment);
+            transaction.commit();
         }
-        mSrl.setRefreshing(false);
-    }
 
-    @Override
-    public void showError() {
-        mRvShots.setVisibility(View.GONE);
-        mIvEmptyError.setVisibility(View.VISIBLE);
-        mIvEmptyError.setImageResource(R.mipmap.ic_error_result);
-        mSrl.setRefreshing(false);
     }
-
 }

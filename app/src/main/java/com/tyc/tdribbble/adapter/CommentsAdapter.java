@@ -1,15 +1,13 @@
 package com.tyc.tdribbble.adapter;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.util.Pair;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.text.TextUtils;
 import android.text.method.LinkMovementMethod;
-import android.util.Log;
+import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,7 +95,7 @@ public class CommentsAdapter extends RecyclerView.Adapter {
                     Intent intent = new Intent();
                     intent.setClass(context, UserActivity.class);
                     intent.putExtra(ApiConstants.USER, commentsEntities.get(holder.getAdapterPosition()).getUser());
-                    context.startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation((FragmentActivity) context,
+                    context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((FragmentActivity) context,
                             Pair.create((View) ((CommentsViewHolder) holder).mTvAvatar, context.getResources().getString(R.string.str_avatar_tran)),
                             Pair.create((View) ((CommentsViewHolder) holder).mTvName, context.getResources().getString(R.string.str_name_tran))).toBundle());
                 }
@@ -135,7 +133,7 @@ public class CommentsAdapter extends RecyclerView.Adapter {
 
     public void addData(List<CommentsEntity> commentsEntities) {
         this.commentsEntities.addAll(commentsEntities);
-        isFooter = commentsEntities.size() <= 0;
+        isFooter = commentsEntities.size() < 20;
         notifyDataSetChanged();
     }
 

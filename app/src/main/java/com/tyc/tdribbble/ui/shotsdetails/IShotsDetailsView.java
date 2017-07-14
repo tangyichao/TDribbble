@@ -26,4 +26,7 @@ public interface IShotsDetailsView {
     public void showCommentsError();
     public void showShotsIntroduction(ShotsEntity shotsEntity);
 
+    public void createComment(CommentsEntity commentsEntity);
+
+    public void showCommentsEmpty();
 }

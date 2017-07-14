@@ -1,33 +1,36 @@
 package com.tyc.tdribbble.ui.shotsdetails;
 
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.ActivityOptionsCompat;
-import android.support.v4.util.Pair;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Pair;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.google.android.flexbox.FlexboxLayout;
-import com.orhanobut.logger.Logger;
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.adapter.CommentsAdapter;
 import com.tyc.tdribbble.api.ApiConstants;
@@ -46,6 +49,7 @@ import com.tyc.tdribbble.utils.ScreenUtils;
 import com.tyc.tdribbble.utils.TimeUtils;
 import com.tyc.tdribbble.view.widget.BadgedFourThreeImageView;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -100,10 +104,21 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
     TextView mTvCommentsCount;
     @BindView(R.id.nsv)
     NestedScrollView mNsv;
+    @BindView(R.id.iv_create_comment)
+    ImageView mIvCreateComment;
+    @BindView(R.id.et_comment)
+    AppCompatEditText mEtComment;
+    @BindView(R.id.til_comment)
+    TextInputLayout mTilComment;
+    @BindView(R.id.iv_error_empty)
+    ImageView mIvErrorEmpty;
+    @BindView(R.id.ctl_shots)
+    CollapsingToolbarLayout mCtlShots;
 
     private ShotsDetailsPresenter presenter;
     private HashMap<String, String> hashMap = new HashMap<>();
     int pageNum = 1;
+    int perpage = 20;
     private boolean isFlag = false;
 
     @Override
@@ -117,6 +132,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        mCtlShots.setExpandedTitleColor(getResources().getColor(R.color.colorAccent));
         final int width = ScreenUtils.getScreenWidth(this);
         ViewGroup.LayoutParams params = mIvShots.getLayoutParams();
         params.width = width;
@@ -135,6 +151,8 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
         setTitle(title);
         presenter = new ShotsDetailsPresenter(this);
         hashMap.put(ApiConstants.PAGE, String.valueOf(pageNum));
+
+        hashMap.put(ApiConstants.PERPAGE, String.valueOf(perpage));
         if (TextUtils.isEmpty(shots.getCreatedAt()) || shots.getUser() == null) {
             presenter.loadShotsIntroduction(this, String.valueOf(shots.getId()));
         } else {
@@ -149,28 +167,6 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
         mRvComments.setLayoutManager(linearLayoutManager);
         mRvComments.setHasFixedSize(true);
         mRvComments.setNestedScrollingEnabled(false);
-//        mRvComments.addOnScrollListener(new RecyclerView.OnScrollListener() {
-//            @Override
-//            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-//                super.onScrollStateChanged(recyclerView, newState);
-//
-//            }
-//
-//            @Override
-//            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-//                super.onScrolled(recyclerView, dx, dy);
-//                int lastItemPosition = linearLayoutManager.findLastVisibleItemPosition();
-//                int count = recyclerView.getAdapter().getItemCount();
-//                if ((lastItemPosition == count - 2 || count < 2) && !isFlag) {
-//                    Logger.i("true");
-//                    isFlag = true;
-//                    hashMap.remove(ApiConstants.PAGE);
-//                    pageNum++;
-//                    hashMap.put(ApiConstants.PAGE, String.valueOf(pageNum));
-//                    presenter.loadComments(ShotsDetailsActivity.this, String.valueOf(shots.getId()), hashMap);
-//                }
-//            }
-//        });
 
         mNsv.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
@@ -220,7 +216,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
     }
 
 
-    @OnClick({R.id.iv_shots, R.id.fab_favorite, R.id.iv_avatar, R.id.tv_attachments})
+    @OnClick({R.id.iv_shots, R.id.fab_favorite, R.id.iv_avatar, R.id.tv_attachments, R.id.iv_create_comment})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_shots: {
@@ -230,7 +226,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
                 if (shots.isAnimated()) {
                     startActivity(intent);
                 } else {
-                    startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(this, mIvShots, getResources().getString(R.string.str_shots_tran)).toBundle());
+                    startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this, mIvShots, getResources().getString(R.string.str_shots_tran)).toBundle());
                 }
                 break;
             }
@@ -242,7 +238,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
                 Intent intent = new Intent();
                 intent.setClass(this, UserActivity.class);
                 intent.putExtra(ApiConstants.USER, shots.getUser());
-                startActivity(intent, ActivityOptionsCompat.makeSceneTransitionAnimation(this,
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this,
                         Pair.create((View) mIvAvatar, getResources().getString(R.string.str_avatar_tran)),
                         Pair.create((View) mTvName, getResources().getString(R.string.str_name_tran))).toBundle());
                 break;
@@ -252,6 +248,15 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
                 intent.setClass(this, AttachmentsActivity.class);
                 intent.putExtra(ApiConstants.SHOTID, shots.getId());
                 startActivity(intent);
+                break;
+            }
+            case R.id.iv_create_comment: {
+                String comment = mEtComment.getText().toString().trim();
+                if (TextUtils.isEmpty(comment)) {
+                    mTilComment.setError(getString(R.string.str_empty));
+                } else {
+                    presenter.createComment(this, String.valueOf(shots.getId()), comment);
+                }
                 break;
             }
         }
@@ -292,8 +297,11 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
 
     @Override
     public void showComments(List<CommentsEntity> commentsEntities) {
-        isFlag = false;
+        if (commentsEntities.size() == perpage) {
+            isFlag = false; //滑动的话可以继续加载
+        }
         mRvComments.setVisibility(View.VISIBLE);
+        mIvErrorEmpty.setVisibility(View.GONE);
         if (mRvComments.getAdapter() == null) {
             CommentsAdapter adapter = new CommentsAdapter(this, commentsEntities);
             mRvComments.setAdapter(adapter);
@@ -322,14 +330,39 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
 
     }
 
-    @Override
-    public void showCommentsError() {
-
-    }
 
     @Override
     public void showShotsIntroduction(ShotsEntity shotsEntity) {
         showShot(shotsEntity);
+    }
+
+    @Override
+    public void createComment(CommentsEntity commentsEntity) {
+        List<CommentsEntity> commentsEntities = new ArrayList<>();
+        commentsEntities.add(commentsEntity);
+        mRvComments.setVisibility(View.VISIBLE);
+        if (mRvComments.getAdapter() == null) {
+            CommentsAdapter adapter = new CommentsAdapter(this, commentsEntities);
+            mRvComments.setAdapter(adapter);
+            mRvComments.addItemDecoration(new DividerItemDecoration(
+                    this, DividerItemDecoration.VERTICAL));
+        } else {
+            ((CommentsAdapter) mRvComments.getAdapter()).addData(commentsEntities);
+        }
+    }
+
+    @Override
+    public void showCommentsEmpty() {
+        mRvComments.setVisibility(View.GONE);
+        mIvErrorEmpty.setVisibility(View.VISIBLE);
+        mIvErrorEmpty.setImageResource(R.mipmap.ic_empty_result);
+    }
+
+    @Override
+    public void showCommentsError() {
+        mRvComments.setVisibility(View.GONE);
+        mIvErrorEmpty.setVisibility(View.VISIBLE);
+        mIvErrorEmpty.setImageResource(R.mipmap.ic_error_result);
     }
 
     private void showShot(ShotsEntity shots) {
@@ -385,7 +418,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
                 Intent intent = new Intent();
                 intent.setClass(ShotsDetailsActivity.this, SearchActivity.class);
                 intent.putExtra("search", tag);
-                startActivity(intent);
+                startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(ShotsDetailsActivity.this).toBundle());
             }
         });
         int padding = DisplayUtils.dip2px(this, 6);
@@ -400,5 +433,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
         textView.setLayoutParams(layoutParams);
         return textView;
     }
+
+
 }
 

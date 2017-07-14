@@ -16,9 +16,9 @@
             android:icon="@drawable/ic_favorite_grey_24dp"
             android:title="@string/str_favorite" />
         <item
-            android:id="@+id/nav_manage"
-            android:icon="@drawable/ic_menu_manage"
-            android:title="Tools" />
+            android:id="@+id/nav_follower"
+            android:icon="@drawable/ic_follower_grey_24dp"
+            android:title="@string/str_follower" />
     </group>
 
     <item android:title="Communicate">

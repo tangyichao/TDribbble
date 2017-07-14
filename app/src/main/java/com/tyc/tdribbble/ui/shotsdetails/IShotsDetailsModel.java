@@ -22,4 +22,6 @@ public interface IShotsDetailsModel {
     public void likeComment(RxAppCompatActivity rxAppCompatActivity,String shotId, String commentId);
 
     public void loadShotsIntroduction(RxAppCompatActivity rxAppCompatActivity, String shotId);
+
+    public void createComment(RxAppCompatActivity rxAppCompatActivity, String shotId, String body);
 }
