@@ -32,7 +32,7 @@ import butterknife.Unbinder;
  * 作者：tangyc on 2017/6/23
  * 邮箱：874500641@qq.com
  */
-public class UserShotsFragment extends BaseFragment implements IShotsView {
+public class UserShotsFragment extends BaseFragment implements IShotsView, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.rv_shots)
     RecyclerView mRvShots;
     ShotsPresenter shotsPresenter;
@@ -40,7 +40,7 @@ public class UserShotsFragment extends BaseFragment implements IShotsView {
     TextView mTvEmptyError;
     @BindView(R.id.srl)
     SwipeRefreshLayout mSrl;
-
+    private String[] user;
     public static UserShotsFragment newInstance(String userId, int shotsType) {
         UserShotsFragment fragment = new UserShotsFragment();
         Bundle bundle = new Bundle();
@@ -58,13 +58,15 @@ public class UserShotsFragment extends BaseFragment implements IShotsView {
     @Override
     public void initData() {
         Bundle bundle = getArguments();
-        String[] user = bundle.getStringArray(ApiConstants.USERID);
-
+        user = bundle.getStringArray(ApiConstants.USERID);
         shotsPresenter = new ShotsPresenter(this);
         shotsPresenter.loadShots(this, user[0], Integer.valueOf(user[1]));
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRvShots.setLayoutManager(manager);
         //  new LinearSnapHelper().attachToRecyclerView(mRvShots);
+        mSrl.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+        mSrl.setRefreshing(true);
+        mSrl.setOnRefreshListener(this);
     }
 
     @Override
@@ -97,4 +99,8 @@ public class UserShotsFragment extends BaseFragment implements IShotsView {
         mSrl.setRefreshing(false);
     }
 
+    @Override
+    public void onRefresh() {
+        shotsPresenter.loadShots(this, user[0], Integer.valueOf(user[1]));
+    }
 }

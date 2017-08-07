@@ -4,25 +4,24 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.LinearSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.adapter.LinearShotsAdapter;
+import com.tyc.tdribbble.adapter.SearchWordAdapter;
 import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.api.ApiManager;
 import com.tyc.tdribbble.api.ApiService;
 import com.tyc.tdribbble.base.BaseActivity;
 import com.tyc.tdribbble.entity.ShotsEntity;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +47,10 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     Map<String, String> map = new HashMap<>();
     @BindView(R.id.srl_search)
     SwipeRefreshLayout mSrlSearch;
-
+    @BindView(R.id.rv_search_word)
+    RecyclerView mRvSearchWord;
+    List<String> list = new ArrayList<>();
+    SearchWordAdapter searchWordAdapter;
     @Override
     protected int layoutResID() {
         return R.layout.activity_search;
@@ -72,6 +74,13 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         map.put(ApiConstants.PERPAGE, "12");
         mSrlSearch.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
         mSrlSearch.setOnRefreshListener(this);
+        LinearLayoutManager manager = new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, false);
+        mRvSearchWord.setLayoutManager(manager);
+
+
+        searchWordAdapter = new SearchWordAdapter(this, list);
+        mRvSearchWord.setAdapter(searchWordAdapter);
+
     }
 
     @Override
@@ -83,6 +92,8 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
 
     @Override
     public boolean onQueryTextSubmit(String query) {
+        list.add(query);
+        searchWordAdapter.notifyDataSetChanged();
         if (TextUtils.isEmpty(query)) {
             Toast.makeText(this, "请输入内容在搜索", Toast.LENGTH_LONG).show();
         } else {
@@ -109,7 +120,6 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                     }, new Consumer<Throwable>() {
                         @Override
                         public void accept(@NonNull Throwable throwable) throws Exception {
-                            Log.i("debug", throwable.getMessage());
                             mSrlSearch.setRefreshing(false);
                         }
                     });
@@ -119,6 +129,7 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
 
     @Override
     public boolean onQueryTextChange(String newText) {
+        Log.i("debug", newText);
         return false;
     }
 
