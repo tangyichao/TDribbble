@@ -1,12 +1,14 @@
 package com.tyc.tdribbble.ui.user.followers;
 
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.adapter.FollowersAdapter;
@@ -22,15 +24,15 @@ import butterknife.BindView;
  * 作者：tangyc on 2017/6/23
  * 邮箱：874500641@qq.com
  */
-public class UserFollowersFragment extends BaseFragment implements IFollowersView {
+public class UserFollowersFragment extends BaseFragment implements IFollowersView, SwipeRefreshLayout.OnRefreshListener {
     @BindView(R.id.rv_followers)
     RecyclerView mRvFollowers;
     FollowersPresenter followersPresenter;
     @BindView(R.id.srl)
     SwipeRefreshLayout mSrl;
-    @BindView(R.id.iv_empty_error)
-    ImageView mIvEmptyError;
-
+    @BindView(R.id.tv_empty_error)
+    TextView mTvEmptyError;
+    private String userId;
     public static UserFollowersFragment newInstance(String userId) {
         UserFollowersFragment fragment = new UserFollowersFragment();
         Bundle bundle = new Bundle();
@@ -47,12 +49,13 @@ public class UserFollowersFragment extends BaseFragment implements IFollowersVie
 
     @Override
     public void initData() {
-        String userId = getArguments().getString(ApiConstants.USERID);
+        userId = getArguments().getString(ApiConstants.USERID);
         followersPresenter = new FollowersPresenter(this);
         followersPresenter.loadFollowers(this,userId);
         mRvFollowers.setLayoutManager(new LinearLayoutManager(getActivity()));
         mSrl.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
         mSrl.setRefreshing(true);
+        mSrl.setOnRefreshListener(this);
     }
 
     @Override
@@ -62,10 +65,14 @@ public class UserFollowersFragment extends BaseFragment implements IFollowersVie
             mRvFollowers.setAdapter(new FollowersAdapter(getActivity(), followersEntities));
             mRvFollowers.addItemDecoration(new DividerItemDecoration(
                     getActivity(), DividerItemDecoration.VERTICAL));
-            mIvEmptyError.setVisibility(View.GONE);
+            mTvEmptyError.setVisibility(View.GONE);
         } else {
             mRvFollowers.setVisibility(View.GONE);
-            mIvEmptyError.setVisibility(View.VISIBLE);
+            mTvEmptyError.setVisibility(View.VISIBLE);
+            Drawable drawable = getResources().getDrawable(R.mipmap.ic_empty_result);
+            drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+            mTvEmptyError.setCompoundDrawables(null, drawable, null, null);
+            mTvEmptyError.setText(R.string.str_empty);
         }
         mSrl.setRefreshing(false);
     }
@@ -73,9 +80,16 @@ public class UserFollowersFragment extends BaseFragment implements IFollowersVie
     @Override
     public void showError() {
         mRvFollowers.setVisibility(View.GONE);
-        mIvEmptyError.setVisibility(View.VISIBLE);
-        mIvEmptyError.setImageResource(R.mipmap.ic_error_result);
+        mTvEmptyError.setVisibility(View.VISIBLE);
+        Drawable drawable = getResources().getDrawable(R.mipmap.ic_error_result);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
+        mTvEmptyError.setCompoundDrawables(null, drawable, null, null);
+        mTvEmptyError.setText(R.string.str_error);
         mSrl.setRefreshing(false);
     }
 
+    @Override
+    public void onRefresh() {
+        followersPresenter.loadFollowers(this, userId);
+    }
 }

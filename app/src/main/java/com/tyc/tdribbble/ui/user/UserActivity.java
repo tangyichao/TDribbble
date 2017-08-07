@@ -80,16 +80,17 @@ public class UserActivity extends BaseActivity {
         params.width = width;
         mIvAvatarBig.setLayoutParams(params);
         UserEntity user = (UserEntity) getIntent().getSerializableExtra(ApiConstants.USER);
-        String avatar = user.getAvatarUrl();
-        Glide.with(this).load(avatar).into(mIvAvatar);
-        Glide.with(this).load(avatar).bitmapTransform(new BlurTransformation(this, 20)).override(width, width).into(mIvAvatarBig);
-
+        if (user != null && user.getAvatarUrl() != null) {
+            String avatar = user.getAvatarUrl();
+            Glide.with(this).load(avatar).into(mIvAvatar);
+            Glide.with(this).load(avatar).bitmapTransform(new BlurTransformation(this, 20)).override(width, width).into(mIvAvatarBig);
+        }
 
         String name = user.getName();
         mTvName.setText(name);
         // setTitle(name);
         list.add(UserInfoFragment.newInstance(user));
-        list.add(UserShotsFragment.newInstance(String.valueOf(user.getId())));
+        list.add(UserShotsFragment.newInstance(String.valueOf(user.getId()), 1));
         list.add(UserFollowersFragment.newInstance(String.valueOf(user.getId())));
         mTlUser.setupWithViewPager(mVpUser);
         FragmentManager fm = getSupportFragmentManager();

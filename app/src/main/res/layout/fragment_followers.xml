@@ -14,19 +14,22 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
-            <ImageView
-                android:id="@+id/iv_empty_error"
+            <TextView
+                android:id="@+id/tv_empty_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="50dp"
-                android:visibility="invisible"
-                android:src="@mipmap/ic_empty_result" />
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:visibility="gone"
+                android:drawableTop="@mipmap/ic_empty_result"
+                android:textSize="14sp"
+                android:drawablePadding="8dp" />
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_followers"
                 android:layout_width="match_parent"
                 android:visibility="invisible"
+                android:focusableInTouchMode="true"
                 android:layout_height="wrap_content" />
         </FrameLayout>
     </android.support.v4.widget.SwipeRefreshLayout>

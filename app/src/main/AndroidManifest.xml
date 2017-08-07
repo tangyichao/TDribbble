@@ -20,6 +20,7 @@
         <activity
             android:name=".ui.home.HomeActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.Home">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,33 +30,42 @@
         </activity>
         <activity
             android:name=".ui.oauth.OAuthActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.login.LoginActivity"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.About" />
         <activity
             android:name=".ui.user.UserActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.myuser.shots.MyUserShotsActivity"
-            android:theme="@style/AppTheme" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.shotsdetails.ShotsDetailsActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".ui.bigimage.BigImageActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/FullScreenTheme" />
         <activity
             android:name=".ui.about.AboutActivity"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.About" />
         <activity
             android:name=".ui.search.SearchActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar.About" />
         <activity
             android:name=".ui.shotsdetails.attachments.AttachmentsActivity"
             android:label="@string/str_attachments"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
 
         <meta-data
@@ -64,6 +74,11 @@
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="github" />
+
+        <activity
+            android:name=".ui.setting.SettingsActivity"
+            android:label="@string/str_settings"
+            android:theme="@style/AppTheme.NoActionBar.About" />
     </application>
 
 </manifest>

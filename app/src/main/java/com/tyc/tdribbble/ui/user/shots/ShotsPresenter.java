@@ -16,8 +16,8 @@ public class ShotsPresenter implements IShotsPresenter {
     }
 
     @Override
-    public void loadShots(RxFragment rxFragment,String userId) {
-        model.loadShots(rxFragment,userId);
+    public void loadShots(RxFragment rxFragment, String userId, int shotsType) {
+        model.loadShots(rxFragment, userId, shotsType);
     }
 
 }

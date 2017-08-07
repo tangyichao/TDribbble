@@ -135,9 +135,11 @@ public class LinearShotsAdapter extends RecyclerView.Adapter {
            }
             ((LinearShotsViewHolder) holder).mIvIsGif.setVisibility(View.VISIBLE);
         }else{
-            String normal=shotsEntities.get(position).getImages().getNormal();
-            Glide.with(context).load(normal).placeholder(R.drawable.bg_linear_shots).override(width,height).into(((LinearShotsViewHolder) holder).mIvShots);
-            ((LinearShotsViewHolder) holder).mIvIsGif.setVisibility(View.GONE);
+            if (shotsEntities.get(position).getImages() != null) {
+                String normal = shotsEntities.get(position).getImages().getNormal();
+                Glide.with(context).load(normal).placeholder(R.drawable.bg_linear_shots).override(width, height).into(((LinearShotsViewHolder) holder).mIvShots);
+                ((LinearShotsViewHolder) holder).mIvIsGif.setVisibility(View.GONE);
+            }
         }
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

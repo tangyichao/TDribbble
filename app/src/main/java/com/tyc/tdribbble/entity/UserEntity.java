@@ -43,7 +43,7 @@ public class UserEntity implements Serializable {
      * updated_at : 2017-06-20T09:23:11Z
      */
 
-    private int id;
+    private long id;
     private String name;
     private String username;
     @SerializedName("html_url")
@@ -87,11 +87,11 @@ public class UserEntity implements Serializable {
     private String created_at;
     private String updated_at;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 

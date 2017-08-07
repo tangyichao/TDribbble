@@ -48,7 +48,6 @@ public class HomeModel implements IHomeModel {
                             }else{
                                 iHomeView.showEmpty();
                             }
-
                         }
                     }, new Consumer<Throwable>() {
                         @Override

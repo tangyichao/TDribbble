@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:checkableBehavior="single">
+    <group
+        android:id="@+id/first_group"
+        android:checkableBehavior="single">
         <item
             android:id="@+id/nav_home"
             android:icon="@drawable/ic_home_grey_24dp"
@@ -21,17 +23,15 @@
             android:title="@string/str_follower" />
     </group>
 
-    <item android:title="Communicate">
-        <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
+    <group android:id="@+id/second_group">
             <item
                 android:id="@+id/nav_settings"
                 android:icon="@drawable/ic_settings_grey_24dp"
                 android:title="@string/str_settings" />
-        </menu>
-    </item>
+        <item
+            android:id="@+id/nav_about"
+            android:icon="@drawable/ic_about_grey_24dp"
+            android:title="@string/str_about" />
+    </group>
 
 </menu>

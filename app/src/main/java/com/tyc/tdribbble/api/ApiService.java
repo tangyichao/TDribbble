@@ -3,6 +3,7 @@ package com.tyc.tdribbble.api;
 import com.tyc.tdribbble.entity.AttachmentsEntity;
 import com.tyc.tdribbble.entity.CommentsEntity;
 import com.tyc.tdribbble.entity.FollowersEntity;
+import com.tyc.tdribbble.entity.LikesEntity;
 import com.tyc.tdribbble.entity.ShotsEntity;
 import com.tyc.tdribbble.entity.TTEntity;
 import com.tyc.tdribbble.entity.TokenEntity;
@@ -54,11 +55,14 @@ public interface ApiService {
     @GET(ApiConstants.SEARCH)
     Observable<List<ShotsEntity>> getSearch(@QueryMap Map<String, String> map);
 
-    @GET(ApiConstants.FOLLOWERS)
+    @GET(ApiConstants.FOLLOWERS + "?" + ApiConstants.PERPAGE + "=20")
     Observable<List<FollowersEntity>> getFollowers(@Path(ApiConstants.USERID) String userId);
 
     @GET(ApiConstants.USERSHOTS)
     Observable<List<ShotsEntity>> getUserShots(@Path(ApiConstants.USERID) String userId);
+
+    @GET(ApiConstants.USERLIKES)
+    Observable<List<LikesEntity>> getUserLikes(@Path(ApiConstants.USERID) String userId);
 
     @GET(ApiConstants.COMMENTS)
     Observable<List<CommentsEntity>> getComments(@Path(ApiConstants.SHOTID) String shotId, @QueryMap HashMap<String, String> hashMap);

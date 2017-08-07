@@ -1,5 +1,8 @@
 package com.tyc.tdribbble.ui.about;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.RecyclerView;
@@ -14,6 +17,8 @@ import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.adapter.LibsAdapter;
 import com.tyc.tdribbble.base.BaseActivity;
 import com.tyc.tdribbble.entity.Library;
+
+import java.io.File;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -86,7 +91,8 @@ public class AboutActivity extends BaseActivity {
     Toolbar mToolbar;
     @BindView(R.id.tv_version)
     TextView mTvVersion;
-
+    @BindView(R.id.tv_cache)
+    TextView mTvCache;
 
     @Override
     protected int layoutResID() {
@@ -108,6 +114,8 @@ public class AboutActivity extends BaseActivity {
         LibsAdapter libsAdapter = new LibsAdapter(this, libs);
         mRvLib.setAdapter(libsAdapter);
         mRvLib.addOnScrollListener(new CenterScrollListener());
+        mTvVersion.setText("版本:" + getVersionName(this));
+        mTvCache.setText("缓存大小");
     }
 
 
@@ -121,10 +129,36 @@ public class AboutActivity extends BaseActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
+    //版本名
+    public static String getVersionName(Context context) {
+        return getPackageInfo(context).versionName;
+    }
+
+    //版本号
+    public static int getVersionCode(Context context) {
+        return getPackageInfo(context).versionCode;
+    }
+
+    private static PackageInfo getPackageInfo(Context context) {
+        PackageInfo pi = null;
+
+        try {
+            PackageManager pm = context.getPackageManager();
+            pi = pm.getPackageInfo(context.getPackageName(),
+                    PackageManager.GET_CONFIGURATIONS);
+
+            return pi;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return pi;
+    }
+
+    private String getCacheSize() {
+        long fileSize = 0;
+        File filesDir = getFilesDir();
+        File cacheDir = getCacheDir();
+        return null;
     }
 }

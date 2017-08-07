@@ -2,6 +2,7 @@ package com.tyc.tdribbble.ui.shotsdetails;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -12,26 +13,34 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
+import android.support.v7.graphics.Palette;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Pair;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.request.animation.GlideAnimation;
+import com.bumptech.glide.request.target.SimpleTarget;
 import com.google.android.flexbox.FlexboxLayout;
 import com.tyc.tdribbble.R;
+import com.tyc.tdribbble.TDribbbleApp;
+import com.tyc.tdribbble.adapter.ColorsAdapter;
 import com.tyc.tdribbble.adapter.CommentsAdapter;
 import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.base.BaseActivity;
@@ -114,12 +123,17 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
     ImageView mIvErrorEmpty;
     @BindView(R.id.ctl_shots)
     CollapsingToolbarLayout mCtlShots;
+    @BindView(R.id.tv_share)
+    TextView mTvShare;
+    @BindView(R.id.rv_color)
+    RecyclerView mRvColor;
 
     private ShotsDetailsPresenter presenter;
     private HashMap<String, String> hashMap = new HashMap<>();
     int pageNum = 1;
     int perpage = 20;
     private boolean isFlag = false;
+    private List<Integer> listColors = new ArrayList<>();
 
     @Override
     protected int layoutResID() {
@@ -128,27 +142,69 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
 
     @Override
     protected void initData() {
+        shots = (ShotsEntity) getIntent().getSerializableExtra(ApiConstants.SHOTS);
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
+        String title = shots.getTitle();
+        setTitle(title);
         mCtlShots.setExpandedTitleColor(getResources().getColor(R.color.colorAccent));
         final int width = ScreenUtils.getScreenWidth(this);
         ViewGroup.LayoutParams params = mIvShots.getLayoutParams();
         params.width = width;
         params.height = width * 3 / 4;
         mIvShots.setLayoutParams(params);
-        shots = (ShotsEntity) getIntent().getSerializableExtra(ApiConstants.SHOTS);
+
         final boolean isAnimated = shots.isAnimated();
+        final GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 2);
+        gridLayoutManager.setAutoMeasureEnabled(true);
+        gridLayoutManager.setSmoothScrollbarEnabled(true);
+        mRvColor.setLayoutManager(gridLayoutManager);
+        mRvColor.setHasFixedSize(true);
+        mRvColor.setNestedScrollingEnabled(false);
         if (isAnimated) {
             String hidpi = shots.getImages().getHidpi();
             Glide.with(ShotsDetailsActivity.this).load(hidpi).asGif().placeholder(R.drawable.bg_linear_shots).diskCacheStrategy(DiskCacheStrategy.SOURCE).dontTransform().fitCenter().into(mIvShots);
         } else {
             String normal = shots.getImages().getNormal();
-            Glide.with(ShotsDetailsActivity.this).load(normal).placeholder(R.drawable.bg_linear_shots).override(width, width * 3 / 4).into(mIvShots);
+            // Glide.with(ShotsDetailsActivity.this).load(normal).placeholder(R.drawable.bg_linear_shots).override(width, width * 3 / 4).into(mIvShots);
+            Glide.with(ShotsDetailsActivity.this).load(normal).asBitmap().into(new SimpleTarget<Bitmap>() {
+                @Override
+                public void onResourceReady(Bitmap resource, GlideAnimation<? super Bitmap> glideAnimation) {
+                    mIvShots.setImageBitmap(resource);
+                    Palette.Builder builder = Palette.from(resource);
+                    builder.generate(new Palette.PaletteAsyncListener() {
+                        @Override
+                        public void onGenerated(Palette palette) {
+                            if (palette.getVibrantSwatch() != null) {
+                                listColors.add(palette.getVibrantSwatch().getRgb());
+                            }
+                            if (palette.getDarkVibrantSwatch() != null) {
+                                listColors.add(palette.getDarkVibrantSwatch().getRgb());
+                            }
+                            if (palette.getLightVibrantSwatch() != null) {
+                                listColors.add(palette.getLightVibrantSwatch().getRgb());
+                            }
+                            if (palette.getMutedSwatch() != null) {
+                                listColors.add(palette.getMutedSwatch().getRgb());
+                            }
+                            if (palette.getDarkMutedSwatch() != null) {
+                                listColors.add(palette.getDarkMutedSwatch().getRgb());
+
+                            }
+                            if (palette.getLightMutedSwatch() != null) {
+                                listColors.add(palette.getLightMutedSwatch().getRgb());
+                            }
+                            mRvColor.setAdapter(new ColorsAdapter(ShotsDetailsActivity.this, listColors));
+                        }
+                    });
+
+
+                }
+            });
         }
-        String title = shots.getTitle();
-        setTitle(title);
+
         presenter = new ShotsDetailsPresenter(this);
         hashMap.put(ApiConstants.PAGE, String.valueOf(pageNum));
 
@@ -182,6 +238,9 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
                 }
             }
         });
+        if (!TextUtils.isEmpty(TDribbbleApp.avatar)) {
+            Glide.with(this).load(TDribbbleApp.avatar).into(mIvAvatarAuthor);
+        }
     }
 
     @Override
@@ -385,7 +444,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
         mTvViewsCount.setText(String.valueOf(shots.getViewsCount()));
         mTvBucketsCount.setText(String.valueOf(shots.getBucketsCount()));
         mTvFavoriteCount.setText(String.valueOf(shots.getLikesCount()));
-        String time = shots.getUpdatedAt();
+        String time = shots.getCreatedAt();
         mTvTime.setText(TimeUtils.getTimeFromISO8601(time) + "创建");
         if (shots.getTags() != null) {
             for (int i = 0; i < shots.getTags().size(); i++) {
@@ -405,13 +464,16 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
         }
     }
 
-    private TextView createNewFlexItemTextView(final String tag) {
+    private FrameLayout createNewFlexItemTextView(final String tag) {
+        FrameLayout layout = new FrameLayout(this);
         TextView textView = new TextView(this);
         textView.setGravity(Gravity.CENTER);
         textView.setText(tag);
         textView.setTextSize(14);
         textView.setTextColor(getResources().getColor(R.color.colorAccent));
-        textView.setBackgroundResource(R.drawable.bg_linear_tag);
+        TypedValue outValue = new TypedValue();
+        getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
+        textView.setBackgroundResource(outValue.resourceId);
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -430,8 +492,10 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
         int margin = DisplayUtils.dip2px(this, 6);
         int marginTop = DisplayUtils.dip2px(this, 16);
         layoutParams.setMargins(margin, marginTop, margin, 0);
-        textView.setLayoutParams(layoutParams);
-        return textView;
+        layout.setLayoutParams(layoutParams);
+        layout.setBackgroundResource(R.drawable.bg_linear_tag);
+        layout.addView(textView);
+        return layout;
     }
 
 

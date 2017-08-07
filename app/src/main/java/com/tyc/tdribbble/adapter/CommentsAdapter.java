@@ -72,7 +72,7 @@ public class CommentsAdapter extends RecyclerView.Adapter {
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder holder, int position) {
         if (holder.getItemViewType() == COMMENTSTYPE) {
-            Glide.with(context).load(commentsEntities.get(position).getUser().getAvatarUrl()).error(R.mipmap.ic_default_avatar).into(((CommentsViewHolder) holder).mTvAvatar);
+            Glide.with(context).load(commentsEntities.get(position).getUser().getAvatarUrl()).error(R.mipmap.ic_default_avatar).into(((CommentsViewHolder) holder).mIvAvatar);
             String location = commentsEntities.get(position).getUser().getLocation();
             if (!TextUtils.isEmpty(location))
                 ((CommentsViewHolder) holder).mTvLocation.setText(location);
@@ -89,15 +89,22 @@ public class CommentsAdapter extends RecyclerView.Adapter {
             int likesCount = commentsEntities.get(position).getLikes_count();
             ((CommentsViewHolder) holder).mTvLikesCount.setText(String.valueOf(likesCount));
             HtmlFormatUtils.Html2StringNoP(((CommentsViewHolder) holder).mTvBody, body);
-            holder.itemView.setOnClickListener(new View.OnClickListener() {
+            ((CommentsViewHolder) holder).mIvAvatar.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Intent intent = new Intent();
                     intent.setClass(context, UserActivity.class);
                     intent.putExtra(ApiConstants.USER, commentsEntities.get(holder.getAdapterPosition()).getUser());
                     context.startActivity(intent, ActivityOptions.makeSceneTransitionAnimation((FragmentActivity) context,
-                            Pair.create((View) ((CommentsViewHolder) holder).mTvAvatar, context.getResources().getString(R.string.str_avatar_tran)),
+                            Pair.create((View) ((CommentsViewHolder) holder).mIvAvatar, context.getResources().getString(R.string.str_avatar_tran)),
                             Pair.create((View) ((CommentsViewHolder) holder).mTvName, context.getResources().getString(R.string.str_name_tran))).toBundle());
+                }
+            });
+            ((CommentsViewHolder) holder).itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    ((CommentsViewHolder) holder).mLLShowComment.setVisibility(View.INVISIBLE);
+                    ((CommentsViewHolder) holder).mLLLikeComment.setVisibility(View.VISIBLE);
                 }
             });
             ((CommentsViewHolder) holder).mTvLikesCount.setOnClickListener(new View.OnClickListener() {
@@ -147,7 +154,7 @@ public class CommentsAdapter extends RecyclerView.Adapter {
     }
     public class CommentsViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.iv_avatar)
-        CircleImageView mTvAvatar;
+        CircleImageView mIvAvatar;
         @BindView(R.id.tv_name)
         TextView mTvName;
         @BindView(R.id.tv_location)
@@ -158,7 +165,10 @@ public class CommentsAdapter extends RecyclerView.Adapter {
         TextView mTvBody;
         @BindView(R.id.tv_likes_count)
         TextView mTvLikesCount;
-
+        @BindView(R.id.ll_like_comment)
+        LinearLayout mLLLikeComment;
+        @BindView(R.id.ll_show_comment)
+        LinearLayout mLLShowComment;
         public CommentsViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

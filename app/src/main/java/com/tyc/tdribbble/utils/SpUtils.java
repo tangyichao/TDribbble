@@ -34,4 +34,13 @@ public class SpUtils {
     {
      return sp.getString(key,"");
     }
+
+    public void putBoolean(String key, boolean value) {
+        editor.putBoolean(key, value);
+        editor.apply();
+    }
+
+    public boolean getBoolean(String key) {
+        return sp.getBoolean(key, true);
+    }
 }

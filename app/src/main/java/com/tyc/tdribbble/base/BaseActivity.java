@@ -13,6 +13,8 @@ import com.trello.rxlifecycle2.RxLifecycle;
 import com.trello.rxlifecycle2.android.ActivityEvent;
 import com.trello.rxlifecycle2.android.RxLifecycleAndroid;
 import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
+import com.tyc.tdribbble.utils.SpUtils;
+import com.tyc.tdribbble.utils.ThemeUtils;
 import com.umeng.analytics.MobclickAgent;
 
 import org.greenrobot.eventbus.EventBus;
@@ -57,6 +59,9 @@ public abstract class BaseActivity extends RxAppCompatActivity  {
     protected void onResume() {
         super.onResume();
         MobclickAgent.onResume(this);
+//        if (SpUtils.getSpUtils(this).getBoolean("dark_theme")) {
+//            ThemeUtils.notifyThemeApply(this);
+//        }
     }
 
     @Override

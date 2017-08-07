@@ -11,19 +11,38 @@
         <item name="android:textColorHint">@color/colorTextHint</item>
         <item name="actionOverflowMenuStyle">@style/OverflowMenu</item>
         <item name="actionMenuTextColor">@color/white</item>
-        <item name="actionMenuTextAppearance">@style/MenuTextStyle</item>
+        <item name="android:typeface">monospace</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">false</item>
+        <item name="android:windowContentTransitions">true</item>
     </style>
 
-
-    <style name="MenuTextStyle">
-        <item name="android:textColor">@android:color/white</item>
+    <style name="AppThemeLight" parent="Theme.AppCompat.Light.DarkActionBar">
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimaryHolo</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDarkHolo</item>
+        <item name="colorAccent">@color/colorAccentHolo</item>
+        <item name="android:windowBackground">@color/light</item>
+        <item name="android:textColor">@color/colorTextHolo</item>
+        <item name="android:textColorHint">@color/colorTextHint</item>
+        <item name="actionOverflowMenuStyle">@style/OverflowMenuLight</item>
+        <item name="actionMenuTextColor">@color/colorTextHint</item>
+        <item name="android:typeface">monospace</item>
     </style>
+
 
     <style name="OverflowMenu" parent="Widget.AppCompat.PopupMenu.Overflow">
         <item name="android:popupBackground">@color/colorPrimary</item>
     </style>
 
+    <style name="OverflowMenuLight" parent="Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:popupBackground">@color/colorPrimaryHolo</item>
+    </style>
     <style name="AppTheme.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="AppThemeLight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
@@ -32,6 +51,9 @@
         <item name="android:windowEnterTransition">@transition/home_enter</item>
     </style>
 
+    <style name="AppThemeLight.NoActionBar.Home">
+        <item name="android:windowEnterTransition">@transition/home_enter</item>
+    </style>
     <style name="AppTheme.NoActionBar.About">
         <item name="android:windowEnterTransition">@transition/about_enter</item>
         <item name="android:windowReturnTransition">@transition/about_return</item>

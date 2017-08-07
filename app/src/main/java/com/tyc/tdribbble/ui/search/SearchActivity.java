@@ -11,6 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.tyc.tdribbble.R;
 import com.tyc.tdribbble.adapter.LinearShotsAdapter;
@@ -57,15 +60,16 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mSvSearch.setIconified(false);
-        mSvSearch.setOnQueryTextListener(this);
-        mSvSearch.requestFocus();
-        SearchView.SearchAutoComplete mComplete = mSvSearch.findViewById(R.id.search_src_text);
+
+        SearchView.SearchAutoComplete mComplete = (SearchView.SearchAutoComplete) mSvSearch.findViewById(R.id.search_src_text);
         if (!TextUtils.isEmpty(search)) {
             mComplete.setText(search);
         }
+        mSvSearch.setIconified(false);
+        mSvSearch.setOnQueryTextListener(this);
+        mSvSearch.requestFocus();
         map.put(ApiConstants.PAGE, "1");
-        map.put("per_page", "12");
+        map.put(ApiConstants.PERPAGE, "12");
         mSrlSearch.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
         mSrlSearch.setOnRefreshListener(this);
     }
@@ -79,35 +83,37 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        mSrlSearch.setRefreshing(true);
+        if (TextUtils.isEmpty(query)) {
+            Toast.makeText(this, "请输入内容在搜索", Toast.LENGTH_LONG).show();
+        } else {
+            map.put("q", query);
+            mSrlSearch.setRefreshing(true);
+            ApiService service = ApiManager.getRetrofitJsoup(ApiConstants.BASE_URL).create(ApiService.class);
+            service.getSearch(map)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe(new Consumer<List<ShotsEntity>>() {
+                        @Override
+                        public void accept(@NonNull List<ShotsEntity> shotsEntities) throws Exception {
+                            if (shotsEntities.size() > 0) {
+                                LinearLayoutManager manager = new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, false);
+                                mRvSearch.setLayoutManager(manager);
+                                //new LinearSnapHelper().attachToRecyclerView(mRvSearch);
+                                mRvSearch.setAdapter(new LinearShotsAdapter(SearchActivity.this, shotsEntities, 5));
+                            } else {
+                                Log.i("debug", "" + shotsEntities.size() + " is 0");
+                            }
+                            mSrlSearch.setRefreshing(false);
 
-        ApiService service = ApiManager.getRetrofitJsoup(ApiConstants.BASE_URL).create(ApiService.class);
-        service.getSearch(map)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Consumer<List<ShotsEntity>>() {
-                    @Override
-                    public void accept(@NonNull List<ShotsEntity> shotsEntities) throws Exception {
-                        if (shotsEntities.size() > 0) {
-                            Log.i("debug", "" + shotsEntities.size());
-                            LinearLayoutManager manager = new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, false);
-                            mRvSearch.setLayoutManager(manager);
-                            new LinearSnapHelper().attachToRecyclerView(mRvSearch);
-                            mRvSearch.setAdapter(new LinearShotsAdapter(SearchActivity.this, shotsEntities, 5));
-                        } else {
-
-                            Log.i("debug", "" + shotsEntities.size() + " is 0");
                         }
-                        mSrlSearch.setRefreshing(false);
-
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(@NonNull Throwable throwable) throws Exception {
-                        Log.i("debug", throwable.getMessage());
-                        mSrlSearch.setRefreshing(false);
-                    }
-                });
+                    }, new Consumer<Throwable>() {
+                        @Override
+                        public void accept(@NonNull Throwable throwable) throws Exception {
+                            Log.i("debug", throwable.getMessage());
+                            mSrlSearch.setRefreshing(false);
+                        }
+                    });
+        }
         return false;
     }
 
@@ -128,6 +134,5 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
 
     @Override
     public void onRefresh() {
-
     }
 }

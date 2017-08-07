@@ -8,6 +8,6 @@ import com.trello.rxlifecycle2.components.support.RxFragment;
  */
 public interface IShotsModel {
 
-    public void loadShots(RxFragment rxFragment,String userId);
+    public void loadShots(RxFragment rxFragment, String userId, int shotsType);
 
 }
