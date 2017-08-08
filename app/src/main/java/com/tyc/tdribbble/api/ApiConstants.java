@@ -55,7 +55,6 @@ public class ApiConstants {
        String SCOPE = "scope";
        String STATE = "state";
        String CODE = "code";
-
        String TOKEN="token";
 
    }

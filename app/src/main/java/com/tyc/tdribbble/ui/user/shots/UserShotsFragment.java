@@ -3,6 +3,7 @@ package com.tyc.tdribbble.ui.user.shots;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.LinearSnapHelper;
@@ -64,7 +65,7 @@ public class UserShotsFragment extends BaseFragment implements IShotsView, Swipe
         LinearLayoutManager manager = new LinearLayoutManager(getActivity());
         mRvShots.setLayoutManager(manager);
         //  new LinearSnapHelper().attachToRecyclerView(mRvShots);
-        mSrl.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+        mSrl.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
         mSrl.setRefreshing(true);
         mSrl.setOnRefreshListener(this);
     }

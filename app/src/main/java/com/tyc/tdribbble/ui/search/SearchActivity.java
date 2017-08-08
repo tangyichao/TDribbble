@@ -19,6 +19,10 @@ import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.api.ApiManager;
 import com.tyc.tdribbble.api.ApiService;
 import com.tyc.tdribbble.base.BaseActivity;
+import com.tyc.tdribbble.db.entity.DaoMaster;
+import com.tyc.tdribbble.db.entity.DaoSession;
+import com.tyc.tdribbble.db.entity.HistoryEntity;
+import com.tyc.tdribbble.db.entity.HistoryEntityDao;
 import com.tyc.tdribbble.entity.ShotsEntity;
 
 import java.util.ArrayList;
@@ -49,8 +53,11 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
     SwipeRefreshLayout mSrlSearch;
     @BindView(R.id.rv_search_word)
     RecyclerView mRvSearchWord;
-    List<String> list = new ArrayList<>();
+
+    private SearchView.SearchAutoComplete mComplete;
+    List<HistoryEntity> list = new ArrayList<>();
     SearchWordAdapter searchWordAdapter;
+    HistoryEntityDao historyEntityDao;
     @Override
     protected int layoutResID() {
         return R.layout.activity_search;
@@ -58,12 +65,17 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
 
     @Override
     protected void initData() {
+        DaoMaster.DevOpenHelper devOpenHelper = new DaoMaster.DevOpenHelper(this, "TDribbble", null);
+        DaoMaster daoMaster = new DaoMaster(devOpenHelper.getWritableDatabase());
+        DaoSession daoSession = daoMaster.newSession();
+        historyEntityDao = daoSession.getHistoryEntityDao();
+
         String search = getIntent().getStringExtra("search");
         setSupportActionBar(mToolbar);
         if (getSupportActionBar() != null)
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        SearchView.SearchAutoComplete mComplete = (SearchView.SearchAutoComplete) mSvSearch.findViewById(R.id.search_src_text);
+        mComplete = (SearchView.SearchAutoComplete) mSvSearch.findViewById(R.id.search_src_text);
         if (!TextUtils.isEmpty(search)) {
             mComplete.setText(search);
         }
@@ -76,11 +88,20 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
         mSrlSearch.setOnRefreshListener(this);
         LinearLayoutManager manager = new LinearLayoutManager(SearchActivity.this, LinearLayoutManager.VERTICAL, false);
         mRvSearchWord.setLayoutManager(manager);
-
-
+        list = historyEntityDao.queryBuilder().orderDesc(HistoryEntityDao.Properties.Time).limit(5).list();
         searchWordAdapter = new SearchWordAdapter(this, list);
         mRvSearchWord.setAdapter(searchWordAdapter);
-
+        mRvSearchWord.setHasFixedSize(true);
+        searchWordAdapter.setOnItemClickListener(new SearchWordAdapter.OnItemClickListener() {
+            @Override
+            public void onClick(String data) {
+                mComplete.setText(data);
+                mSvSearch.setIconified(false);
+                mSvSearch.requestFocus();
+                list.clear();
+                searchWordAdapter.refreshData(list);
+            }
+        });
     }
 
     @Override
@@ -92,12 +113,18 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
 
     @Override
     public boolean onQueryTextSubmit(String query) {
-        list.add(query);
         searchWordAdapter.notifyDataSetChanged();
         if (TextUtils.isEmpty(query)) {
             Toast.makeText(this, "请输入内容在搜索", Toast.LENGTH_LONG).show();
         } else {
             map.put("q", query);
+            HistoryEntity historyEntity = historyEntityDao.queryBuilder().where(HistoryEntityDao.Properties.Name.eq(query)).build().unique();
+            if (historyEntity == null) {
+                historyEntityDao.insert(new HistoryEntity(null, System.currentTimeMillis(), query));
+            } else {
+                historyEntity.setTime(System.currentTimeMillis());
+                historyEntityDao.update(historyEntity);
+            }
             mSrlSearch.setRefreshing(true);
             ApiService service = ApiManager.getRetrofitJsoup(ApiConstants.BASE_URL).create(ApiService.class);
             service.getSearch(map)
@@ -115,7 +142,6 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
                                 Log.i("debug", "" + shotsEntities.size() + " is 0");
                             }
                             mSrlSearch.setRefreshing(false);
-
                         }
                     }, new Consumer<Throwable>() {
                         @Override
@@ -129,7 +155,9 @@ public class SearchActivity extends BaseActivity implements SearchView.OnQueryTe
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        Log.i("debug", newText);
+        //模糊查询    Time 降序  限制次数五个
+        list = historyEntityDao.queryBuilder().where(HistoryEntityDao.Properties.Name.like(newText + "%")).orderDesc(HistoryEntityDao.Properties.Time).limit(5).list();
+        searchWordAdapter.refreshData(list);
         return false;
     }
 

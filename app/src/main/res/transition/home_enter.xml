@@ -6,7 +6,7 @@
         class="com.tyc.tdribbble.utils.anim.Pop"
         android:duration="@android:integer/config_shortAnimTime"
         android:startDelay="@android:integer/config_shortAnimTime"
-        android:interpolator="@android:interpolator/fast_out_slow_in"></transition>
+        android:interpolator="@android:interpolator/fast_out_slow_in" />
 
     <fade />
 

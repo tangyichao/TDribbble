@@ -1,6 +1,7 @@
 package com.tyc.tdribbble.ui.shotsdetails.attachments;
 
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -44,7 +45,7 @@ public class AttachmentsActivity extends BaseActivity implements IAttachmentsVie
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         }
         mSfl.setRefreshing(true);
-        mSfl.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+        mSfl.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorAccent));
         AttachmentsPresenter presenter = new AttachmentsPresenter(this);
         presenter.loadAttachments(this, String.valueOf(shotId));
         mRvAttachments.setLayoutManager(new LinearLayoutManager(this));

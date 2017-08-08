@@ -3,6 +3,7 @@ package com.tyc.tdribbble.ui.user.followers;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
@@ -53,7 +54,7 @@ public class UserFollowersFragment extends BaseFragment implements IFollowersVie
         followersPresenter = new FollowersPresenter(this);
         followersPresenter.loadFollowers(this,userId);
         mRvFollowers.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mSrl.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+        mSrl.setColorSchemeColors(ContextCompat.getColor(getContext(), R.color.colorAccent));
         mSrl.setRefreshing(true);
         mSrl.setOnRefreshListener(this);
     }

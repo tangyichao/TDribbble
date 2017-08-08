@@ -3,16 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:foreground="?android:attr/selectableItemBackground"
-    android:background="?attr/selectableItemBackgroundBorderless"
     android:orientation="horizontal"
     android:padding="8dp">
-
     <TextView
         android:id="@+id/tv_word"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:textSize="14sp" />
-
 </LinearLayout>
 

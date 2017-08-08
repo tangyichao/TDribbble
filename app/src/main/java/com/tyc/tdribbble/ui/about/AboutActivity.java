@@ -85,7 +85,12 @@ public class AboutActivity extends BaseActivity {
                     "Android Carousel LayoutManager for RecyclerView",
                     "https://github.com/Azoft/CarouselLayoutManager",
                     "https://avatars1.githubusercontent.com/u/6938975",
-                    true)
+                    true),
+            new Library("greenDAO",
+                    "greenDAO is a light & fast ORM solution for Android that maps objects to SQLite databases.",
+                    "https://github.com/greenrobot/greenDAO",
+                    "https://avatars2.githubusercontent.com/u/242242",
+                    false),
     };
     @BindView(R.id.toolbar)
     Toolbar mToolbar;

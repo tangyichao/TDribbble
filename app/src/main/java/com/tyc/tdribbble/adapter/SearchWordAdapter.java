@@ -10,10 +10,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.tyc.tdribbble.R;
+import com.tyc.tdribbble.db.entity.HistoryEntity;
 import com.tyc.tdribbble.ui.search.SearchActivity;
 import com.tyc.tdribbble.ui.shotsdetails.ShotsDetailsActivity;
 
@@ -30,13 +32,20 @@ public class SearchWordAdapter extends RecyclerView.Adapter<SearchWordAdapter.Co
 
 
     private Context context;
-    private List<String> list;
+    private List<HistoryEntity> list;
 
-    public SearchWordAdapter(Context context, List<String> list) {
+
+    private OnItemClickListener onItemClickListener;
+
+    public SearchWordAdapter(Context context, List<HistoryEntity> list) {
         this.context = context;
         this.list = list;
     }
 
+
+    public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     @Override
     public ColorsViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -47,13 +56,25 @@ public class SearchWordAdapter extends RecyclerView.Adapter<SearchWordAdapter.Co
     @Override
     public void onBindViewHolder(final ColorsViewHolder holder, int position) {
         //holder.mIvColor.setImageResource(listColor.get(position));
-        holder.mTvWord.setText(list.get(position));
+        holder.mTvWord.setText(list.get(position).getName());
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onItemClickListener.onClick(list.get(holder.getAdapterPosition()).getName());
+            }
+        });
 
     }
 
     @Override
     public int getItemCount() {
         return list.size();
+    }
+
+    public void refreshData(List<HistoryEntity> list) {
+        this.list.clear();
+        this.list.addAll(list);
+        notifyDataSetChanged();
     }
 
 
@@ -66,6 +87,10 @@ public class SearchWordAdapter extends RecyclerView.Adapter<SearchWordAdapter.Co
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+    }
+
+    public interface OnItemClickListener {
+        public void onClick(String data);
     }
 
 
