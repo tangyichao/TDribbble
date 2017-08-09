@@ -70,7 +70,7 @@ public class UserFollowersFragment extends BaseFragment implements IFollowersVie
         } else {
             mRvFollowers.setVisibility(View.GONE);
             mTvEmptyError.setVisibility(View.VISIBLE);
-            Drawable drawable = getResources().getDrawable(R.mipmap.ic_empty_result);
+            Drawable drawable = ContextCompat.getDrawable(getContext(), R.mipmap.ic_empty_result);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             mTvEmptyError.setCompoundDrawables(null, drawable, null, null);
             mTvEmptyError.setText(R.string.str_empty);
@@ -82,7 +82,7 @@ public class UserFollowersFragment extends BaseFragment implements IFollowersVie
     public void showError() {
         mRvFollowers.setVisibility(View.GONE);
         mTvEmptyError.setVisibility(View.VISIBLE);
-        Drawable drawable = getResources().getDrawable(R.mipmap.ic_error_result);
+        Drawable drawable = ContextCompat.getDrawable(getContext(), R.mipmap.ic_error_result);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         mTvEmptyError.setCompoundDrawables(null, drawable, null, null);
         mTvEmptyError.setText(R.string.str_error);

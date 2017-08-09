@@ -54,7 +54,7 @@ public class FollowersAdapter extends RecyclerView.Adapter<FollowersAdapter.Foll
         if (!TextUtils.isEmpty(location))
             holder.mTvLocation.setText(location);
         else
-            holder.mTvLocation.setVisibility(View.GONE);
+            holder.mTvLocation.setVisibility(View.INVISIBLE);
         holder.mTvName.setText(followersEntities.get(position).getFollower().getName());
         holder.mTvTime.setText(TimeUtils.getTimeFromISO8601(followersEntities.get(position).getCreated_at()) + "关注");
         String bio = followersEntities.get(position).getFollower().getBio();

@@ -34,63 +34,51 @@ public class AboutActivity extends BaseActivity {
             new Library("Android support libraries",
                     "The Android support libraries offer a number of features that are not built into the framework.",
                     "https://developer.android.com/topic/libraries/support-library",
-                    "https://avatars0.githubusercontent.com/u/1342004",
-                    false),
+                    "https://avatars0.githubusercontent.com/u/1342004"),
             new Library("ButterKnife",
                     "Bind Android views and callbacks to fields and methods.",
                     "http://jakewharton.github.io/butterknife/",
-                    "https://avatars.githubusercontent.com/u/66577",
-                    true),
+                    "https://avatars.githubusercontent.com/u/66577"),
             new Library("Glide",
                     "An image loading and caching library for Android focused on smooth scrolling.",
                     "https://github.com/bumptech/glide",
-                    "https://avatars.githubusercontent.com/u/423539",
-                    false),
+                    "https://avatars.githubusercontent.com/u/423539"),
             new Library("RxJava",
                     "RxJava – Reactive Extensions for the JVM – a library for composing asynchronous and event-based programs using observable sequences for the Java VM.",
                     "https://github.com/ReactiveX/RxJava",
-                    "https://avatars1.githubusercontent.com/u/6407041",
-                    false),
+                    "https://avatars1.githubusercontent.com/u/6407041"),
             new Library("OkHttp",
                     "An HTTP & HTTP/2 client for Android and Java applications.",
                     "http://square.github.io/okhttp/",
-                    "https://avatars.githubusercontent.com/u/82592",
-                    false),
+                    "https://avatars.githubusercontent.com/u/82592"),
             new Library("Retrofit",
                     "A type-safe HTTP client for Android and Java.",
                     "http://square.github.io/retrofit/",
-                    "https://avatars.githubusercontent.com/u/82592",
-                    false),
+                    "https://avatars.githubusercontent.com/u/82592"),
             new Library("gson",
                     "A Java serialization/deserialization library to convert Java Objects into JSON and back",
                     "https://github.com/google/gson",
-                    "https://avatars0.githubusercontent.com/u/1342004",
-                    false),
+                    "https://avatars0.githubusercontent.com/u/1342004"),
             new Library("CircleImageView",
                     "A circular ImageView for Android",
                     "https://github.com/hdodenhof/CircleImageView",
-                    "https://avatars2.githubusercontent.com/u/1824223",
-                    false),
+                    "https://avatars2.githubusercontent.com/u/1824223"),
             new Library("JSoup",
                     "Java HTML Parser, with best of DOM, CSS, and jquery.",
                     "https://github.com/jhy/jsoup/",
-                    "https://avatars.githubusercontent.com/u/76934",
-                    true),
+                    "https://avatars.githubusercontent.com/u/76934"),
             new Library("RxLifecycle",
                     "Lifecycle handling APIs for Android apps using RxJava",
                     "https://github.com/trello/RxLifecycle",
-                    "https://avatars3.githubusercontent.com/u/6181431",
-                    true),
+                    "https://avatars3.githubusercontent.com/u/6181431"),
             new Library("CarouselLayoutManager",
                     "Android Carousel LayoutManager for RecyclerView",
                     "https://github.com/Azoft/CarouselLayoutManager",
-                    "https://avatars1.githubusercontent.com/u/6938975",
-                    true),
+                    "https://avatars1.githubusercontent.com/u/6938975"),
             new Library("greenDAO",
                     "greenDAO is a light & fast ORM solution for Android that maps objects to SQLite databases.",
                     "https://github.com/greenrobot/greenDAO",
-                    "https://avatars2.githubusercontent.com/u/242242",
-                    false),
+                    "https://avatars2.githubusercontent.com/u/242242"),
     };
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
@@ -151,13 +139,11 @@ public class AboutActivity extends BaseActivity {
             PackageManager pm = context.getPackageManager();
             pi = pm.getPackageInfo(context.getPackageName(),
                     PackageManager.GET_CONFIGURATIONS);
-
             return pi;
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-        return pi;
+        return null;
     }
 
     private String getCacheSize() {

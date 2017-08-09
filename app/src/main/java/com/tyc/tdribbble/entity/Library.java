@@ -42,21 +42,10 @@ public class Library {
         this.imageUrl = imageUrl;
     }
 
-    public boolean isCircleCrop() {
-        return circleCrop;
-    }
-
-    public void setCircleCrop(boolean circleCrop) {
-        this.circleCrop = circleCrop;
-    }
-
-    private boolean circleCrop;
-
-    public Library(String name, String desc, String url, String imageUrl, boolean circleCrop) {
+    public Library(String name, String desc, String url, String imageUrl) {
         this.name = name;
         this.desc = desc;
         this.url = url;
         this.imageUrl = imageUrl;
-        this.circleCrop = circleCrop;
     }
 }

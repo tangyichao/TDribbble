@@ -79,7 +79,6 @@ public class LibsAdapter extends RecyclerView.Adapter<LibsAdapter.LibsViewHolder
         TextView mTvName;
         @BindView(R.id.tv_desc)
         TextView mTvDesc;
-
         public LibsViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);

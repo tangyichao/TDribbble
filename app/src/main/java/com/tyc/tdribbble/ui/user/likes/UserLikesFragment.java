@@ -2,6 +2,7 @@ package com.tyc.tdribbble.ui.user.likes;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -71,7 +72,7 @@ public class UserLikesFragment extends BaseFragment implements ILikesView {
         } else {
             mRvShots.setVisibility(View.GONE);
             mTvEmptyError.setVisibility(View.VISIBLE);
-            Drawable drawable = getResources().getDrawable(R.mipmap.ic_empty_result);
+            Drawable drawable = ContextCompat.getDrawable(getContext(), R.mipmap.ic_empty_result);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             mTvEmptyError.setCompoundDrawables(null, drawable, null, null);
             mTvEmptyError.setText(R.string.str_empty);
@@ -83,7 +84,7 @@ public class UserLikesFragment extends BaseFragment implements ILikesView {
     public void showError() {
         mRvShots.setVisibility(View.GONE);
         mTvEmptyError.setVisibility(View.VISIBLE);
-        Drawable drawable = getResources().getDrawable(R.mipmap.ic_error_result);
+        Drawable drawable = ContextCompat.getDrawable(getContext(), R.mipmap.ic_error_result);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         mTvEmptyError.setCompoundDrawables(null, drawable, null, null);
         mTvEmptyError.setText(R.string.str_error);

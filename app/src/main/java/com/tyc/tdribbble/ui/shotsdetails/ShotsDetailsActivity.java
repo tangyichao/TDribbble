@@ -5,12 +5,14 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v7.graphics.Palette;
@@ -21,9 +23,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.util.Pair;
 import android.util.TypedValue;
 import android.view.Gravity;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -97,8 +101,6 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
     FlexboxLayout mFlTags;
     @BindView(R.id.tv_desc)
     TextView mTvDesc;
-    @BindView(R.id.tv_attachments)
-    TextView mTvAttachments;
     @BindView(R.id.toolbar)
     Toolbar mToolbar;
     @BindView(R.id.iv_avatar_author)
@@ -123,8 +125,6 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
     ImageView mIvErrorEmpty;
     @BindView(R.id.ctl_shots)
     CollapsingToolbarLayout mCtlShots;
-    @BindView(R.id.tv_share)
-    TextView mTvShare;
     @BindView(R.id.rv_color)
     RecyclerView mRvColor;
 
@@ -149,7 +149,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
         }
         String title = shots.getTitle();
         setTitle(title);
-        mCtlShots.setExpandedTitleColor(getResources().getColor(R.color.colorAccent));
+        mCtlShots.setExpandedTitleColor(ContextCompat.getColor(this, R.color.colorAccent));
         final int width = ScreenUtils.getScreenWidth(this);
         ViewGroup.LayoutParams params = mIvShots.getLayoutParams();
         params.width = width;
@@ -241,14 +241,51 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
         if (!TextUtils.isEmpty(TDribbbleApp.avatar)) {
             Glide.with(this).load(TDribbbleApp.avatar).into(mIvAvatarAuthor);
         }
+        Log.i("debug", "onCreate");
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+
+        getMenuInflater().inflate(R.menu.shot_menu, menu);
+        if (shots != null) {
+            int attachmentsCount = shots.getAttachmentsCount();
+            if (attachmentsCount == 0) {
+                menu.findItem(R.id.action_attachment).setVisible(false);
+            }
+        }
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case android.R.id.home:
+            case android.R.id.home: {
                 finish();
                 break;
+            }
+            case R.id.action_attachment: {
+                Intent intent = new Intent();
+                intent.setClass(this, AttachmentsActivity.class);
+                intent.putExtra(ApiConstants.SHOTID, shots.getId());
+                startActivity(intent);
+                break;
+            }
+            case R.id.action_share: {
+                Intent intent = new Intent(Intent.ACTION_SEND);
+                final boolean isAnimated = shots.isAnimated();
+                String image;
+                if (isAnimated) {
+                    image = shots.getImages().getHidpi();
+                } else {
+                    image = shots.getImages().getNormal();
+                }
+                intent.setType("text/plain");
+                intent.putExtra(Intent.EXTRA_TEXT, image);
+                startActivity(Intent.createChooser(intent, getString(R.string.str_share)));
+                break;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -275,7 +312,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
     }
 
 
-    @OnClick({R.id.iv_shots, R.id.fab_favorite, R.id.iv_avatar, R.id.tv_attachments, R.id.iv_create_comment})
+    @OnClick({R.id.iv_shots, R.id.fab_favorite, R.id.iv_avatar, R.id.iv_create_comment})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.iv_shots: {
@@ -302,13 +339,6 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
                         Pair.create((View) mTvName, getResources().getString(R.string.str_name_tran))).toBundle());
                 break;
             }
-            case R.id.tv_attachments: {
-                Intent intent = new Intent();
-                intent.setClass(this, AttachmentsActivity.class);
-                intent.putExtra(ApiConstants.SHOTID, shots.getId());
-                startActivity(intent);
-                break;
-            }
             case R.id.iv_create_comment: {
                 String comment = mEtComment.getText().toString().trim();
                 if (TextUtils.isEmpty(comment)) {
@@ -327,7 +357,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
         mFabFavorite.setImageResource(R.drawable.ic_favorite_red_24dp);
         Integer count = Integer.valueOf(mTvFavoriteCount.getText().toString().trim()) + 1;
         mTvFavoriteCount.setText(String.valueOf(count));
-        Drawable drawable = getResources().getDrawable(R.drawable.ic_favorite_red_24dp);
+        Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_favorite_red_24dp);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         mTvFavoriteCount.setCompoundDrawables(drawable, null, null, null);
     }
@@ -341,7 +371,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
     public void checklikeShot(boolean isLike) {
         if (isLike) {
             mFabFavorite.setImageResource(R.drawable.ic_favorite_red_24dp);
-            Drawable drawable = getResources().getDrawable(R.drawable.ic_favorite_red_24dp);
+            Drawable drawable = ContextCompat.getDrawable(this, R.drawable.ic_favorite_red_24dp);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             mTvFavoriteCount.setCompoundDrawables(drawable, null, null, null);
         } else {
@@ -455,13 +485,14 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
         String desc = shots.getDescription();
         if (!TextUtils.isEmpty(desc))
             HtmlFormatUtils.Html2StringNoP(mTvDesc, desc);
-        int attachmentsCount = shots.getAttachmentsCount();
-        if (attachmentsCount > 0) {
-            mTvAttachments.setVisibility(View.VISIBLE);
-            mTvAttachments.setText(attachmentsCount + "个插件");
-        } else {
-            mTvAttachments.setVisibility(View.GONE);
-        }
+        // TODO: 2017/8/8
+//        int attachmentsCount = shots.getAttachmentsCount();
+//        if (attachmentsCount > 0) {
+//            mTvAttachments.setVisibility(View.VISIBLE);
+//            mTvAttachments.setText(attachmentsCount + "个插件");
+//        } else {
+//            mTvAttachments.setVisibility(View.GONE);
+//        }
     }
 
     private FrameLayout createNewFlexItemTextView(final String tag) {
@@ -470,7 +501,7 @@ public class ShotsDetailsActivity extends BaseActivity implements IShotsDetailsV
         textView.setGravity(Gravity.CENTER);
         textView.setText(tag);
         textView.setTextSize(14);
-        textView.setTextColor(getResources().getColor(R.color.colorAccent));
+        textView.setTextColor(ContextCompat.getColor(this, R.color.colorAccent));
         TypedValue outValue = new TypedValue();
         getTheme().resolveAttribute(android.R.attr.selectableItemBackground, outValue, true);
         textView.setBackgroundResource(outValue.resourceId);

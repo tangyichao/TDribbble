@@ -1,5 +1,6 @@
 package com.tyc.tdribbble.ui.user.shots;
 
+import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -81,7 +82,7 @@ public class UserShotsFragment extends BaseFragment implements IShotsView, Swipe
         } else {
             mRvShots.setVisibility(View.GONE);
             mTvEmptyError.setVisibility(View.VISIBLE);
-            Drawable drawable = getResources().getDrawable(R.mipmap.ic_empty_result);
+            Drawable drawable = ContextCompat.getDrawable(getContext(), R.mipmap.ic_empty_result);
             drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
             mTvEmptyError.setCompoundDrawables(null, drawable, null, null);
             mTvEmptyError.setText(R.string.str_empty);
@@ -93,7 +94,7 @@ public class UserShotsFragment extends BaseFragment implements IShotsView, Swipe
     public void showError() {
         mRvShots.setVisibility(View.GONE);
         mTvEmptyError.setVisibility(View.VISIBLE);
-        Drawable drawable = getResources().getDrawable(R.mipmap.ic_error_result);
+        Drawable drawable = ContextCompat.getDrawable(getContext(), R.mipmap.ic_error_result);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         mTvEmptyError.setCompoundDrawables(null, drawable, null, null);
         mTvEmptyError.setText(R.string.str_error);

@@ -425,7 +425,7 @@ public class HomeActivity extends BaseActivity
         Snackbar.make(mRvShots, R.string.str_error, Snackbar.LENGTH_LONG).show();
         mRvShots.setVisibility(View.GONE);
         mTvEmptyError.setVisibility(View.VISIBLE);
-        Drawable drawable = getResources().getDrawable(R.mipmap.ic_error_result);
+        Drawable drawable = ContextCompat.getDrawable(this, R.mipmap.ic_error_result);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         mTvEmptyError.setCompoundDrawables(null, drawable, null, null);
         mTvEmptyError.setText(R.string.str_error);
@@ -437,7 +437,7 @@ public class HomeActivity extends BaseActivity
         Snackbar.make(mRvShots, R.string.str_empty, Snackbar.LENGTH_LONG).show();
         mRvShots.setVisibility(View.GONE);
         mTvEmptyError.setVisibility(View.VISIBLE);
-        Drawable drawable = getResources().getDrawable(R.mipmap.ic_empty_result);
+        Drawable drawable = ContextCompat.getDrawable(this, R.mipmap.ic_empty_result);
         drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         mTvEmptyError.setCompoundDrawables(null, drawable, null, null);
         mTvEmptyError.setText(R.string.str_empty);

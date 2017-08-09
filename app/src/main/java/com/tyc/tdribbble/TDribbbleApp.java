@@ -6,6 +6,7 @@ import android.support.v7.app.AlertDialog;
 
 import com.orhanobut.logger.AndroidLogAdapter;
 import com.orhanobut.logger.Logger;
+import com.squareup.leakcanary.LeakCanary;
 import com.tyc.tdribbble.api.ApiConstants;
 import com.tyc.tdribbble.utils.SpUtils;
 import com.tyc.tdribbble.utils.TypefaceUtil;
@@ -30,6 +31,13 @@ public class TDribbbleApp extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        if (LeakCanary.isInAnalyzerProcess(this)) {
+            // This process is dedicated to LeakCanary for heap analysis.
+            // You should not init your app in this process.
+            return;
+        }
+        LeakCanary.install(this);
+
 
         MobclickAgent.setScenarioType(getApplicationContext(), MobclickAgent.EScenarioType.E_UM_NORMAL);
         EventBus.builder().addIndex(new MyEventBusIndex()).installDefaultEventBus();

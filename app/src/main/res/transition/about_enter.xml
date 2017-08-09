@@ -10,7 +10,6 @@
             <target android:excludeId="@android:id/statusBarBackground" />
         </targets>
     </slide>
-
     <fade android:duration="@android:integer/config_mediumAnimTime">
         <targets>
             <target android:targetId="@android:id/navigationBarBackground" />
